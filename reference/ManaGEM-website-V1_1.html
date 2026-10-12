@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="ManaGEM follows every job from enquiry to invoice and shows the real margin on each one. Built and supported by GEMIS.">
+<title>ManaGEM Website V1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Outfit:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: job-ticket logic. Light working page; the product sits in a navy "site office" frame; hi-vis amber marks the one thing that matters (margin). */
+:root{
+  --bg:#F4F5F7; --surface:#FFFFFF; --sunk:#EBEDF1; --ink:#0F172A; --muted:#566173; --line:#DADEE6;
+  --frame:#0F172A; --frame-2:#18223A; --frame-ink:#E6EAF2; --frame-muted:#93A0B6; --frame-line:#283453;
+  --amber:#F2B01E; --amber-ink:#875700; --on-amber:#1A1405;
+  --good:#0E7F57; --good-bg:#E3F4EC; --warn:#9A5B00; --warn-bg:#FCF0D9; --bad:#B42F25; --bad-bg:#FBE6E4;
+  --note:#6B3FD4; --note-bg:#F0EAFE;
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Outfit",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-data:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --r:10px; --wrap:1180px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0A0F1C; --surface:#111A2C; --sunk:#0D1424; --ink:#E7EBF3; --muted:#97A3B7; --line:#24304A;
+  --frame:#070B15; --frame-2:#111A2C; --frame-ink:#E7EBF3; --frame-muted:#8E9AB0; --frame-line:#24304A;
+  --amber:#F5B92E; --amber-ink:#F5B92E; --on-amber:#1A1405;
+  --good:#3CC48F; --good-bg:#10291F; --warn:#F2B44A; --warn-bg:#2D2410; --bad:#F2695E; --bad-bg:#331614;
+  --note:#B49BFF; --note-bg:#221A3D; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0A0F1C; --surface:#111A2C; --sunk:#0D1424; --ink:#E7EBF3; --muted:#97A3B7; --line:#24304A;
+  --frame:#070B15; --frame-2:#111A2C; --frame-ink:#E7EBF3; --frame-muted:#8E9AB0; --frame-line:#24304A;
+  --amber:#F5B92E; --amber-ink:#F5B92E; --on-amber:#1A1405;
+  --good:#3CC48F; --good-bg:#10291F; --warn:#F2B44A; --warn-bg:#2D2410; --bad:#F2695E; --bad-bg:#331614;
+  --note:#B49BFF; --note-bg:#221A3D; color-scheme:dark }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--f-body);margin:0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-inline:clamp(16px,4vw,40px)}
+h1,h2,h3{font-family:var(--f-display);font-stretch:112%;line-height:1.04;letter-spacing:-.01em;margin:0;text-wrap:balance}
+h1{font-size:clamp(40px,6.2vw,76px);font-weight:850}
+h2{font-size:clamp(30px,3.8vw,46px);font-weight:800}
+h3{font-size:20px;font-weight:750;font-stretch:105%;line-height:1.2}
+p{margin:0;max-width:62ch}
+a{color:inherit}
+.eyebrow{font:500 12.5px/1 var(--f-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.num{font-family:var(--f-data);font-variant-numeric:tabular-nums}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;font:600 16px/1 var(--f-body);padding:14px 20px;border-radius:8px;text-decoration:none;border:1.5px solid transparent;cursor:pointer;white-space:nowrap}
+.btn-primary{background:var(--amber);color:var(--on-amber)}
+.btn-primary:hover{filter:brightness(1.06)}
+.btn-ghost{border-color:var(--line);color:var(--ink);background:transparent}
+.btn-ghost:hover{border-color:var(--ink)}
+.btn-sm{padding:10px 14px;font-size:15px}
+
+/* review notes */
+.review-bar{background:var(--note-bg);color:var(--note);font:500 13.5px/1.4 var(--f-body);border-bottom:1px solid var(--line)}
+.review-bar .wrap{display:flex;gap:12px;align-items:center;justify-content:space-between;padding-block:9px;flex-wrap:wrap}
+.review-bar button{font:600 13px var(--f-body);color:var(--note);background:transparent;border:1.5px solid currentColor;border-radius:999px;padding:5px 12px;cursor:pointer}
+.q{display:inline-flex;align-items:center;gap:4px;font:600 11.5px/1 var(--f-data);color:var(--note);background:var(--note-bg);border:1px dashed var(--note);border-radius:999px;padding:3px 7px;vertical-align:middle;margin-left:6px;white-space:nowrap;cursor:help;letter-spacing:0;text-transform:none}
+body.clean .q, body.clean .review-only{display:none!important}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:24px;padding-block:14px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:800 21px/1 var(--f-display);font-stretch:108%;letter-spacing:-.01em}
+.brand svg{flex:none}
+.nav-links{display:flex;gap:22px;margin-left:12px}
+.nav-links a{text-decoration:none;color:var(--muted);font-weight:500;font-size:15.5px}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{margin-left:auto;display:flex;gap:10px;align-items:center}
+.login{font-weight:600;font-size:15px;text-decoration:none;padding:10px 12px}
+@media (max-width:900px){.nav-links{display:none}}
+@media (max-width:480px){.login{display:none}}
+
+/* hero */
+.hero{padding-block:clamp(40px,7vw,88px) clamp(48px,7vw,96px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);gap:clamp(32px,5vw,64px);align-items:center}
+@media (max-width:960px){.hero-grid{grid-template-columns:1fr}}
+.hero h1 .hl{background:linear-gradient(transparent 62%,color-mix(in srgb,var(--amber) 55%,transparent) 62%);padding:0 .06em}
+.hero .lede{font-size:clamp(18px,1.6vw,20.5px);color:var(--muted);margin-top:22px;max-width:46ch}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.hero .fine{margin-top:16px;font-size:14.5px;color:var(--muted)}
+.hero .by{display:flex;align-items:center;gap:10px;margin-top:34px;padding-top:22px;border-top:1px solid var(--line);font-size:14.5px;color:var(--muted)}
+.hero .by b{color:var(--ink);font-weight:600}
+
+/* job ticket (hero product) */
+.ticket{background:var(--frame);color:var(--frame-ink);border-radius:14px;padding:clamp(18px,2.4vw,26px);box-shadow:0 30px 60px -30px rgba(15,23,42,.55);position:relative}
+.t-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding-bottom:16px;border-bottom:1px dashed var(--frame-line)}
+.t-head .id{font:500 12.5px var(--f-data);color:var(--frame-muted);letter-spacing:.04em}
+.t-head h3{color:var(--frame-ink);margin-top:6px;font-size:19px}
+.t-head .meta{font-size:13.5px;color:var(--frame-muted);margin-top:3px}
+.status{font:600 11.5px/1 var(--f-data);letter-spacing:.06em;text-transform:uppercase;padding:6px 9px;border-radius:999px;white-space:nowrap}
+.st-done{background:color-mix(in srgb,var(--good) 22%,transparent);color:#7FE0B5}
+.t-margin{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding-block:18px 14px;flex-wrap:wrap}
+.t-margin .lbl{font:500 12px var(--f-data);letter-spacing:.08em;text-transform:uppercase;color:var(--frame-muted)}
+.t-margin .big{font:600 clamp(40px,4.6vw,54px)/1 var(--f-data);color:var(--amber);letter-spacing:-.02em;margin-top:6px}
+.t-margin .big small{font-size:.42em;color:var(--frame-ink);margin-left:8px;letter-spacing:0}
+.t-margin .vs{font-size:13.5px;color:var(--frame-muted)}
+.t-margin .vs{text-align:left}
+@media (min-width:441px){.t-margin .vs{text-align:right}}
+.t-margin .vs b{color:#FF9C92;font-weight:600}
+.bar{display:flex;height:14px;border-radius:4px;overflow:hidden;gap:2px}
+.bar span{display:block;height:100%}
+.legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 18px;margin-top:14px}
+.legend div{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding-block:6px;border-bottom:1px solid var(--frame-line)}
+.legend div span:first-child{display:flex;align-items:center;gap:8px;color:var(--frame-muted)}
+.legend i{width:9px;height:9px;border-radius:2px;flex:none}
+.legend .num{color:var(--frame-ink)}
+@media (max-width:440px){.legend{grid-template-columns:1fr}}
+.flag{display:flex;gap:12px;align-items:flex-start;margin-top:18px;background:var(--frame-2);border:1px solid var(--frame-line);border-left:3px solid var(--amber);border-radius:8px;padding:12px 14px;font-size:14.5px;line-height:1.45}
+.flag svg{flex:none;margin-top:2px}
+.flag b{color:var(--frame-ink)}
+.flag span{color:var(--frame-muted)}
+
+/* sections */
+section{padding-block:clamp(56px,8vw,104px)}
+.sec-head{display:grid;gap:14px;margin-bottom:clamp(28px,4vw,48px)}
+.sec-head p{color:var(--muted);font-size:18.5px}
+.sec-head p.eyebrow{font-size:12.5px}
+.band{background:var(--surface);border-block:1px solid var(--line)}
+
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);overflow:hidden}
+.step{padding:22px 20px 24px;border-right:1px solid var(--line);position:relative;display:grid;gap:8px;align-content:start}
+.step:last-child{border-right:0;background:color-mix(in srgb,var(--amber) 14%,var(--surface))}
+.step .n{font:500 12px var(--f-data);color:var(--muted);letter-spacing:.06em}
+.step h3{font-size:19px}
+.step p{font-size:15px;color:var(--muted)}
+.step .mod{font:500 12px var(--f-data);color:var(--muted);margin-top:4px}
+.step:not(:last-child)::after{content:"";position:absolute;right:-7px;top:28px;width:12px;height:12px;background:var(--surface);border-top:1px solid var(--line);border-right:1px solid var(--line);transform:rotate(45deg);z-index:1}
+@media (max-width:900px){.flow{grid-template-columns:1fr}.step{border-right:0;border-bottom:1px solid var(--line)}.step:last-child{border-bottom:0}.step:not(:last-child)::after{right:auto;left:28px;top:auto;bottom:-7px;transform:rotate(135deg)}}
+
+/* problems */
+.probs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,36px)}
+@media (max-width:860px){.probs{grid-template-columns:1fr}}
+.prob{display:grid;gap:10px;align-content:start;padding-top:18px;border-top:2px solid var(--ink)}
+.prob .fig{font:600 28px/1 var(--f-data);color:var(--bad);letter-spacing:-.01em}
+.prob p{color:var(--muted);font-size:16px}
+
+/* tour */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.tab{font:600 15px var(--f-body);padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.app{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;color:var(--frame-ink);display:grid;grid-template-columns:200px minmax(0,1fr)}
+@media (max-width:820px){.app{grid-template-columns:1fr}.side{display:none!important}}
+.side{background:var(--frame);border-right:1px solid var(--frame-line);padding:18px 14px;display:grid;gap:4px;align-content:start;font-size:14px;color:var(--frame-muted)}
+.side .grp{font:500 10.5px var(--f-data);letter-spacing:.1em;text-transform:uppercase;margin:12px 8px 4px;color:#6C7891}
+.side div.it{padding:7px 8px;border-radius:6px}
+.side div.on{background:var(--frame-2);color:var(--frame-ink)}
+.pane{background:var(--surface);color:var(--ink);padding:clamp(16px,2.4vw,26px);min-width:0}
+.pane-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.pane-head h3{font-size:20px}
+.pane-head .sub{font-size:14px;color:var(--muted)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:620px}
+th{font:500 11.5px var(--f-data);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:left;padding:11px 14px;background:var(--sunk);border-bottom:1px solid var(--line)}
+td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right}
+.jid{font:500 13px var(--f-data);color:var(--muted)}
+.pill{display:inline-block;font:600 12.5px/1 var(--f-data);padding:6px 9px;border-radius:999px}
+.p-good{background:var(--good-bg);color:var(--good)} .p-warn{background:var(--warn-bg);color:var(--warn)} .p-bad{background:var(--bad-bg);color:var(--bad)}
+.mbar{display:inline-block;width:72px;height:6px;border-radius:3px;background:var(--sunk);vertical-align:middle;margin-right:10px;position:relative;overflow:hidden}
+.mbar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.tour-note{display:flex;gap:10px;margin-top:14px;font-size:14.5px;color:var(--muted)}
+.tour-note b{color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+@media (max-width:640px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.kpi .k{font:500 11px var(--f-data);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.kpi .v{font:600 22px/1.2 var(--f-data);margin-top:6px}
+.stage{display:flex;gap:4px;align-items:center}
+
+/* split */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:start}
+@media (max-width:860px){.split{grid-template-columns:1fr}}
+.checks{display:grid;gap:14px;margin-top:24px;padding:0;list-style:none}
+.checks li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;font-size:16.5px}
+.checks li svg{margin-top:4px}
+.checks li span{color:var(--muted)}
+.checks li b{color:var(--ink);font-weight:600}
+.sync{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:22px;display:grid;gap:14px}
+.sync-row{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:center}
+.node{border:1px solid var(--line);border-radius:8px;padding:14px;text-align:center;display:grid;gap:4px}
+.node b{font-family:var(--f-display);font-stretch:108%;font-size:18px}
+.node span{font-size:13px;color:var(--muted)}
+.node.main{border-color:var(--ink);background:var(--sunk)}
+.arrow{font:500 12px var(--f-data);color:var(--muted);text-align:center}
+.sync ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-size:14.5px;color:var(--muted)}
+.sync li{display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:8px}
+.sync li b{color:var(--ink);font-weight:500}
+
+.people{background:var(--frame);color:var(--frame-ink)}
+.people h2{color:var(--frame-ink)}
+.people .sec-head p,.people p{color:var(--frame-muted)}
+.terms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;border-radius:var(--r);overflow:hidden}
+@media (max-width:640px){.terms{grid-template-columns:1fr}}
+.terms div{background:var(--frame-2);padding:22px;display:grid;gap:10px;align-content:start}
+.terms .eyebrow{color:var(--amber)}
+.terms ul{margin:0;padding-left:18px;color:var(--frame-muted);font-size:15.5px;display:grid;gap:6px}
+
+/* pricing */
+.plans{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media (max-width:1000px){.plans{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:540px){.plans{grid-template-columns:1fr}}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px 22px;display:grid;gap:14px;align-content:start}
+.plan.pop{border:2px solid var(--ink)}
+.plan .tag{font:600 11.5px var(--f-data);letter-spacing:.07em;text-transform:uppercase;color:var(--amber-ink)}
+.plan .price{font:600 36px/1 var(--f-data);letter-spacing:-.02em}
+.plan .price small{font:400 14px var(--f-body);color:var(--muted);letter-spacing:0;margin-left:4px}
+.plan .users{font-size:15.5px;font-weight:600}
+.plan p{font-size:14.5px;color:var(--muted)}
+.plan .btn{justify-content:center}
+.price-note{margin-top:18px;font-size:14.5px;color:var(--muted)}
+.fill{background:var(--note-bg);color:var(--note);border-bottom:1.5px dashed var(--note);padding:0 4px;border-radius:3px;font-weight:600}
+body.clean .fill{background:transparent;color:inherit;border:0;padding:0;font-weight:inherit}
+.field-users{display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:14px;padding:18px 22px;border:1px dashed var(--ink);border-radius:var(--r);background:var(--surface)}
+.field-users b{font-family:var(--f-display);font-stretch:106%;font-size:18px}
+.field-users p{color:var(--muted);font-size:15.5px;margin-top:2px}
+.field-users .num{font-size:20px;font-weight:600;white-space:nowrap}
+/* site capture */
+.capture{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(28px,5vw,72px);align-items:center}
+@media (max-width:960px){.capture{grid-template-columns:1fr}}
+.phones{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.phone{width:262px;max-width:100%;background:var(--frame);border-radius:34px;padding:10px;box-shadow:0 26px 50px -28px rgba(15,23,42,.6)}
+.phone:nth-child(2){margin-top:40px}
+@media (max-width:620px){.phone:nth-child(2){margin-top:0}}
+.screen{background:var(--surface);border-radius:26px;overflow:hidden;color:var(--ink)}
+.s-top{background:var(--frame-2);color:var(--frame-ink);padding:16px 16px 14px;display:grid;gap:3px}
+.s-top .id{font:500 11px var(--f-data);color:var(--frame-muted);letter-spacing:.05em}
+.s-top b{font:700 16px/1.25 var(--f-display);font-stretch:104%}
+.s-body{padding:12px 14px 16px;display:grid;gap:8px}
+.crew{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;font-size:13.5px}
+.crew small{display:block;font:400 11.5px var(--f-data);color:var(--muted)}
+.crew .num{font-weight:600;font-size:14px}
+.s-btn{display:block;text-align:center;background:var(--amber);color:var(--on-amber);font:600 14px var(--f-body);padding:11px;border-radius:10px;margin-top:4px}
+.s-total{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);padding-top:4px}
+.s-total .num{color:var(--ink);font-weight:600}
+.slip{height:150px;border-radius:10px;background:repeating-linear-gradient(180deg,var(--sunk) 0 10px,var(--surface) 10px 20px);border:1px solid var(--line);position:relative;display:grid;place-items:center}
+.slip span{font:500 11.5px var(--f-data);color:var(--muted);background:var(--surface);padding:4px 8px;border-radius:6px;border:1px solid var(--line)}
+.kv{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;padding-block:6px;border-bottom:1px solid var(--line)}
+.kv span:first-child{color:var(--muted)}
+.ok{font-size:12.5px;color:var(--good);font-weight:600;display:flex;gap:6px;align-items:center}
+.pilot{margin-top:22px;border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:18px 20px;display:grid;gap:6px}
+.pilot b{font-family:var(--f-display);font-stretch:106%;font-size:18px}
+.pilot p{color:var(--muted);font-size:15.5px}
+.contact{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:26px;padding-top:20px;border-top:1px solid var(--frame-line);font-size:15px;color:var(--frame-muted)}
+.contact b{color:var(--frame-ink);font-weight:600}
+.people .fill,footer .fill{background:color-mix(in srgb,var(--note) 22%,transparent);color:#D9CCFF;border-bottom-color:#B49BFF}
+
+/* proof */
+.proof{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:14px}
+@media (max-width:860px){.proof{grid-template-columns:1fr}}
+.quote-slot{border:2px dashed var(--line);border-radius:var(--r);padding:28px;display:grid;gap:14px;align-content:center;min-height:220px}
+.quote-slot .ph{font:500 12px var(--f-data);color:var(--note);letter-spacing:.06em;text-transform:uppercase}
+.quote-slot blockquote{margin:0;font:700 clamp(22px,2.4vw,28px)/1.25 var(--f-display);font-stretch:104%;color:var(--muted)}
+.facts{display:grid;gap:14px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;display:grid;gap:4px}
+.fact b{font:600 26px/1.1 var(--f-data)}
+.fact span{color:var(--muted);font-size:15px}
+
+/* faq */
+.faq{display:grid;gap:0;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line);padding-block:4px}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;padding-block:16px;font:700 19px/1.3 var(--f-display);font-stretch:104%}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font:400 26px/1 var(--f-body);color:var(--muted)}
+.faq details[open] summary::after{content:"–"}
+.faq details p{padding-bottom:18px;color:var(--muted)}
+
+/* trial */
+.trial{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:start}
+@media (max-width:860px){.trial{grid-template-columns:1fr}}
+.trial ol{margin:22px 0 0;padding:0;list-style:none;display:grid;gap:14px;counter-reset:s}
+.trial ol li{counter-increment:s;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;font-size:16.5px;color:var(--muted)}
+.trial ol li::before{content:counter(s);font:600 14px/32px var(--f-data);width:32px;height:32px;text-align:center;border-radius:50%;background:var(--sunk);color:var(--ink)}
+.trial ol li b{color:var(--ink);font-weight:600;display:block}
+form{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:clamp(20px,3vw,30px);display:grid;gap:16px}
+.field{display:grid;gap:6px}
+.field label{font-weight:600;font-size:14.5px}
+.field input,.field select{font:400 16px var(--f-body);padding:12px 14px;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%}
+.field input:focus,.field select:focus{border-color:var(--ink);outline:none}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:480px){.row2{grid-template-columns:1fr}}
+form .btn{justify-content:center;width:100%}
+form .fine{font-size:13.5px;color:var(--muted);text-align:center}
+.done{display:grid;gap:10px;text-align:center;padding-block:20px}
+.done b{font:800 24px var(--f-display);font-stretch:108%}
+.done p{margin:0 auto;color:var(--muted)}
+
+/* customers */
+.cust{border-top:1px solid var(--line);background:var(--sunk)}
+.cust .wrap{display:flex;gap:24px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding-block:28px}
+.cust h3{font-size:20px}
+.cust p{color:var(--muted);font-size:15.5px;margin-top:4px}
+.cust .links{display:flex;gap:10px;flex-wrap:wrap}
+
+footer{background:var(--frame);color:var(--frame-muted);font-size:14.5px}
+footer .wrap{display:flex;gap:24px;justify-content:space-between;flex-wrap:wrap;padding-block:36px}
+footer .brand{color:var(--frame-ink)}
+footer b{color:var(--frame-ink);font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="review-bar review-only" id="reviewBar">
+  <div class="wrap">
+    <span><b>Draft V1 for internal review.</b> Purple tags mark copy that depends on open questions in the ManaGEM product-truth note (Q-numbers match that note). Bracketed fields are facts still to be supplied.</span>
+    <button type="button" id="toggleNotes" aria-pressed="false">Hide review notes</button>
+  </div>
+</div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="ManaGEM home">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="7" fill="var(--amber)"/><path d="M7 21V9l8 8 8-8v12" fill="none" stroke="var(--on-amber)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      ManaGEM
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#how">How it works</a>
+      <a href="#capture">On site</a>
+      <a href="#tour">Product</a>
+      <a href="#people">Support</a>
+      <a href="#pricing">Pricing</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="login" href="#customers">Customer login</a>
+      <a class="btn btn-primary btn-sm" href="#trial">Start free trial</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Job management for contractors and service businesses</p>
+        <h1 style="margin-top:16px">Know which jobs <span class="hl">make you money</span>.</h1>
+        <p class="lede">ManaGEM follows every job from first enquiry to final invoice, then shows what it really cost in materials and labour. You see the margin on each job, not just a busy month.<span class="q" title="Depends on per-job margin view being built (Sebastian) and labour hours being captured (Vanessa)">Q2 · Q5</span></p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="#trial">Start your free trial</a>
+          <a class="btn btn-ghost" href="#how">See how it works</a>
+        </div>
+        <p class="fine">14 days free. No card needed. From R1,000 a month for 2 users.<span class="q" title="Trial length, card requirement and VAT treatment not frozen (Leon + Graeme, Day 1 commercial)">Commercial</span></p>
+        <div class="by">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.4 8.6-8 10-4.6-1.4-8-5-8-10V6z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 12l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span>Built and supported by <b>GEMIS</b>, a South African software team you can actually talk to.</span>
+        </div>
+      </div>
+
+      <div class="ticket" aria-label="Example job summary in ManaGEM">
+        <div class="t-head">
+          <div>
+            <div class="id">JOB J-0142 · COMPLETED 18 SEP</div>
+            <h3>Office park roof waterproofing</h3>
+            <div class="meta">Northcliff, Johannesburg · Foreman: T. Nkosi</div>
+          </div>
+          <span class="status st-done">Invoiced</span>
+        </div>
+        <div class="t-margin">
+          <div>
+            <div class="lbl">Job margin</div>
+            <div class="big num">23.4%<small>R 66,680</small></div>
+          </div>
+          <div class="vs">Quoted at <span class="num">29.6%</span><br><b class="num">6.2 pts under quote</b></div>
+        </div>
+        <div class="bar" role="img" aria-label="Of R 284,500 invoiced: materials 42.6%, labour 27.5%, other costs 6.5%, margin 23.4%">
+          <span style="width:42.6%;background:#5B6B8C"></span>
+          <span style="width:27.5%;background:#8C9BB8"></span>
+          <span style="width:6.5%;background:#3A4766"></span>
+          <span style="width:23.4%;background:var(--amber)"></span>
+        </div>
+        <div class="legend">
+          <div><span><i style="background:transparent;border:1px solid var(--frame-muted)"></i>Invoiced</span><span class="num">R 284,500</span></div>
+          <div><span><i style="background:#5B6B8C"></i>Materials</span><span class="num">R 121,300</span></div>
+          <div><span><i style="background:#8C9BB8"></i>Labour · 186 h</span><span class="num">R 78,120</span></div>
+          <div><span><i style="background:#3A4766"></i>Subcontract &amp; hire</span><span class="num">R 18,400</span></div>
+        </div>
+        <div class="flag">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l10 18H2z" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v5M12 18h.01" stroke="var(--amber)" stroke-width="2" stroke-linecap="round"/></svg>
+          <div><b>Labour ran 42 hours over the quote.</b> <span>That cost R 17,640 of margin. Two similar roof jobs this year ran over by the same amount.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW -->
+  <section id="how" class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">How it works</p>
+        <h2>One record for each job, from enquiry to margin.</h2>
+        <p>Your team captures the work as it happens. ManaGEM adds up the money behind it.</p>
+      </div>
+      <div class="flow">
+        <div class="step"><span class="n">01</span><h3>Enquiry</h3><p>Log the lead, the site and who's following up.</p><span class="mod">Enquiries · Customers</span></div>
+        <div class="step"><span class="n">02</span><h3>Quote</h3><p>Price from your own product list and templates.</p><span class="mod">Quotes · Products &amp; pricing</span></div>
+        <div class="step"><span class="n">03</span><h3>Job</h3><p>Book the team, dispatch stock, track progress.</p><span class="mod">Jobs · Bookings · Stock</span></div>
+        <div class="step"><span class="n">04</span><h3>Costs</h3><p>Foremen log hours and slips from their phone.<span class="q" title="Mobile capture of hours and slips: exists, planned or not?">Q13</span></p><span class="mod">Site app · Stock dispatch</span></div>
+        <div class="step"><span class="n">05</span><h3>Margin</h3><p>Invoice it and see what the job really made.<span class="q" title="Per-job margin view not in product yet">Q5</span></p><span class="mod">Invoices · Job margin</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SITE CAPTURE -->
+  <section id="capture">
+    <div class="wrap capture">
+      <div>
+        <p class="eyebrow">From site to margin</p>
+        <h2 style="margin-top:14px">Your foremen capture the costs on site, in under a minute a day.</h2>
+        <p style="margin-top:18px;color:var(--muted);font-size:18px">A margin is only as good as the costs behind it. ManaGEM puts hours and on-the-way purchases on the job the day they happen, so nobody types up timesheets on Friday.<span class="q" title="Can foremen log hours and slips on a phone today? This is the claim most likely to decide a sale">Q2 · Q13</span></p>
+        <ul class="checks">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="var(--good)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>Clock the whole team in and out.</b> <span>One tap by the foreman, against the job they're on.</span></div></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="var(--good)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>Photograph the slip.</b> <span>Materials bought at the hardware store go on the job, not in a cubbyhole.</span><span class="q" title="Ad-hoc purchases: can a slip be attached to a job?">Q14</span></div></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="var(--good)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>Field users cost less.</b> <span>Foremen who only log hours and slips don't need a full seat.</span><span class="q" title="Field-user pricing is a proposal for Leon + Graeme">Q16</span></div></li>
+        </ul>
+      </div>
+      <div class="phones" aria-label="ManaGEM on a foreman's phone, example screens">
+        <div class="phone"><div class="screen">
+          <div class="s-top"><span class="id">TODAY · J-0142</span><b>Office park roof, Northcliff</b></div>
+          <div class="s-body">
+            <div class="crew"><div>T. Nkosi<small>Foreman · in 07:02</small></div><span class="num">9.5 h</span></div>
+            <div class="crew"><div>S. Dlamini<small>in 07:05</small></div><span class="num">9.4 h</span></div>
+            <div class="crew"><div>J. Mokoena<small>in 07:05</small></div><span class="num">9.4 h</span></div>
+            <div class="crew"><div>P. Botha<small>in 08:30</small></div><span class="num">8.0 h</span></div>
+            <div class="s-total"><span>Today on this job</span><span class="num">36.3 h</span></div>
+            <span class="s-btn">Clock out team</span>
+          </div>
+        </div></div>
+        <div class="phone"><div class="screen">
+          <div class="s-top"><span class="id">ADD A PURCHASE</span><b>Slip for J-0142</b></div>
+          <div class="s-body">
+            <div class="slip"><span>Photo of till slip</span></div>
+            <div class="kv"><span>Store</span><span>Hardware store, Randburg</span></div>
+            <div class="kv"><span>Amount</span><span class="num">R 1,846.50</span></div>
+            <div class="kv"><span>Job</span><span>J-0142</span></div>
+            <span class="ok"><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Added to job costs</span>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEMS -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Why it matters</p>
+        <h2>A full order book can still lose money.</h2>
+        <p>Most small businesses find out which jobs paid when the accountant closes the year. By then the same mistakes have been quoted again.</p>
+      </div>
+      <div class="probs">
+        <div class="prob"><span class="fig num">+42 h</span><h3>The quote was right. The job wasn't.</h3><p>Hours run over on site and nobody adds them up until the invoice has gone.</p></div>
+        <div class="prob"><span class="fig num">−R30</span><h3>A product priced below cost.</h3><p>Supplier prices move, your price list doesn't, and every job that uses it loses a little.</p></div>
+        <div class="prob"><span class="fig num">90+ days</span><h3>Invoiced isn't paid.</h3><p>A profitable job that's paid in four months still squeezes this month's wages.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOUR -->
+  <section id="tour" class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Inside ManaGEM</p>
+        <h2>The same screens your team works in every day.</h2>
+        <p>Sales, jobs and money in one place, with the problems flagged before they repeat. Example data shown.</p>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Product views">
+        <button class="tab" role="tab" id="t-jobs" aria-selected="true" aria-controls="v-jobs">Job margins</button>
+        <button class="tab" role="tab" id="t-sales" aria-selected="false" aria-controls="v-sales">Sales pipeline</button>
+        <button class="tab" role="tab" id="t-debt" aria-selected="false" aria-controls="v-debt">Debtors</button>
+      </div>
+      <div class="app">
+        <div class="side" aria-hidden="true">
+          <div class="grp">Sales</div><div class="it" data-s="sales">Enquiries</div><div class="it">Quotes</div><div class="it">Invoices</div>
+          <div class="grp">Operations</div><div class="it on" data-s="jobs">Jobs</div><div class="it">Products &amp; pricing</div><div class="it">Stock control</div><div class="it" data-s="debt">Debtors</div>
+          <div class="grp">Admin</div><div class="it">Staff</div><div class="it">Settings</div>
+        </div>
+        <div class="pane">
+          <div id="v-jobs" role="tabpanel" aria-labelledby="t-jobs">
+            <div class="pane-head"><div><h3>Completed jobs · September</h3><div class="sub">Sorted by margin, lowest first</div></div><span class="pill p-warn">2 need attention</span></div>
+            <div class="tbl-wrap"><table>
+              <thead><tr><th>Job</th><th>Customer / site</th><th class="r">Invoiced</th><th class="r">Cost</th><th>Margin</th></tr></thead>
+              <tbody>
+                <tr><td class="jid">J-0135</td><td>School hall roof, Fourways</td><td class="r num">R 74,800</td><td class="r num">R 77,120</td><td><span class="mbar"><i style="width:3%;background:var(--bad)"></i></span><span class="pill p-bad">−3.1%</span></td></tr>
+                <tr><td class="jid">J-0137</td><td>Parking deck membrane, Pretoria</td><td class="r num">R 412,000</td><td class="r num">R 334,130</td><td><span class="mbar"><i style="width:19%;background:var(--warn)"></i></span><span class="pill p-warn">18.9%</span></td></tr>
+                <tr><td class="jid">J-0142</td><td>Office park roof, Northcliff</td><td class="r num">R 284,500</td><td class="r num">R 217,820</td><td><span class="mbar"><i style="width:23.4%;background:var(--good)"></i></span><span class="pill p-good">23.4%</span></td></tr>
+                <tr><td class="jid">J-0131</td><td>Retail centre roof, Randburg</td><td class="r num">R 158,300</td><td class="r num">R 115,240</td><td><span class="mbar"><i style="width:27.2%;background:var(--good)"></i></span><span class="pill p-good">27.2%</span></td></tr>
+                <tr><td class="jid">J-0139</td><td>Townhouse balconies, Midrand</td><td class="r num">R 96,200</td><td class="r num">R 65,610</td><td><span class="mbar"><i style="width:31.8%;background:var(--good)"></i></span><span class="pill p-good">31.8%</span></td></tr>
+              </tbody></table></div>
+            <div class="tour-note"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="flex:none;margin-top:3px"><path d="M12 3l10 18H2z" fill="none" stroke="var(--bad)" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v5M12 18h.01" stroke="var(--bad)" stroke-width="2" stroke-linecap="round"/></svg><span><b>Flagged:</b> PU membrane 5L sells at R510 but costs R540. It was used on J-0135 and two quotes still open.<span class="q" title="Flags/AI: what exists or is planned? Don't call it AI until it does something real">Q7</span></span></div>
+          </div>
+
+          <div id="v-sales" role="tabpanel" aria-labelledby="t-sales" hidden>
+            <div class="pane-head"><div><h3>Sales this month</h3><div class="sub">Enquiries to signed work</div></div><span class="pill p-good">On target</span></div>
+            <div class="kpis">
+              <div class="kpi"><div class="k">Enquiries</div><div class="v num">41</div></div>
+              <div class="kpi"><div class="k">Quotes out</div><div class="v num">R 3.35m</div></div>
+              <div class="kpi"><div class="k">Won</div><div class="v num">R 955k</div></div>
+              <div class="kpi"><div class="k">Win rate</div><div class="v num">28.5%</div></div>
+            </div>
+            <div class="tbl-wrap"><table>
+              <thead><tr><th>Ref</th><th>Customer</th><th>Stage</th><th class="r">Value</th><th>Next step</th></tr></thead>
+              <tbody>
+                <tr><td class="jid">E-0418</td><td>Body corporate, Sandton</td><td><span class="pill p-warn">Quoted</span></td><td class="r num">R 312,000</td><td>Follow up Thu</td></tr>
+                <tr><td class="jid">E-0416</td><td>Primary school, Benoni</td><td><span class="pill p-good">Won</span></td><td class="r num">R 88,400</td><td>Book team</td></tr>
+                <tr><td class="jid">E-0411</td><td>Homeowner, Linden</td><td><span class="pill p-warn">Site visit</span></td><td class="r num">—</td><td>Inspection Mon</td></tr>
+                <tr><td class="jid">E-0409</td><td>Warehouse, Isando</td><td><span class="pill p-good">Won</span></td><td class="r num">R 546,000</td><td>Deposit paid</td></tr>
+              </tbody></table></div>
+          </div>
+
+          <div id="v-debt" role="tabpanel" aria-labelledby="t-debt" hidden>
+            <div class="pane-head"><div><h3>Debtors</h3><div class="sub">What you're owed, by age</div></div><span class="pill p-bad">R 232k over 60 days</span></div>
+            <div class="kpis">
+              <div class="kpi"><div class="k">Outstanding</div><div class="v num">R 960k</div></div>
+              <div class="kpi"><div class="k">Current</div><div class="v num">R 425k</div></div>
+              <div class="kpi"><div class="k">31–60 days</div><div class="v num">R 303k</div></div>
+              <div class="kpi"><div class="k">60+ days</div><div class="v num">R 232k</div></div>
+            </div>
+            <div class="tbl-wrap"><table>
+              <thead><tr><th>Invoice</th><th>Customer</th><th>Age</th><th class="r">Balance</th><th>Last contact</th></tr></thead>
+              <tbody>
+                <tr><td class="jid">INV-0136</td><td>Property group, Rosebank</td><td><span class="pill p-bad">61–90 days</span></td><td class="r num">R 170,000</td><td>Statement sent 2 Oct</td></tr>
+                <tr><td class="jid">INV-0135</td><td>Holdings, Kempton Park</td><td><span class="pill p-bad">90+ days</span></td><td class="r num">R 62,000</td><td>Called 29 Sep</td></tr>
+                <tr><td class="jid">INV-0138</td><td>School, Fourways</td><td><span class="pill p-warn">31–60 days</span></td><td class="r num">R 74,500</td><td>Emailed 1 Oct</td></tr>
+              </tbody></table></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACCOUNTING -->
+  <section>
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">Your accounts stay where they are</p>
+        <h2 style="margin-top:14px">ManaGEM runs the work. Your accounting package keeps the books.</h2>
+        <p style="margin-top:18px;color:var(--muted);font-size:18px">You don't replace anything. ManaGEM sends invoices and products to Sage, so your accountant keeps working the way they do now.</p>
+        <ul class="checks">
+          <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="var(--good)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>Sage sync.</b> <span>Works with <span class="fill">[Sage version]</span>. Products and invoices, one-way or two-way.</span><span class="q" title="Which Sage products are supported: Pastel, Business Cloud Accounting, Sage 300?">Q15</span></div></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="3 3"/></svg><div><b>Xero.</b> <span>Talk to us about timing.</span><span class="q" title="Is Xero built, in progress or planned? Don't list it as live until it is">Q6</span></div></li>
+          <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="var(--good)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>Your data, exportable.</b> <span>Every list exports to CSV, Excel or PDF.</span></div></li>
+        </ul>
+      </div>
+      <div class="sync" aria-label="How ManaGEM and Sage share data">
+        <div class="sync-row">
+          <div class="node main"><b>ManaGEM</b><span>Customers, quotes, jobs, costs</span></div>
+          <div class="arrow">⇄<br>sync</div>
+          <div class="node"><b>Sage</b><span><span class="fill">[version]</span> · ledger, VAT</span></div>
+        </div>
+        <ul>
+          <li><span>Products &amp; prices</span><b>Both ways</b></li>
+          <li><span>Invoices</span><b>ManaGEM → Sage</b></li>
+          <li><span>Sales accounts</span><b>Mapped once in settings</b></li>
+          <li><span>Job margin</span><b>Stays in ManaGEM</b></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PEOPLE -->
+  <section id="people" class="people">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" style="color:var(--amber)">Support</p>
+        <h2>The people who build ManaGEM answer the phone.</h2>
+        <p>GEMIS has built business software for South African companies since <span class="fill">[year]</span>. When your business works differently, you talk to the developers, not a ticket queue.<span class="q" title="Developer-access wording and commercial boundary to be approved by Leon + Graeme (Day 4)">Day 4</span></p>
+      </div>
+      <div class="terms">
+        <div><span class="eyebrow">Included in every plan</span><ul><li>AI-assisted setup from your existing spreadsheets</li><li>Support from the ManaGEM team by phone and email</li><li>Product updates as they ship</li></ul></div>
+        <div><span class="eyebrow">Scoped and quoted separately</span><ul><li>Workflows specific to your trade</li><li>Custom reports and documents</li><li>Integrations with other systems you use</li></ul></div>
+      </div>
+      <div class="contact">
+        <span><b>Your contact:</b> <span class="fill">[Name]</span>, ManaGEM customer lead</span>
+        <span><b>Phone:</b> <span class="fill">[010 000 0000]</span></span>
+        <span><b>Office:</b> <span class="fill">[Street address]</span>, Johannesburg</span>
+        <span class="q" title="Founding year, address and a named contact: Leon to confirm">Q18</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Pricing</p>
+        <h2>Priced by team size. Every feature on every plan.</h2>
+        <p>Start with a 14-day free trial. Pick a plan when you're ready.<span class="q" title="Trial length, VAT, monthly vs annual: commercial matrix (Leon + Graeme)">Commercial</span></p>
+      </div>
+      <div class="plans">
+        <div class="plan"><span class="tag">Starter</span><div class="price num">R1,000<small>/month</small></div><span class="users">Up to 2 users</span><p>An owner and an office manager running sales and jobs.</p><a class="btn btn-ghost" href="#trial">Start free trial</a></div>
+        <div class="plan pop"><span class="tag">Most teams</span><div class="price num">R2,000<small>/month</small></div><span class="users">Up to 5 users</span><p>Sales, office and site leads working from the same jobs.</p><a class="btn btn-primary" href="#trial">Start free trial</a></div>
+        <div class="plan"><span class="tag">Growing</span><div class="price num">R3,000<small>/month</small></div><span class="users">Up to 10 users</span><p>Several teams and foremen on site at the same time.</p><a class="btn btn-ghost" href="#trial">Start free trial</a></div>
+        <div class="plan"><span class="tag">Larger teams</span><div class="price" style="font:800 30px/1.1 var(--f-display)">Let's talk</div><span class="users">More than 10 users</span><p>Multiple companies, branches or custom requirements.</p><a class="btn btn-ghost" href="#trial">Talk to us</a></div>
+      </div>
+      <div class="field-users">
+        <div><b>Foremen and site staff</b><p>Field users only log hours and slips from their phone. They don't count toward your plan's users.<span class="q" title="Proposal: field-user seat. Price and whether it's separate from plan users are Leon + Graeme's call">Q16</span></p></div>
+        <span class="num"><span class="fill">R[__]</span> per field user / month</span>
+      </div>
+      <p class="price-note">Prices exclude VAT. Billed monthly, no minimum term.<span class="q" title="Minimum term and notice period">Q19</span></p>
+    </div>
+  </section>
+
+  <!-- PROOF -->
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Customers</p>
+        <h2>Running real businesses today.</h2>
+      </div>
+      <div class="proof">
+        <div class="quote-slot">
+          <span class="ph review-only">Placeholder · real customer quote needed (Q11)</span>
+          <blockquote>A named customer quote goes here: the job they couldn't see before, and what changed.</blockquote>
+          <span style="color:var(--muted);font-size:15px">Name, role · Company, city</span>
+        </div>
+        <div class="facts">
+          <div class="fact"><b class="num">12</b><span>businesses run on ManaGEM today<span class="q" title="Confirm count and permission to state it">Q11</span></span></div>
+          <div class="fact"><b>Waterproofing, roofing, building</b><span>Trades where every job is priced, booked and costed differently<span class="q" title="Confirm customer sectors from Vanessa's audit">Q4</span></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRIAL -->
+  <section id="trial">
+    <div class="wrap trial">
+      <div>
+        <p class="eyebrow">Free trial</p>
+        <h2 style="margin-top:14px">See what your last job really made.</h2>
+        <ol>
+          <li><div><b>Create your account</b>Two minutes. No card needed.</div></li>
+          <li><div><b>Load a job you've just finished</b>Its quote, invoice, materials and hours. Send us your spreadsheets and our AI take-on tool sets up your customers, products and price list for you.<span class="q" title="Can past jobs with costs be imported or entered quickly?">Q17</span></div></li>
+          <li><div><b>See its margin, then run live jobs</b>Jobs often run longer than a trial, so start with one that's done and add today's work alongside it.</div></li>
+        </ol>
+        <div class="pilot">
+          <b>Longer jobs or a bigger team? Ask for a guided pilot.</b>
+          <p>30 days on 3 live jobs, set up with you by the ManaGEM team, including your foremen's phones.<span class="q" title="Guided pilot offer: length, cost (free or credited) to confirm">Commercial</span></p>
+        </div>
+      </div>
+      <form id="trialForm" novalidate>
+        <div id="formBody" style="display:grid;gap:16px">
+          <div class="row2">
+            <div class="field"><label for="fName">Your name</label><input id="fName" name="name" autocomplete="name" required></div>
+            <div class="field"><label for="fCo">Company</label><input id="fCo" name="company" autocomplete="organization" required></div>
+          </div>
+          <div class="field"><label for="fEmail">Work email</label><input id="fEmail" name="email" type="email" autocomplete="email" required></div>
+          <div class="row2">
+            <div class="field"><label for="fTeam">Team size</label><select id="fTeam" name="team"><option>1–2 people</option><option selected>3–5 people</option><option>6–10 people</option><option>More than 10</option></select></div>
+            <div class="field"><label for="fStart">How to start</label><select id="fStart" name="start"><option selected>Start my free trial</option><option>Guided 30-day pilot</option><option>Just show me around</option></select></div>
+          </div>
+          <p id="formErr" style="color:var(--bad);font-size:14.5px" hidden>Add your name, company and a work email to continue.</p>
+          <button class="btn btn-primary" type="submit" id="fSubmit">Start free trial</button>
+          <p class="fine">Your enquiry goes straight to the ManaGEM team. We don't share your details.</p>
+        </div>
+        <div class="done" id="formDone" hidden>
+          <b>You're in.</b>
+          <p>Check your inbox for your login link. In this prototype nothing was sent; on the live site this creates your trial and logs the lead in ManaGEM.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Questions</p><h2>Before you start.</h2></div>
+      <div class="faq">
+        <details><summary>Do I have to stop using Sage? Which versions work?</summary><p>No. ManaGEM handles customers, quotes, jobs and costs, and sends invoices and products to Sage. It works with <span class="fill">[Sage version]</span>. Your accountant keeps working in Sage as they do now.<span class="q" title="Sage versions supported">Q15</span></p></details>
+        <details><summary>Do my foremen need a full login?</summary><p>No. Foremen and site staff can be field users. They log hours and slips from their phone, and they don't use up your plan's users.<span class="q" title="Field-user model">Q16</span></p></details>
+        <details><summary>What happens when the trial ends?</summary><p>Pick a plan and keep everything you set up. If you don't, your account pauses and nothing is charged.</p></details>
+        <details><summary>Can I bring my existing customers and products?</summary><p>Yes. Our AI take-on tool reads your existing spreadsheets and sets up customers, products and prices for you, or you can sync products from Sage. The team checks the result with you.</p></details>
+        <details><summary>Is there a minimum contract?</summary><p>No. Plans are monthly and you can cancel with <span class="fill">[__ days']</span> notice.<span class="q" title="Minimum term and notice">Q19</span></p></details>
+        <details><summary>Where is my data, and is it POPIA-compliant?</summary><p>Your data is hosted in <span class="fill">[hosting location]</span>, backed up daily, and processed in line with POPIA.<span class="q" title="Hosting location, backups, POPIA wording: Sebastian">Q19</span></p></details>
+        <details><summary>What happens to my data if I leave?</summary><p>It's yours. Export every list to Excel or CSV before you go, and we delete it from our systems within <span class="fill">[__]</span> days.<span class="q" title="Data exit and deletion policy">Q19</span></p></details>
+        <details><summary>Can ManaGEM be changed for how we work?</summary><p>Often, yes. Because GEMIS builds ManaGEM, we can scope changes for your trade. Custom work is quoted separately from your subscription.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="cust" id="customers">
+  <div class="wrap">
+    <div><h3>Already use ManaGEM?</h3><p>Sign in, get help from the team, or see what's new this month.</p></div>
+    <div class="links">
+      <a class="btn btn-primary btn-sm" href="#customers">Sign in</a>
+      <a class="btn btn-ghost btn-sm" href="#people">Get support</a>
+      <a class="btn btn-ghost btn-sm" href="#tour">What's new</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div style="display:grid;gap:10px">
+      <span class="brand"><svg width="24" height="24" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="7" fill="var(--amber)"/><path d="M7 21V9l8 8 8-8v12" fill="none" stroke="var(--on-amber)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>ManaGEM</span>
+      <span>Know which jobs make you money.</span>
+    </div>
+    <div style="display:grid;gap:6px;text-align:right">
+      <span>Developed and supported by <b>GEMIS</b></span>
+      <span><span class="fill">[Street address]</span>, Johannesburg, South Africa</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // review notes toggle
+  var btn=document.getElementById('toggleNotes'), bar=document.getElementById('reviewBar');
+  function setClean(c){document.body.classList.toggle('clean',c);btn.setAttribute('aria-pressed',String(c));
+    btn.textContent=c?'Show review notes':'Hide review notes';
+    if(c){bar.style.display='block';bar.classList.remove('review-only')} else {bar.classList.add('review-only')}
+    try{localStorage.setItem('mm-clean',c?'1':'0')}catch(e){} }
+  btn.addEventListener('click',function(){setClean(!document.body.classList.contains('clean'))});
+  try{ if(localStorage.getItem('mm-clean')==='1') setClean(true) }catch(e){}
+
+  // tabs
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  var map={'t-jobs':'jobs','t-sales':'sales','t-debt':'debt'};
+  function select(t){tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',String(on));document.getElementById(x.getAttribute('aria-controls')).hidden=!on});
+    document.querySelectorAll('.side .it').forEach(function(i){i.classList.toggle('on',i.dataset.s===map[t.id])});}
+  tabs.forEach(function(t,i){t.addEventListener('click',function(){select(t)});
+    t.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='ArrowLeft'){var n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];n.focus();select(n)}})});
+
+  var labels={'Start my free trial':'Start free trial','Guided 30-day pilot':'Request my pilot','Just show me around':'Book a walkthrough'};
+  var sel=document.getElementById('fStart'),sub=document.getElementById('fSubmit');
+  sel.addEventListener('change',function(){sub.textContent=labels[sel.value]||'Start free trial'});
+  // trial form (prototype only)
+  var f=document.getElementById('trialForm');
+  f.addEventListener('submit',function(e){e.preventDefault();
+    var el=f.elements;var ok=el['name'].value.trim()&&el['company'].value.trim()&&/\S+@\S+\.\S+/.test(el['email'].value);
+    document.getElementById('formErr').hidden=!!ok; if(!ok) return;
+    document.getElementById('formBody').hidden=true; document.getElementById('formDone').hidden=false;});
+})();
+</script>
+
+</body>
+</html>
