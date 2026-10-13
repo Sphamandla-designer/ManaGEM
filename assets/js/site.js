@@ -144,6 +144,39 @@
     });
   });
 
+  /* ---- for your trade: horizontal tabs ---- */
+  var ttabs = $$('.trade-tab'), tpanels = $$('.trade-panel');
+  function selectTrade(t) {
+    ttabs.forEach(function (x) { var on = x === t; x.classList.toggle('on', on); x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; });
+    tpanels.forEach(function (p) { var on = p.id === t.getAttribute('aria-controls'); p.hidden = !on; p.classList.toggle('on', on); });
+  }
+  ttabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { selectTrade(t); });
+    t.addEventListener('keydown', function (e) {
+      var n = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!n) return;
+      e.preventDefault(); var nx = ttabs[(i + n + ttabs.length) % ttabs.length]; nx.focus(); selectTrade(nx);
+    });
+  });
+
+  /* ---- pricing: compare table disclosure ---- */
+  var cmpBtn = $('#compareBtn'), cmpBody = $('#compareTable');
+  if (cmpBtn) cmpBtn.addEventListener('click', function () {
+    var open = cmpBtn.getAttribute('aria-expanded') === 'true';
+    cmpBtn.setAttribute('aria-expanded', String(!open)); cmpBody.hidden = open;
+    cmpBtn.querySelector('span').textContent = open ? 'Compare plans in detail' : 'Hide plan comparison';
+  });
+
+  /* ---- sticky action bar on small screens: after the hero, hidden while a form is on screen ---- */
+  var sticky = $('#stickyCta');
+  if (sticky && 'IntersectionObserver' in window) {
+    sticky.hidden = false;
+    var pastHero = false, formVisible = false, nearEnd = false;
+    function syncSticky() { var show = pastHero && !formVisible && !nearEnd; sticky.classList.toggle('show', show); document.body.classList.toggle('has-sticky', show); }
+    new IntersectionObserver(function (en) { pastHero = !en[0].isIntersecting && en[0].boundingClientRect.bottom < 0; syncSticky(); }, { threshold: 0 }).observe(hero);
+    new IntersectionObserver(function (en) { formVisible = en[0].isIntersecting; syncSticky(); }, { threshold: 0.1 }).observe($('#teams'));
+    new IntersectionObserver(function (en) { nearEnd = en[0].isIntersecting; syncSticky(); }, { threshold: 0.05 }).observe($('.site-footer'));
+  }
+
   /* ---- larger-teams form (prototype: validates and confirms, sends nothing) ---- */
   var form = $('#teamForm');
   if (form) {
