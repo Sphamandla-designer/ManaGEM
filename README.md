@@ -39,17 +39,20 @@ Taken from the brand files and the product itself, not invented for the site.
 
 Follows the reference layout, section for section.
 
-1. Dark hero with centred headline and floating product cards that overlap onto the page
-2. Trades strip
-3. Feature bento, two wide cells then three narrow, each with a product crop
-4. Why it matters, three problem cards
-5. Product tour, tabbed browser frame with five full screens
-6. How it works, dark band with three steps and the trial form
-7. Sage integration
-8. Customer quotes with two stat tiles
-9. Pricing with monthly and yearly toggle, included list and plan selector
-10. FAQ
-11. Final call to action and footer
+1. Dark hero on a graded video loop, floating product cards that overlap onto the page
+2. Animated stats strip and trades strip
+3. Why it matters, three problem cards
+4. Feature bento, two wide cells then three narrow, each with a product crop
+5. Pricing: four plan cards with seat dots, billing toggle, and an "everything on every plan" footer
+6. Product tour, tabbed browser frame with five full screens
+7. How it works: AI take-on self-onboarding with an animated take-on console, trial starts from here
+8. Larger teams: the only form on the page, for 10+ users, multi-company and custom work
+9. Sage integration
+10. Customers: four selectable stories, each with quote, outcome chips and the module they use most
+11. FAQ
+12. Final call to action and footer
+
+Trial buttons link to `https://app.managem.co.za/signup`, a placeholder for the real sign-up URL.
 
 ## Hero video
 
