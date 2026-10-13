@@ -39,18 +39,22 @@ Taken from the brand files and the product itself, not invented for the site.
 
 Follows the reference layout, section for section.
 
-1. Dark hero on a graded video loop, floating product cards that overlap onto the page
-2. Animated stats strip and trades strip
-3. Why it matters, three problem cards
-4. Feature bento, two wide cells then three narrow, each with a product crop
-5. Pricing: four plan cards with seat dots, billing toggle, and an "everything on every plan" footer
-6. Product tour, tabbed browser frame with five full screens
-7. How it works: AI take-on self-onboarding with an animated take-on console, trial starts from here
-8. Larger teams: the only form on the page, for 10+ users, multi-company and custom work
-9. Sage integration
-10. Customers: four selectable stories, each with quote, outcome chips and the module they use most
-11. FAQ
-12. Final call to action and footer
+1. Dark hero on a graded video loop, floating product cards, assurance row (14 days free, no card, cancel anytime)
+2. Animated stats strip
+3. For your trade: five trade tabs with outcomes, modules and a product crop, plus an accountants and bookkeepers card
+4. Why it matters, three problem cards
+5. Feature bento, two wide cells then three narrow, each with a product crop
+6. Pricing: four plan cards with seat dots, billing toggle, "everything on every plan" footer, expandable comparison table and add-ons
+7. Our promises: data, POPIA and backups, month to month, support from the people who build it
+8. Product tour, tabbed browser frame with five full screens
+9. How it works: AI take-on self-onboarding with an animated take-on console, trial starts from here
+10. Larger teams: the only form on the page, for 10+ users, multi-company and custom work
+11. Sage integration
+12. Customers: four selectable stories, each with quote, outcome chips and the module they use most
+13. FAQ with support entry point and "ask the team" route
+14. Final call to action with three paths, five-column footer, sticky action bar on phones
+
+The reasoning behind the segmentation, assurance copy, pricing comparison and trust band is in `docs/competitor-teardown.md`.
 
 Trial buttons link to `https://app.managem.co.za/signup`, a placeholder for the real sign-up URL.
 
@@ -79,3 +83,6 @@ The copy keeps the V1 positioning. These points are still proposals or placehold
 | Phone capture of hours and slips by foremen | Mentioned in FAQ and pricing; confirm it exists before launch. |
 | Customer login URL | Links point to the top of the page until the app URL is supplied. |
 | Stats strip figures | "12 businesses" comes from V1 and is unconfirmed. "24 modules" counts the sidebar entries in the product build. |
+| Add-on prices | Extra field user and extra company show "Price to be confirmed" in the comparison table. |
+| Legal pages | Privacy, Terms and POPIA notice footer links are placeholders. |
+| Companies per plan | 1, 2, 3 and unlimited in the comparison table is a proposal. |
