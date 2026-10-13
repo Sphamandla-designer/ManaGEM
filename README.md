@@ -51,6 +51,12 @@ Follows the reference layout, section for section.
 10. FAQ
 11. Final call to action and footer
 
+## Hero video
+
+`assets/video/hero.mp4` and `hero.webm` are cut from `reference/design/hero-source-16-9.mp4`. The source is a 1280 by 720 abstract gradient loop with a vendor badge in the bottom-right corner. The badge is removed by cropping the frame to 1280 by 648, and the blue-to-purple palette is remapped through a luminance curve to navy, deep teal and GEM teal. A poster frame is exported as WebP. The page pauses the video under reduced motion or data saver and layers a navy shade over it for contrast.
+
+Regenerate with ffmpeg: crop `1280:648:0:0`, convert to grey, then map luminance to the three brand stops with `geq`.
+
 ## Regenerating mockups
 
 The mockups are real screens from `reference/product/managem-app.html`, rendered in Chromium at 1440 px and 2x scale, signed in with the prefilled prototype user, cropped per card with Playwright element screenshots and saved as WebP. The product is not responsive below desktop width, so phone frames are not used.
@@ -69,3 +75,4 @@ The copy keeps the V1 positioning. These points are still proposals or placehold
 | Xero | Listed as roadmap only. |
 | Phone capture of hours and slips by foremen | Mentioned in FAQ and pricing; confirm it exists before launch. |
 | Customer login URL | Links point to the top of the page until the app URL is supplied. |
+| Stats strip figures | "12 businesses" comes from V1 and is unconfirmed. "24 modules" counts the sidebar entries in the product build. |

@@ -70,6 +70,13 @@
 <main id="main">
 <!-- ================= HERO ================= -->
 <section class="hero" id="top" aria-labelledby="heroTitle">
+  <div class="hero-media" aria-hidden="true">
+    <video class="hero-video" id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="assets/video/hero-poster.webp" width="1280" height="648">
+      <source src="assets/video/hero.webm" type="video/webm">
+      <source src="assets/video/hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-shade"></div>
+  </div>
   <div class="wrap hero-inner">
     <span class="pill"><b>New</b> Sage invoice sync and multi-company support</span>
     <h1 id="heroTitle">Know what's <span class="accent">making you money</span>.</h1>
@@ -87,21 +94,33 @@
       <div class="glow" aria-hidden="true"></div>
       <div class="stage-grid">
         <div class="col left">
-          <figure class="shot"><img src="assets/mockups/card-kpi-quotes.webp" alt="Quotes this month: R 3,348,130, up 8% on the prior period" width="276" height="119" fetchpriority="high"></figure>
-          <figure class="shot"><img src="assets/mockups/card-monthly-performance.webp" alt="Monthly performance: opportunities, quotes sent and sales against target" width="399" height="346"></figure>
+          <figure class="shot" data-depth="1.4" style="--i:1"><img src="assets/mockups/card-kpi-quotes.webp" alt="Quotes this month: R 3,348,130, up 8% on the prior period" width="276" height="119" fetchpriority="high"></figure>
+          <figure class="shot" data-depth="0.9" style="--i:2"><img src="assets/mockups/card-monthly-performance.webp" alt="Monthly performance: opportunities, quotes sent and sales against target" width="399" height="346"></figure>
         </div>
         <div class="col center">
-          <figure class="shot main"><img src="assets/mockups/card-sales-summary.webp" alt="Sales summary for the last 12 months showing open and closed-won quotes rising month by month" width="738" height="346" fetchpriority="high"></figure>
+          <figure class="shot main" data-depth="0.5" style="--i:0"><img src="assets/mockups/card-sales-summary.webp" alt="Sales summary for the last 12 months showing open and closed-won quotes rising month by month" width="738" height="346" fetchpriority="high"></figure>
         </div>
         <div class="col right">
-          <figure class="shot"><img src="assets/mockups/card-kpi-enquiries.webp" alt="41 enquiries this month, 5 more than the prior period" width="276" height="119"></figure>
-          <figure class="shot"><img src="assets/mockups/card-low-stock.webp" alt="Low stock alerts for four items below their minimum, with a reorder action" width="568" height="201"></figure>
+          <figure class="shot" data-depth="1.4" style="--i:3"><img src="assets/mockups/card-kpi-enquiries.webp" alt="41 enquiries this month, 5 more than the prior period" width="276" height="119"></figure>
+          <figure class="shot" data-depth="0.9" style="--i:4"><img src="assets/mockups/card-warehouse.webp" alt="Warehouse capacity by store and vehicle, with percentage used" width="455" height="349"></figure>
         </div>
       </div>
     </div>
   </div>
 </section>
 <div class="hero-tail" aria-hidden="true"></div>
+
+<!-- ================= STATS ================= -->
+<section class="stats" aria-label="ManaGEM in numbers">
+  <div class="wrap">
+    <ul class="stat-grid" id="stats">
+      <li class="reveal" data-delay="1"><span class="stat-num"><span class="count num" data-to="12" data-dur="1400">0</span></span><span class="stat-lbl">businesses run on ManaGEM today</span></li>
+      <li class="reveal" data-delay="2"><span class="stat-num"><span class="count num" data-to="24" data-dur="1600">0</span></span><span class="stat-lbl">modules, from enquiries to factory, in one login</span></li>
+      <li class="reveal" data-delay="3"><span class="stat-num"><span class="count num" data-to="14" data-dur="1200">0</span><span class="unit">days</span></span><span class="stat-lbl">free trial on every plan, no card needed</span></li>
+      <li class="reveal" data-delay="4"><span class="stat-num"><span class="count num" data-to="100" data-dur="1800">0</span><span class="unit">%</span></span><span class="stat-lbl">of features on every plan, priced by team size</span></li>
+    </ul>
+  </div>
+</section>
 
 <!-- ================= TRUSTED ================= -->
 <section class="trusted" aria-labelledby="trustTitle">
@@ -169,7 +188,7 @@
           <p>Dispatch material to a job, track what's in each store and bakkie, and get a low-stock alert before the crew arrives at an empty shelf.</p>
         </div>
         <div class="frame stack">
-          <img src="assets/mockups/card-warehouse.webp" alt="Warehouse capacity by store and vehicle, with percentage used" width="455" height="349" loading="lazy">
+          <img src="assets/mockups/card-stock-movements.webp" alt="Recent stock movements: receipts, dispatches, transfers and returns by item" width="682" height="349" loading="lazy">
         </div>
       </article>
       <article class="cell span-2">

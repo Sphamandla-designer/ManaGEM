@@ -162,6 +162,60 @@
 
   $('#year').textContent = String(new Date().getFullYear());
 
-  /* once the hero entrance has played, freeze it so nothing is left animated */
+  /* once the hero copy has entered, freeze it so nothing is left animated */
   setTimeout(function () { document.body.classList.add('ready'); }, reduce ? 0 : 1600);
+
+  /* ---- hero video: honour reduced motion and data saver ---- */
+  var vid = $('#heroVideo');
+  if (vid) {
+    var saver = navigator.connection && navigator.connection.saveData;
+    if (reduce || saver) { vid.removeAttribute('autoplay'); vid.pause(); vid.removeAttribute('loop'); }
+    else { var play = vid.play(); if (play && play.catch) play.catch(function () {}); }
+    document.addEventListener('visibilitychange', function () { if (reduce) return; if (document.hidden) vid.pause(); else vid.play().catch(function () {}); });
+  }
+
+  /* ---- hero stage: pointer parallax by depth (fine pointers only) ---- */
+  var stage = $('.stage');
+  if (stage && !reduce && window.matchMedia('(pointer:fine)').matches) {
+    var shots = $$('.shot', stage), tx = 0, ty = 0, cx = 0, cy = 0, raf;
+    function tick() {
+      cx += (tx - cx) * 0.08; cy += (ty - cy) * 0.08;
+      shots.forEach(function (s) {
+        var d = parseFloat(s.dataset.depth || 1);
+        s.style.setProperty('--px', (cx * 14 * d).toFixed(2) + 'px');
+        s.style.setProperty('--py', (cy * 10 * d).toFixed(2) + 'px');
+      });
+      if (Math.abs(tx - cx) > 0.001 || Math.abs(ty - cy) > 0.001) raf = requestAnimationFrame(tick); else raf = 0;
+    }
+    hero.addEventListener('pointermove', function (e) {
+      var r = hero.getBoundingClientRect();
+      tx = ((e.clientX - r.left) / r.width - 0.5) * 2; ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
+      if (!raf) raf = requestAnimationFrame(tick);
+    });
+    hero.addEventListener('pointerleave', function () { tx = 0; ty = 0; if (!raf) raf = requestAnimationFrame(tick); });
+  }
+
+  /* ---- stats: count up when the strip scrolls into view ---- */
+  var counters = $$('.count');
+  function fmt(n) { return n.toLocaleString('en-ZA'); }
+  function runCounter(el) {
+    var to = parseFloat(el.dataset.to), dur = parseInt(el.dataset.dur || '1500', 10), t0;
+    if (reduce) { el.textContent = fmt(to); return; }
+    function step(ts) {
+      if (!t0) t0 = ts;
+      var p = Math.min(1, (ts - t0) / dur);
+      var e = 1 - Math.pow(2, -10 * p); if (p === 1) e = 1;
+      el.textContent = fmt(Math.round(to * e));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  if (counters.length) {
+    if ('IntersectionObserver' in window) {
+      var cio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { runCounter(en.target); cio.unobserve(en.target); } });
+      }, { threshold: 0.6 });
+      counters.forEach(function (c) { cio.observe(c); });
+    } else { counters.forEach(runCounter); }
+  }
 })();
