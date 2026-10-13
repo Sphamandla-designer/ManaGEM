@@ -101,64 +101,65 @@
     sio.observe($('#steps'));
   }
 
-  /* ---- pricing ---- */
-  var sw = $('#billSwitch'), yearly = false, plans = $$('.plan'), planBtn = $('#planBtn');
-  var planName = $('#planName'), planUsers = $('#planUsers');
-  function fmt(n) { return 'R' + n.toLocaleString('en-ZA'); }
+  /* ---- pricing: billing toggle swaps every amount ---- */
+  var sw = $('#billSwitch'), yearly = false;
+  function fmt(n) { return n.toLocaleString('en-ZA'); }
   function renderPrices() {
-    plans.forEach(function (p) {
-      var base = parseInt(p.dataset.price, 10); if (!base) return;
-      var price = $('.price', p);
-      if (yearly) price.innerHTML = fmt(base * 10) + '<small>per year · 2 months free</small>';
-      else price.innerHTML = fmt(base) + '<small>per month</small>';
-    });
+    $$('.pprice .amt[data-m]').forEach(function (el) { el.textContent = fmt(parseInt(yearly ? el.dataset.y : el.dataset.m, 10)); });
+    $$('.per-lbl').forEach(function (el) { el.textContent = yearly ? 'per year' : 'per month'; });
     $('#lblMonthly').classList.toggle('on', !yearly);
     $('#lblYearly').classList.toggle('on', yearly);
   }
-  sw.addEventListener('click', function () { yearly = !yearly; sw.setAttribute('aria-checked', String(yearly)); renderPrices(); });
-  function selectPlan(p) {
-    plans.forEach(function (x) { var on = x === p; x.classList.toggle('selected', on); x.setAttribute('aria-checked', String(on)); });
-    planName.textContent = p.dataset.name; planUsers.textContent = p.dataset.users;
-    var custom = !p.dataset.price;
-    planBtn.textContent = custom ? 'Talk to us about ' + p.dataset.name.toLowerCase() : 'Start free trial on ' + p.dataset.name;
-    planBtn.setAttribute('data-start', custom ? 'demo' : 'trial');
+  if (sw) sw.addEventListener('click', function () { yearly = !yearly; sw.setAttribute('aria-checked', String(yearly)); renderPrices(); });
+
+  /* ---- AI take-on console: play the mapping once it scrolls into view ---- */
+  var takeon = $('#takeon');
+  if (takeon) {
+    var rows = $$('.to-row', takeon), statusTxt = $('.to-status-txt', takeon);
+    function playTakeon() {
+      if (reduce) { rows.forEach(function (r) { r.classList.add('go', 'ok'); }); takeon.classList.add('done'); statusTxt.textContent = 'Ready for review'; return; }
+      rows.forEach(function (r, i) {
+        setTimeout(function () { r.classList.add('go'); }, 300 + i * 650);
+        setTimeout(function () { r.classList.add('ok'); }, 300 + i * 650 + 1000);
+      });
+      setTimeout(function () { takeon.classList.add('done'); statusTxt.textContent = 'Ready for review'; }, 300 + (rows.length - 1) * 650 + 1300);
+    }
+    if ('IntersectionObserver' in window) {
+      var tio = new IntersectionObserver(function (en) { if (en[0].isIntersecting) { playTakeon(); tio.disconnect(); } }, { threshold: 0.45 });
+      tio.observe(takeon);
+    } else playTakeon();
   }
-  plans.forEach(function (p, i) {
-    p.addEventListener('click', function () { selectPlan(p); });
-    p.addEventListener('keydown', function (e) {
-      var n = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0; if (!n) return;
-      e.preventDefault(); var nx = plans[(i + n + plans.length) % plans.length]; nx.focus(); selectPlan(nx);
+
+  /* ---- customer stories: vertical tabs ---- */
+  var stabs = $$('.story-tab'), spanels = $$('.story-panel');
+  function selectStory(t) {
+    stabs.forEach(function (x) { var on = x === t; x.classList.toggle('on', on); x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; });
+    spanels.forEach(function (p) { var on = p.id === t.getAttribute('aria-controls'); p.hidden = !on; p.classList.toggle('on', on); });
+  }
+  stabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { selectStory(t); });
+    t.addEventListener('keydown', function (e) {
+      var n = (e.key === 'ArrowDown' || e.key === 'ArrowRight') ? 1 : (e.key === 'ArrowUp' || e.key === 'ArrowLeft') ? -1 : 0; if (!n) return;
+      e.preventDefault(); var nx = stabs[(i + n + stabs.length) % stabs.length]; nx.focus(); selectStory(nx);
     });
   });
 
-  /* ---- links that preset the form's "how to start" ---- */
-  var startSel = $('#fStart'), submit = $('#fSubmit');
-  var labels = { trial: 'Start free trial', pilot: 'Request my pilot', demo: 'Book a walkthrough' };
-  function syncSubmit() { submit.textContent = labels[startSel.value] || labels.trial; }
-  startSel.addEventListener('change', syncSubmit);
-  $$('[data-start]').forEach(function (a) {
-    a.addEventListener('click', function () { startSel.value = a.getAttribute('data-start'); syncSubmit(); });
-  });
-
-  /* ---- trial form (prototype: validates and confirms, sends nothing) ---- */
-  var form = $('#trial');
-  function check(id, ok) { var f = $('#' + id).closest('.field'); f.classList.toggle('invalid', !ok); $('#' + id).setAttribute('aria-invalid', String(!ok)); return ok; }
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var a = check('fName', $('#fName').value.trim().length > 1);
-    var b = check('fCo', $('#fCo').value.trim().length > 1);
-    var c = check('fEmail', /^\S+@\S+\.\S+$/.test($('#fEmail').value.trim()));
-    if (!(a && b && c)) { var first = $('.field.invalid input', form); if (first) first.focus(); return; }
-    var mode = startSel.value;
-    $('#doneMsg').textContent = mode === 'pilot'
-      ? 'The ManaGEM team will call to plan your 30-day pilot on three live jobs, including your foremen’s phones.'
-      : mode === 'demo' ? 'The ManaGEM team will be in touch to book a walkthrough at a time that suits you.'
-      : 'Check your inbox for your login link. The team will call to help you load your first job.';
-    $('#formBody').hidden = true; var done = $('#formDone'); done.hidden = false; done.focus();
-  });
-  ['fName', 'fCo', 'fEmail'].forEach(function (id) {
-    $('#' + id).addEventListener('input', function () { $('#' + id).closest('.field').classList.remove('invalid'); });
-  });
+  /* ---- larger-teams form (prototype: validates and confirms, sends nothing) ---- */
+  var form = $('#teamForm');
+  if (form) {
+    function check(id, ok) { var f = $('#' + id).closest('.field'); f.classList.toggle('invalid', !ok); $('#' + id).setAttribute('aria-invalid', String(!ok)); return ok; }
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var a = check('fName', $('#fName').value.trim().length > 1);
+      var b = check('fCo', $('#fCo').value.trim().length > 1);
+      var c = check('fEmail', /^\S+@\S+\.\S+$/.test($('#fEmail').value.trim()));
+      if (!(a && b && c)) { var first = $('.field.invalid input', form); if (first) first.focus(); return; }
+      $('#formBody').hidden = true; var done = $('#formDone'); done.hidden = false; done.focus();
+    });
+    ['fName', 'fCo', 'fEmail'].forEach(function (id) {
+      $('#' + id).addEventListener('input', function () { $('#' + id).closest('.field').classList.remove('invalid'); });
+    });
+  }
 
   $('#year').textContent = String(new Date().getFullYear());
 
