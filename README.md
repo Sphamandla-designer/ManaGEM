@@ -44,7 +44,7 @@ Taken from the brand files and the product itself, not invented for the site.
 ## Page order
 
 1. Hero, following `reference/design/reference-03-hero.jpeg`: left-aligned copy over a black-to-teal-to-white gradient with drifting light rays and blooms, a trade pill, a white call to action and an arrow link, and the dashboard standing on the white bloom with its lower part faded out
-2. Features: six linked cards, three and three, on the strong navy-to-teal card gradient shared with the FAQ contact tile (`--grad-card`); each is a link to its page under `features/`, and the only control is the animated arrow
+2. Features: three white linked cards in one row (sales pipeline, jobs and bookings, invoicing and Sage); each is a link to its page under `features/`, and the only control is the animated arrow. The "Also in every plan" line below links the quotes, stock and factory pages
 3. Verified facts strip: one record per job, Sage sync, the 14-day trial, built by GEMIS
 4. Inside ManaGEM, centred on a clean navy-to-teal-to-white band (`--grad-band`, no pattern): six steps, enquiry to payment, each with its copy above an auto-playing silent clip of the real screen (see below); the clips play through in order and a chosen step loops
 5. For your trade: five trade tabs with outcomes, modules and a product crop, plus the accountants card
@@ -59,7 +59,7 @@ The header menu is centred: Features, Product, For your trade, Pricing, Support,
 
 ## Feature pages
 
-`features/<slug>.html`, one per tile in the mosaic. Each has the same header and footer as the homepage, a hero on the dark band with the real screen, a "what you get" list drawn only from what the product build shows, and a next-feature link. They are static pages generated from the content table in the October 2026 rebuild; edit them directly.
+`features/<slug>.html`, six pages: three reached from the feature cards and three from the "Also in every plan" line. Each has the same header and footer as the homepage, a hero on the dark band with the real screen, a "what you get" list drawn only from what the product build shows, and a next-feature link. They are static pages generated from the content table in the October 2026 rebuild; edit them directly.
 
 ## Walkthrough clips
 

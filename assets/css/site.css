@@ -231,10 +231,6 @@ p{margin:0}
 .how .sky .bloom{opacity:.3;bottom:auto}
 .how .sky .bloom-l{top:0}
 .how .sky .bloom-r{top:30%}
-.final .sky .bloom{opacity:.35;bottom:auto}
-.final .sky .bloom-l{top:20%}
-.final .sky .bloom-r{top:10%}
-.final .sky .rays{mask-image:linear-gradient(180deg,transparent 0,#000 30%,#000 80%,transparent 100%);-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 30%,#000 80%,transparent 100%)}
 
 /* ---------- verified facts ---------- */
 .facts{padding-block:0 clamp(56px,7vw,96px)}
@@ -289,31 +285,34 @@ p{margin:0}
 
 /* feature bento */
 .features{padding-top:clamp(40px,5vw,64px)}
-/* feature cards: two rows of three on the hero's light gradient; the whole card is the link, the arrow is the only control */
+/* feature cards: one row of three white cards; the whole card is the link, the arrow is the only control */
 .fgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-@media (max-width:980px){.fgrid{grid-template-columns:1fr 1fr}}
+@media (max-width:980px){.fgrid{grid-template-columns:1fr 1fr}.fgrid .tile:last-child{grid-column:1/-1}}
 @media (max-width:600px){.fgrid{grid-template-columns:1fr}}
-.tile{position:relative;isolation:isolate;overflow:hidden;display:grid;grid-template-rows:auto 1fr;gap:18px;min-height:380px;padding:26px 26px 0;border-radius:var(--r-lg);border:1px solid rgba(255,255,255,.1);color:#fff;text-decoration:none;background:var(--grad-card);box-shadow:0 30px 60px -30px rgba(7,11,21,.6);transition:transform var(--t) var(--ease),box-shadow var(--t) var(--ease),border-color var(--t-fast)}
-.tile::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(60% 50% at 90% 110%,rgba(94,234,212,.45),transparent 70%)}
-.tile:hover,.tile:focus-visible{transform:translateY(-4px);border-color:rgba(94,234,212,.4);box-shadow:0 40px 70px -30px rgba(7,11,21,.75)}
+.tile{position:relative;isolation:isolate;overflow:hidden;display:grid;grid-template-rows:auto 1fr;gap:18px;min-height:400px;padding:26px 26px 0;border-radius:var(--r-lg);border:1px solid var(--line);color:var(--ink);text-decoration:none;background:#fff;box-shadow:var(--shadow);transition:transform var(--t) var(--ease),box-shadow var(--t) var(--ease),border-color var(--t-fast)}
+.tile::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(60% 50% at 90% 110%,rgba(0,191,166,.14),transparent 70%)}
+.tile:hover,.tile:focus-visible{transform:translateY(-4px);border-color:var(--line-strong);box-shadow:var(--shadow-lg)}
 .tile:focus-visible{outline:3px solid var(--teal-300);outline-offset:3px}
-.tile-n{position:absolute;left:26px;top:22px;font-size:12.5px;color:var(--teal-300);letter-spacing:.06em}
-.tile-arrow{position:absolute;right:20px;top:18px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);color:#fff;transition:background var(--t) var(--ease),color var(--t) var(--ease),border-color var(--t) var(--ease)}
+.tile-n{position:absolute;left:26px;top:22px;font-size:12.5px;color:#0F766E;letter-spacing:.06em}
+.tile-arrow{position:absolute;right:20px;top:18px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--navy-900);border:1px solid var(--navy-900);color:#fff;transition:background var(--t) var(--ease),color var(--t) var(--ease),border-color var(--t) var(--ease)}
 .tile-arrow svg{width:20px;height:20px;transition:transform var(--t) var(--ease)}
 .tile:hover .tile-arrow,.tile:focus-visible .tile-arrow{background:var(--gem);border-color:var(--gem);color:var(--navy-900)}
 .tile:hover .tile-arrow svg,.tile:focus-visible .tile-arrow svg{transform:translate(3px,-3px)}
 @media (prefers-reduced-motion:no-preference){.tile-arrow svg{animation:nudge 2.6s ease-in-out infinite}.tile:hover .tile-arrow svg,.tile:focus-visible .tile-arrow svg{animation:none}}
 @keyframes nudge{0%,70%,100%{transform:translate(0,0)}80%{transform:translate(3px,-3px)}90%{transform:translate(0,0)}}
 .tile-copy{display:grid;gap:8px;align-content:start;padding-top:30px;padding-right:48px}
-.tile-k{font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-300)}
-.tile-h{font-size:clamp(20px,1.6vw,24px);font-weight:500;letter-spacing:-.02em;line-height:1.2;color:#fff;max-width:22ch}
-.tile-p{font-size:15px;color:#D5E3E6;line-height:1.55;max-width:46ch}
-.tile-shot{position:relative;align-self:end;justify-self:end;width:calc(100% + 26px);margin-right:-26px;margin-left:34px;aspect-ratio:16/9;border-radius:12px 0 0 0;overflow:hidden;border:1px solid rgba(255,255,255,.2);border-right:0;border-bottom:0;background:#fff;box-shadow:0 24px 50px -24px rgba(0,0,0,.7);transition:transform .6s var(--ease)}
+.tile-k{font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#0F766E}
+.tile-h{font-size:clamp(20px,1.6vw,24px);font-weight:500;letter-spacing:-.02em;line-height:1.2;color:var(--navy-900);max-width:22ch}
+.tile-p{font-size:15px;color:var(--ink-2);line-height:1.55;max-width:46ch}
+.tile-shot{position:relative;align-self:end;justify-self:end;width:calc(100% + 26px);margin-right:-26px;margin-left:34px;aspect-ratio:16/9;border-radius:12px 0 0 0;overflow:hidden;border:1px solid var(--line);border-right:0;border-bottom:0;background:#fff;box-shadow:0 24px 50px -24px rgba(7,11,21,.35);transition:transform .6s var(--ease)}
 .tile-shot img{width:150%;max-width:none;height:auto;display:block;transform-origin:top left;transition:transform .9s var(--ease)}
 .tile:hover .tile-shot img,.tile:focus-visible .tile-shot img{transform:scale(1.04)}
 .tile:hover .tile-shot,.tile:focus-visible .tile-shot{transform:translateY(-4px)}
-.tile .tile-shot::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 55%,rgba(15,95,112,.92))}
-.also{color:var(--ink-2)}
+.tile .tile-shot::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 55%,rgba(255,255,255,.96))}
+.also{margin-top:clamp(36px,4vw,56px);padding:18px 22px;border-radius:var(--r);border:1px solid var(--line);background:var(--bg);color:var(--ink-2);font-size:15px;line-height:1.6}
+.also b{color:var(--ink)}
+.also a{color:#0369A1;text-decoration:underline;text-underline-offset:3px}
+.also a:hover{color:var(--navy-900)}
 
 /* how it works (dark) */
 .dark{background:linear-gradient(180deg,#020305 0%,#061219 30%,#0A2A38 75%,#0E3446 100%);color:var(--on-dark)}
