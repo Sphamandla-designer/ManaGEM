@@ -261,6 +261,21 @@ p{margin:0}
 
 /* feature bento */
 .features{padding-top:clamp(40px,5vw,64px)}
+/* the feature cards share the hero's surface: dark teal gradient, a soft bloom, faint rays */
+.outcomes{background:transparent;border:0;gap:16px;overflow:visible}
+.outcomes .cell{position:relative;isolation:isolate;overflow:hidden;color:#fff;border-radius:var(--r-lg);border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,#040a10 0%,#071a24 40%,#0A2A38 100%);box-shadow:0 30px 60px -30px rgba(2,10,16,.6)}
+.outcomes .cell::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(60% 40% at 50% 115%,rgba(120,185,205,.55),transparent 70%),repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 2px,transparent 2px 34px);mask-image:linear-gradient(180deg,#000 0,#000 60%,rgba(0,0,0,.35) 100%);-webkit-mask-image:linear-gradient(180deg,#000 0,#000 60%,rgba(0,0,0,.35) 100%)}
+.outcomes .cell h3{color:#fff;font-weight:500;letter-spacing:-.02em}
+.outcomes .cell p{color:#C9D6DE}
+.outcomes .cell .ico{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:var(--teal-300)}
+.outcomes .checks li{color:#C9D6DE}
+.outcomes .checks svg{color:var(--teal-300)}
+.outcomes .frame{background:transparent;padding-top:18px;max-height:250px;align-self:end}
+.outcomes .cell{grid-template-rows:1fr auto}
+.outcomes .frame::after{background:linear-gradient(180deg,transparent 55%,rgba(10,42,56,.95))}
+.outcomes .frame img{border-color:rgba(255,255,255,.18);box-shadow:0 24px 50px -24px rgba(0,0,0,.7)}
+@media (prefers-reduced-motion:no-preference){.outcomes .cell{transition:transform var(--t) var(--ease),box-shadow var(--t) var(--ease)}.outcomes .cell:hover{transform:translateY(-3px);box-shadow:0 40px 70px -30px rgba(2,10,16,.7)}}
+.also{color:var(--ink-2)}
 .bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;background:var(--line);gap:1px}
 .cell{background:#fff;padding:clamp(22px,2.6vw,34px);display:grid;grid-template-rows:auto 1fr;gap:18px;min-width:0;position:relative}
 .cell.span-3{grid-column:span 3}.cell.span-2{grid-column:span 2}.cell.span-6{grid-column:span 6}
@@ -269,7 +284,7 @@ p{margin:0}
 .cell .copy{display:grid;gap:0;align-content:start}
 .cell .ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#E6FBF7;color:var(--teal-600);margin-bottom:14px}
 .cell .ico svg{width:20px;height:20px}
-.cell .ico.sky{background:#E6F6FE;color:var(--sky-600)}
+.cell .ico.ico-sky{background:#E6F6FE;color:var(--sky-600)}
 .cell .ico.amber{background:#FFF3DA;color:#B45309}
 .cell .ico.violet{background:#F0EAFF;color:#6D4AD6}
 .frame{position:relative;align-self:end;border-radius:var(--r-sm) var(--r-sm) 0 0;overflow:hidden;background:var(--sunk);padding:14px 14px 0;margin-inline:calc(-1*clamp(22px,2.6vw,34px)) 0;margin-right:calc(-1*clamp(22px,2.6vw,34px));margin-bottom:calc(-1*clamp(22px,2.6vw,34px));min-height:150px}
