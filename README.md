@@ -41,19 +41,21 @@ Taken from the brand files and the product itself, not invented for the site.
 ## Page order
 
 1. Hero, following `reference/design/reference-03-hero.jpeg`: left-aligned copy over a black-to-teal-to-white gradient with drifting light rays and blooms, a trade pill, a white call to action and an arrow link, and the dashboard standing on the white bloom with its lower part faded out
-2. Verified facts strip: one record per job, Sage sync, the 14-day trial, built by GEMIS
-3. Why it matters: three problem categories with illustrative figures, labelled as such
-4. Product walkthrough: six tabs, enquiry to payment, each with its own copy and real screen
-5. What it does: three outcomes with product crops
+2. Features: three outcomes with product crops
+3. Verified facts strip: one record per job, Sage sync, the 14-day trial, built by GEMIS
+4. Why it matters: three problem categories with illustrative figures, labelled as such
+5. Product walkthrough, on a dark band with the hero's sky: six tabs, enquiry to payment, each with its own copy and real screen
 6. For your trade: five trade tabs with outcomes, modules and a product crop, plus the accountants card
 7. Pricing: four plan cards, "everything on every plan", an expandable comparison
 8. What you can count on: data export, POPIA, monthly billing, support
-9. Getting started: four steps and an example of what take-on files become
+9. Getting started, on the dark band: four steps and an example of what take-on files become
 10. Larger teams: the only form, which opens the visitor's email client with the details filled in
 11. Sage integration, with what moves in which direction and what stays in Sage
 12. Who builds it: GEMIS, what is real on the page, and the customer-stories policy
 13. FAQ with the support entry point
-14. Final call to action with three paths, footer, sticky action bar on phones
+14. Final call to action on the dark band with three paths, footer, sticky action bar on phones
+
+The header menu is centred: Features, Product, For your trade, Pricing, Support. The dark bands reuse the hero's `.sky` (rays, blooms, grain) so the page reads as one system.
 
 ## Trial sign-up address
 
