@@ -10,7 +10,7 @@ The site is static. Open `index.html` directly, or serve the folder:
 python3 -m http.server 8080
 ```
 
-No build step. Fonts load from Google Fonts; everything else is local.
+No build step. Everything is local, including the fonts.
 
 ## Layout
 
@@ -18,7 +18,9 @@ No build step. Fonts load from Google Fonts; everything else is local.
 | --- | --- |
 | `index.html` | The site, one page with anchored sections |
 | `assets/css/site.css` | Design tokens and all styles |
-| `assets/js/site.js` | Header state, mobile menu, scroll reveal, product tabs, pricing, trial form |
+| `assets/js/site.js` | Header state, mobile menu, scroll reveal, walkthrough and trade tabs, plan comparison, sticky bar, larger-teams form |
+| `assets/fonts/` | Self-hosted latin subsets of Outfit (variable) and IBM Plex Mono, SIL Open Font License |
+| `docs/homepage-audit-2026-10.md` | The October 2026 audit: what was verified against the product build, what was removed, and what still needs confirming |
 | `assets/brand/` | Logo files supplied by the brand, plus trimmed `logo.png`, `logo-reversed.png`, `mark.png` |
 | `assets/mockups/` | WebP screenshots of the real ManaGEM product, used as the site's mockups |
 | `reference/design/` | The two approved layout references the site follows |
@@ -34,55 +36,53 @@ Taken from the brand files and the product itself, not invented for the site.
 - **Type.** Outfit for everything, IBM Plex Mono for figures and references, matching the product.
 - **Shape.** Pill buttons, 16 to 32 px radii, soft layered shadows on product cards, thin 1 px dividers in the feature bento.
 - **Motion.** Entrance rise on the hero, reveal on scroll, 160 to 600 ms easings. Everything respects `prefers-reduced-motion`.
+- **Restraint.** No background video, no floating cards, no counters. The product screens are the visuals.
 
 ## Page order
 
-Follows the reference layout, section for section.
+1. Hero: the proposition, two calls to action, trial terms, and the dashboard in a browser frame
+2. Verified facts strip: one record per job, Sage sync, the 14-day trial, built by GEMIS
+3. Why it matters: three problem categories with illustrative figures, labelled as such
+4. Product walkthrough: six tabs, enquiry to payment, each with its own copy and real screen
+5. What it does: three outcomes with product crops
+6. For your trade: five trade tabs with outcomes, modules and a product crop, plus the accountants card
+7. Pricing: four plan cards, "everything on every plan", an expandable comparison
+8. What you can count on: data export, POPIA, monthly billing, support
+9. Getting started: four steps and an example of what take-on files become
+10. Larger teams: the only form, which opens the visitor's email client with the details filled in
+11. Sage integration, with what moves in which direction and what stays in Sage
+12. Who builds it: GEMIS, what is real on the page, and the customer-stories policy
+13. FAQ with the support entry point
+14. Final call to action with three paths, footer, sticky action bar on phones
 
-1. Dark hero on a graded video loop, floating product cards, assurance row (14 days free, no card, cancel anytime)
-2. Animated stats strip
-3. For your trade: five trade tabs with outcomes, modules and a product crop, plus an accountants and bookkeepers card
-4. Why it matters, three problem cards
-5. Feature bento, two wide cells then three narrow, each with a product crop
-6. Pricing: four plan cards with seat dots, billing toggle, "everything on every plan" footer, expandable comparison table and add-ons
-7. Our promises: data, POPIA and backups, month to month, support from the people who build it
-8. Product tour, tabbed browser frame with five full screens
-9. How it works: AI take-on self-onboarding with an animated take-on console, trial starts from here
-10. Larger teams: the only form on the page, for 10+ users, multi-company and custom work
-11. Sage integration
-12. Customers: four selectable stories, each with quote, outcome chips and the module they use most
-13. FAQ with support entry point and "ask the team" route
-14. Final call to action with three paths, five-column footer, sticky action bar on phones
+## Trial sign-up address
 
-The reasoning behind the segmentation, assurance copy, pricing comparison and trust band is in `docs/competitor-teardown.md`.
+Every trial button carries `data-signup`. The address is set once, on `<body data-signup="…">` in `index.html`, and the script copies it into each button; the markup carries the same address as a fallback. It is `https://app.managem.co.za/signup`, a placeholder until the real sign-up URL is supplied. Confirm it before launch.
 
-Trial buttons link to `https://app.managem.co.za/signup`, a placeholder for the real sign-up URL.
+## Contact details
 
-## Hero video
-
-`assets/video/hero.mp4` and `hero.webm` are cut from `reference/design/hero-source-16-9.mp4`. The source is a 1280 by 720 abstract gradient loop with a vendor badge in the bottom-right corner. The badge is removed by cropping the frame to 1280 by 648, and the blue-to-purple palette is remapped through a luminance curve to navy, deep teal and GEM teal. A poster frame is exported as WebP. The page pauses the video under reduced motion or data saver and layers a navy shade over it for contrast.
-
-Regenerate with ffmpeg: crop `1280:648:0:0`, convert to grey, then map luminance to the three brand stops with `geq`.
+The form, the FAQ and the footer use the GEMIS contact published on the GEMIS corporate site: `info@gemis.co.za` and `+27 11 219 5008`. The form's address is the `data-to` attribute on `#teamForm`. Change these in `index.html` if ManaGEM enquiries should go elsewhere.
 
 ## Regenerating mockups
 
-The mockups are real screens from `reference/product/managem-app.html`, rendered in Chromium at 1440 px and 2x scale, signed in with the prefilled prototype user, cropped per card with Playwright element screenshots and saved as WebP. The product is not responsive below desktop width, so phone frames are not used.
+The mockups are real screens from `reference/product/managem-app.html`, rendered in Chromium at 1440 px, signed in with the prefilled prototype user, and saved as WebP. Full screens (`app-*.webp`) are 1800 by 1125, captured at 1.25x; cards and tables are element screenshots at 2x. The product is not responsive below desktop width, so phone frames are not used.
 
 ## Content still to confirm
 
-The copy keeps the V1 positioning. These points are still proposals or placeholders and are marked in the source where relevant.
+The copy publishes only what the product build and the approved V1 draft support. These points are still marked "to confirm" in V1, and the audit in `docs/homepage-audit-2026-10.md` lists what was removed and why.
 
 | Item | Status |
 | --- | --- |
-| Customer quotes | Drafts written in the customer's voice. Replace with approved, named quotes before launch. |
-| Yearly billing at ten months' price | Proposal shown by the pricing toggle. Commercial terms not frozen. |
-| Field users not counting toward plan users | Proposal from V1, not yet priced. |
-| Trial length, card requirement, notice period | As in V1, to be confirmed by Leon and Graeme. |
-| Sage editions supported, hosting location, data deletion period | Phrased generally; add specifics when known. |
-| Xero | Listed as roadmap only. |
-| Phone capture of hours and slips by foremen | Mentioned in FAQ and pricing; confirm it exists before launch. |
-| Customer login URL | Links point to the top of the page until the app URL is supplied. |
-| Stats strip figures | "12 businesses" comes from V1 and is unconfirmed. "24 modules" counts the sidebar entries in the product build. |
-| Add-on prices | Extra field user and extra company show "Price to be confirmed" in the comparison table. |
-| Legal pages | Privacy, Terms and POPIA notice footer links are placeholders. |
-| Companies per plan | 1, 2, 3 and unlimited in the comparison table is a proposal. |
+| Trial length and card requirement | 14 days, no card, from V1. Commercial terms not frozen. |
+| Plan prices and user limits | R1,000 / R2,000 / R3,000 for 2 / 5 / 10 users, from V1. Commercial terms not frozen. |
+| Sign-up URL | `https://app.managem.co.za/signup` is a placeholder. |
+| Contact details | GEMIS corporate email and phone used; confirm routing for ManaGEM. |
+| Sage editions supported, direction of product sync | Phrased generally ("synced with Sage"); add specifics when known. |
+| Hosting location, retention after an account closes, notice period | Not stated; the FAQ says "ask us". |
+| Field-user pricing | Not stated; "ask us". |
+| Several companies per account | Not stated as a feature; routed to the larger-teams path. |
+| AI-assisted take-on | Described as in V1, with human review stated and no time estimate. Confirm the feature before launch. |
+| Job costing, labour hours, margin per job | Not in the product build. Not claimed anywhere on the page. If the live application has them, the hero can return to a profitability promise. |
+| Customer stories | None published. The page says so and offers a reference call. |
+| Legal pages | Privacy notice and terms of service do not exist yet; the footer says they are being finalised. |
+| Xero | Planned, not available. |
