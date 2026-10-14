@@ -23,7 +23,7 @@ No build step. Everything is local, including the fonts.
 | `docs/homepage-audit-2026-10.md` | The October 2026 audit: what was verified against the product build, what was removed, and what still needs confirming |
 | `assets/brand/` | Logo files supplied by the brand, plus trimmed `logo.png`, `logo-reversed.png`, `mark.png` |
 | `assets/mockups/` | WebP screenshots of the real ManaGEM product, used as the site's mockups |
-| `reference/design/` | The two approved layout references the site follows |
+| `reference/design/` | The approved layout references: the original two pages, and `reference-03-hero.jpeg` for the hero |
 | `reference/product/` | The self-contained ManaGEM product build the mockups were captured from |
 | `reference/ManaGEM-website-V1_1.html` | The V1 content draft this site's copy is based on |
 | `.claude/skills/ui-ux-pro-max/` | UI/UX guidance skill used during the build |
@@ -40,7 +40,7 @@ Taken from the brand files and the product itself, not invented for the site.
 
 ## Page order
 
-1. Hero: the proposition, two calls to action, trial terms, and the dashboard in a browser frame
+1. Hero, following `reference/design/reference-03-hero.jpeg`: left-aligned copy over a black-to-teal-to-white gradient with drifting light rays and blooms, a trade pill, a white call to action and an arrow link, and the dashboard standing on the white bloom with its lower part faded out
 2. Verified facts strip: one record per job, Sage sync, the 14-day trial, built by GEMIS
 3. Why it matters: three problem categories with illustrative figures, labelled as such
 4. Product walkthrough: six tabs, enquiry to payment, each with its own copy and real screen
