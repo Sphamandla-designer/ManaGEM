@@ -39,7 +39,7 @@
   data-signup and the script copies this value into its href. The README
   records that the address is a placeholder until the real one is supplied.
 -->
-<body data-signup="https://app.managem.co.za/signup">
+<body data-signup="https://app.managem.co.za/signup" data-login="https://app.managem.co.za/">
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="site-header on-dark" id="siteHeader">
@@ -58,6 +58,7 @@
       </ul>
     </nav>
     <div class="nav-cta">
+      <a class="nav-login" href="https://app.managem.co.za/" data-login>Log in</a>
       <a class="btn btn-primary btn-sm" href="https://app.managem.co.za/signup" data-signup>Start your free trial</a>
       <button class="menu-btn" type="button" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -79,6 +80,7 @@
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="#integrations">Sage sync</a></li>
       <li><a href="#support">Support and FAQ</a></li>
+      <li><a href="https://app.managem.co.za/" data-login>Log in</a></li>
     </ul>
     <div class="actions">
       <a class="btn btn-primary btn-lg" href="https://app.managem.co.za/signup" data-signup>Start your free trial</a>
@@ -122,8 +124,8 @@
       <div><span class="eyebrow">Features</span><h2 id="featTitle">Six things ManaGEM does for the business</h2></div>
       <p class="lede">The modules a contractor or service business uses every day, on one record per job. Open any one to see it in detail.</p>
     </div>
-    <div class="mosaic reveal">
-      <a class="tile tile-xl" href="features/sales-pipeline.html">
+    <div class="fgrid reveal">
+      <a class="tile" href="features/sales-pipeline.html">
         <span class="tile-n num">01</span>
         <span class="tile-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
         <span class="tile-copy"><span class="tile-k">Sales pipeline</span><span class="tile-h">Every enquiry, from first call to signed job</span><span class="tile-p">Four-step capture, a pipeline by stage, and the sales rep, area and type on every lead.</span></span>
@@ -177,56 +179,13 @@
 </section>
 
 
-<!-- ================= THE PROBLEM ================= -->
-<section class="section why" id="why" aria-labelledby="whyTitle">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="eyebrow">Why it matters</span>
-      <h2 id="whyTitle">A full order book can still lose money</h2>
-      <p class="lede">Prices that drift below cost, jobs that move without the office seeing it, invoices that sit unpaid. Most businesses find out at year end. ManaGEM keeps the job, the money and the stock on one record, so you see it now.</p>
-    </div>
-    <div class="why-grid">
-      <article class="why-card reveal" data-delay="1">
-        <span class="fig num">−R30</span>
-        <h3>A product priced below cost</h3>
-        <p>Supplier prices move and the price list does not. ManaGEM keeps the cost and the selling price on every product, with a history of price changes, so a quote is priced from today's costs.</p>
-        <div class="mini" aria-label="Example">
-          <div class="row"><span>PU membrane 5L · sell</span><span class="num">R 510</span></div>
-          <div class="row"><span>PU membrane 5L · cost</span><span class="num" style="color:var(--bad)">R 540</span></div>
-          <span class="tag tag-warn">Illustrative figures</span>
-        </div>
-      </article>
-      <article class="why-card reveal" data-delay="2">
-        <span class="fig num">2 late</span>
-        <h3>Jobs that move without the office knowing</h3>
-        <p>Every job carries its quote, its foreman, its dates and its progress, plus the stock dispatched to it and the builds in the factory. What is on track and what is delayed is on one screen.</p>
-        <div class="mini" aria-label="Example">
-          <div class="row"><span>HQ roof refurb</span><span class="tag tag-good">On track · 78%</span></div>
-          <div class="row"><span>Hockey pavilion</span><span class="tag tag-bad">Delayed · 45%</span></div>
-          <div class="row"><span>Vista Bryanston</span><span class="tag tag-bad">Delayed · 22%</span></div>
-          <span class="tag tag-warn">Illustrative figures</span>
-        </div>
-      </article>
-      <article class="why-card reveal" data-delay="3">
-        <span class="fig num">90+ days</span>
-        <h3>Invoiced is not paid</h3>
-        <p>A good job that is paid in four months still squeezes this month's wages. Debtors are aged by customer, with the last contact and the statement date next to the balance.</p>
-        <div class="mini" aria-label="Example">
-          <div class="row"><span>Current</span><span class="num">R 425k</span></div>
-          <div class="row"><span>31 to 60 days</span><span class="num">R 303k</span></div>
-          <div class="row"><span>Over 60 days</span><span class="num" style="color:var(--bad)">R 232k</span></div>
-          <span class="tag tag-warn">Illustrative figures</span>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
 
 <!-- ================= PRODUCT WALKTHROUGH ================= -->
 <section class="section tour grad" id="tour" aria-labelledby="tourTitle">
   <div class="wrap">
-    <div class="section-head split reveal">
-      <div><span class="eyebrow">Inside ManaGEM</span><h2 id="tourTitle">One job, from enquiry to payment</h2></div>
+    <div class="section-head reveal">
+      <span class="eyebrow">Inside ManaGEM</span>
+      <h2 id="tourTitle">One job, from enquiry to payment</h2>
       <p class="lede">The actual ManaGEM screens, shown with example data. Each step plays on its own, then hands to the next. Pick a step to watch it again.</p>
     </div>
     <div class="walk reveal" id="walk">
@@ -239,64 +198,64 @@
         <button class="tab" role="tab" id="wt-6" aria-selected="false" aria-controls="wp-6" tabindex="-1"><span class="tab-n">6</span>Paid and posted to Sage<span class="tab-bar" aria-hidden="true"><i></i></span></button>
       </div>
       <div class="walk-panel" role="tabpanel" id="wp-1" aria-labelledby="wt-1">
-        <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/enquiries</span></div>
-          <video class="walk-video" muted playsinline preload="auto" poster="assets/mockups/app-enquiries.webp" width="1440" height="900" aria-label="Open enquiries: pipeline totals by stage and the list of enquiries, shown with example data"><source src="assets/video/walk-enquiries.mp4" type="video/mp4"><source src="assets/video/walk-enquiries.webm" type="video/webm"></video>
-        </figure>
         <div class="walk-copy">
           <h3>Log the enquiry once</h3>
           <p>Capture the customer, the site and scope, and the schedule in four steps. The enquiry goes into a pipeline by stage, with the sales rep, the area and the enquiry type.</p>
           <div class="tp-mods"><span>Modules</span><em>Enquiries</em><em>Customers</em><em>Sales targets</em></div>
         </div>
+        <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/enquiries</span></div>
+          <video class="walk-video" muted playsinline preload="auto" poster="assets/mockups/app-enquiries.webp" width="1440" height="900" aria-label="Open enquiries: pipeline totals by stage and the list of enquiries, shown with example data"><source src="assets/video/walk-enquiries.mp4" type="video/mp4"><source src="assets/video/walk-enquiries.webm" type="video/webm"></video>
+        </figure>
       </div>
       <div class="walk-panel" role="tabpanel" id="wp-2" aria-labelledby="wt-2" hidden>
-        <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/enquiries/L04-26-124</span></div>
-          <video class="walk-video" muted playsinline preload="none" poster="assets/mockups/app-quote.webp" width="1440" height="900" aria-label="An enquiry with its quote line items, totals and quick actions, shown with example data"><source src="assets/video/walk-quote.mp4" type="video/mp4"><source src="assets/video/walk-quote.webm" type="video/webm"></video>
-        </figure>
         <div class="walk-copy">
           <h3>Quote from your own product list</h3>
           <p>Line items come from your products, each with its unit price and cost behind it. VAT is added, the quote goes out as a PDF, and the timeline records when it was sent and when the deposit arrived.</p>
           <div class="tp-mods"><span>Modules</span><em>Quotes</em><em>Products and pricing</em><em>Quote templates</em></div>
         </div>
+        <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/enquiries/L04-26-124</span></div>
+          <video class="walk-video" muted playsinline preload="none" poster="assets/mockups/app-quote.webp" width="1440" height="900" aria-label="An enquiry with its quote line items, totals and quick actions, shown with example data"><source src="assets/video/walk-quote.mp4" type="video/mp4"><source src="assets/video/walk-quote.webm" type="video/webm"></video>
+        </figure>
       </div>
       <div class="walk-panel" role="tabpanel" id="wp-3" aria-labelledby="wt-3" hidden>
-        <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/projects</span></div>
-          <video class="walk-video" muted playsinline preload="none" poster="assets/mockups/app-projects.webp" width="1440" height="900" aria-label="Current jobs with customer, foreman, dates and progress, shown with example data"><source src="assets/video/walk-projects.mp4" type="video/mp4"><source src="assets/video/walk-projects.webm" type="video/webm"></video>
-        </figure>
         <div class="walk-copy">
           <h3>Turn it into a job</h3>
           <p>The job carries the customer, the foreman, the start and end dates and the progress. Bookings put the crew on the calendar, and the office sees which jobs are on track and which are late.</p>
           <div class="tp-mods"><span>Modules</span><em>Projects</em><em>Bookings and calendar</em><em>Staff records</em></div>
         </div>
+        <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/projects</span></div>
+          <video class="walk-video" muted playsinline preload="none" poster="assets/mockups/app-projects.webp" width="1440" height="900" aria-label="Current jobs with customer, foreman, dates and progress, shown with example data"><source src="assets/video/walk-projects.mp4" type="video/mp4"><source src="assets/video/walk-projects.webm" type="video/webm"></video>
+        </figure>
       </div>
       <div class="walk-panel" role="tabpanel" id="wp-4" aria-labelledby="wt-4" hidden>
-        <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/stock</span></div>
-          <video class="walk-video" muted playsinline preload="none" poster="assets/mockups/app-stock.webp" width="1440" height="900" aria-label="Stock control: totals, recent movements, warehouse capacity and low-stock alerts, shown with example data"><source src="assets/video/walk-stock.mp4" type="video/mp4"><source src="assets/video/walk-stock.webm" type="video/webm"></video>
-        </figure>
         <div class="walk-copy">
           <h3>Dispatch stock and track the build</h3>
           <p>Receive, dispatch, transfer and return stock across stores and vehicles, with low-stock alerts and purchase orders. If you make what you install, each build moves from pending to in build, QC, ready and invoiced.</p>
           <div class="tp-mods"><span>Modules</span><em>Stock control</em><em>Purchase orders</em><em>Factory</em></div>
         </div>
+        <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/stock</span></div>
+          <video class="walk-video" muted playsinline preload="none" poster="assets/mockups/app-stock.webp" width="1440" height="900" aria-label="Stock control: totals, recent movements, warehouse capacity and low-stock alerts, shown with example data"><source src="assets/video/walk-stock.mp4" type="video/mp4"><source src="assets/video/walk-stock.webm" type="video/webm"></video>
+        </figure>
       </div>
       <div class="walk-panel" role="tabpanel" id="wp-5" aria-labelledby="wt-5" hidden>
-        <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/invoices</span></div>
-          <video class="walk-video" muted playsinline preload="none" poster="assets/mockups/app-invoices.webp" width="1440" height="900" aria-label="Invoices with totals and status per invoice, shown with example data"><source src="assets/video/walk-invoices.mp4" type="video/mp4"><source src="assets/video/walk-invoices.webm" type="video/webm"></video>
-        </figure>
         <div class="walk-copy">
           <h3>Invoice from the job</h3>
           <p>Deposits, partial payments and the final invoice are tracked per customer and project, with paid, partial, unpaid and overdue in one list, and billed, paid, outstanding and overdue totals at the top.</p>
           <div class="tp-mods"><span>Modules</span><em>Invoices</em><em>Customer receipts</em></div>
         </div>
+        <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/invoices</span></div>
+          <video class="walk-video" muted playsinline preload="none" poster="assets/mockups/app-invoices.webp" width="1440" height="900" aria-label="Invoices with totals and status per invoice, shown with example data"><source src="assets/video/walk-invoices.mp4" type="video/mp4"><source src="assets/video/walk-invoices.webm" type="video/webm"></video>
+        </figure>
       </div>
       <div class="walk-panel" role="tabpanel" id="wp-6" aria-labelledby="wt-6" hidden>
-        <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/sage-invoices</span></div>
-          <video class="walk-video" muted playsinline preload="none" poster="assets/mockups/app-sage.webp" width="1440" height="900" aria-label="Sage invoices: connected, synced counts, and each invoice with net, VAT, total and sync status, shown with example data"><source src="assets/video/walk-sage.mp4" type="video/mp4"><source src="assets/video/walk-sage.webm" type="video/webm"></video>
-        </figure>
         <div class="walk-copy">
           <h3>Chase payment, post to Sage</h3>
           <p>Invoices post to Sage with their net, VAT and total, and each one shows whether it has synced. Debtors are aged by customer with the last interaction and statement date.</p>
           <div class="tp-mods"><span>Modules</span><em>Sage invoices</em><em>Debtors</em><em>Customer statements</em></div>
         </div>
+        <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/sage-invoices</span></div>
+          <video class="walk-video" muted playsinline preload="none" poster="assets/mockups/app-sage.webp" width="1440" height="900" aria-label="Sage invoices: connected, synced counts, and each invoice with net, VAT, total and sync status, shown with example data"><source src="assets/video/walk-sage.mp4" type="video/mp4"><source src="assets/video/walk-sage.webm" type="video/webm"></video>
+        </figure>
       </div>
     </div>
     <div class="tour-notes reveal">

@@ -8,6 +8,8 @@
   /* ---- trial sign-up address: set once on <body data-signup>, applied to every trial button ---- */
   var signup = document.body.getAttribute('data-signup');
   if (signup) $$('a[data-signup]').forEach(function (a) { a.href = signup; });
+  var login = document.body.getAttribute('data-login');
+  if (login) $$('a[data-login]').forEach(function (a) { a.href = login; });
 
   /* ---- header: switch to light surface once the dark hero scrolls away ---- */
   var header = $('#siteHeader');
