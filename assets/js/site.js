@@ -11,7 +11,7 @@
 
   /* ---- header: switch to light surface once the dark hero scrolls away ---- */
   var header = $('#siteHeader');
-  var hero = $('.hero');
+  var hero = $('.hero') || $('.page-hero');
   function onScroll() { header.classList.toggle('scrolled', window.scrollY > 24); }
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
@@ -87,7 +87,6 @@
     });
     return { select: select, tabs: tabs };
   }
-  tablist($('.walk .tabs'));
   var trades = tablist($('.trade-tabs'), 'on');
   /* footer trade links open the matching trade before scrolling */
   if (trades) $$('a[data-trade]').forEach(function (a) {
@@ -121,48 +120,65 @@
   });
 
   /* ---- sticky action bar on small screens: after the hero, hidden while the form or footer is on screen ---- */
-  var sticky = $('#stickyCta');
-  if (sticky && 'IntersectionObserver' in window) {
+  var sticky = $('#stickyCta'), footer = $('.site-footer');
+  if (sticky && hero && footer && 'IntersectionObserver' in window) {
     sticky.hidden = false;
-    var pastHero = false, formVisible = false, nearEnd = false;
-    function syncSticky() { var show = pastHero && !formVisible && !nearEnd; sticky.classList.toggle('show', show); document.body.classList.toggle('has-sticky', show); }
+    var pastHero = false, nearEnd = false;
+    function syncSticky() { var show = pastHero && !nearEnd; sticky.classList.toggle('show', show); document.body.classList.toggle('has-sticky', show); }
     new IntersectionObserver(function (en) { pastHero = !en[0].isIntersecting && en[0].boundingClientRect.bottom < 0; syncSticky(); }, { threshold: 0 }).observe(hero);
-    new IntersectionObserver(function (en) { formVisible = en[0].isIntersecting; syncSticky(); }, { threshold: 0.1 }).observe($('#teams'));
-    new IntersectionObserver(function (en) { nearEnd = en[0].isIntersecting; syncSticky(); }, { threshold: 0.05 }).observe($('.site-footer'));
+    new IntersectionObserver(function (en) { nearEnd = en[0].isIntersecting; syncSticky(); }, { threshold: 0.05 }).observe(footer);
   }
 
-  /* ---- larger-teams form: validates, then opens the visitor's email client with the details filled in.
-         There is no server behind this site, so the page never claims to have sent anything itself. ---- */
-  var form = $('#teamForm');
-  if (form) {
-    function check(id, ok) { var el = $('#' + id); el.closest('.field').classList.toggle('invalid', !ok); el.setAttribute('aria-invalid', String(!ok)); return ok; }
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var a = check('fName', $('#fName').value.trim().length > 1);
-      var b = check('fCo', $('#fCo').value.trim().length > 1);
-      var c = check('fEmail', /^\S+@\S+\.\S+$/.test($('#fEmail').value.trim()));
-      if (!(a && b && c)) { var first = $('.field.invalid input', form); if (first) first.focus(); return; }
-      var to = form.getAttribute('data-to');
-      var subject = 'ManaGEM: larger team enquiry from ' + $('#fCo').value.trim();
-      var body = [
-        'Name: ' + $('#fName').value.trim(),
-        'Company: ' + $('#fCo').value.trim(),
-        'Work email: ' + $('#fEmail').value.trim(),
-        'Team size: ' + $('#fTeam').value,
-        'What we need: ' + $('#fNeed').value,
-        '', 'Sent from the ManaGEM website.'
-      ].join('\n');
-      window.location.href = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-      $('#formBody').hidden = true; var done = $('#formDone'); done.hidden = false; done.focus();
+  /* ---- product walkthrough: one clip per step. Each clip plays through once, then the next step
+         takes over, so the whole job plays on its own. Picking a step plays that clip and loops it.
+         Nothing plays until the section is on screen, and nothing autoplays under reduced motion. ---- */
+  var walk = $('#walk');
+  if (walk) {
+    var wtabs = $$('[role="tab"]', walk), wpanels = wtabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
+    var videos = wpanels.map(function (p) { return p.querySelector('video'); });
+    var current = 0, picked = false, onScreen = false;
+    function bar(i, frac) { var b = wtabs[i].querySelector('.tab-bar i'); if (b) b.style.width = (frac * 100).toFixed(1) + '%'; }
+    function playCurrent() {
+      var v = videos[current]; if (!v || reduce || !onScreen) return;
+      v.loop = picked;
+      var pr = v.play(); if (pr && pr.catch) pr.catch(function () {});
+    }
+    function show(i, focus) {
+      current = i;
+      wtabs.forEach(function (t, k) {
+        var on = k === i; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; wpanels[k].hidden = !on;
+        if (!on) { bar(k, 0); if (videos[k]) { videos[k].pause(); } }
+      });
+      if (focus) wtabs[i].focus();
+      var v = videos[i]; if (v) { try { v.currentTime = 0; } catch (e) {} if (v.preload !== 'auto') v.preload = 'auto'; }
+      playCurrent();
+    }
+    wtabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { picked = true; show(i); });
+      t.addEventListener('keydown', function (e) {
+        var n = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = (i + 1) % wtabs.length;
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = (i - 1 + wtabs.length) % wtabs.length;
+        else if (e.key === 'Home') n = 0; else if (e.key === 'End') n = wtabs.length - 1;
+        if (n === null) return; e.preventDefault(); picked = true; show(n, true);
+      });
     });
-    ['fName', 'fCo', 'fEmail'].forEach(function (id) {
-      $('#' + id).addEventListener('input', function () { $('#' + id).closest('.field').classList.remove('invalid'); $('#' + id).removeAttribute('aria-invalid'); });
+    videos.forEach(function (v, i) {
+      if (!v) return;
+      v.addEventListener('timeupdate', function () { if (i === current && v.duration) bar(i, v.currentTime / v.duration); });
+      v.addEventListener('ended', function () { if (i !== current) return; if (picked) { v.currentTime = 0; playCurrent(); } else { show((i + 1) % wtabs.length); } });
+      if (reduce) v.controls = true;
     });
-    var again = $('#formAgain');
-    if (again) again.addEventListener('click', function () { $('#formDone').hidden = true; $('#formBody').hidden = false; $('#fName').focus(); });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (en) {
+        onScreen = en[0].isIntersecting;
+        if (onScreen) playCurrent(); else videos.forEach(function (v) { if (v) v.pause(); });
+      }, { threshold: 0.35 }).observe(walk);
+    } else { onScreen = true; playCurrent(); }
+    document.addEventListener('visibilitychange', function () { if (document.hidden) videos.forEach(function (v) { if (v) v.pause(); }); else playCurrent(); });
   }
 
-  $('#year').textContent = String(new Date().getFullYear());
+  var yr = $('#year'); if (yr) yr.textContent = String(new Date().getFullYear());
 
   /* once the hero copy has entered, freeze it so nothing is left animated */
   setTimeout(function () { document.body.classList.add('ready'); }, reduce ? 0 : 1600);
