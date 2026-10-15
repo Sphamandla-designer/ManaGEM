@@ -2,8 +2,10 @@
 Usage: python3 tools/make-walkthrough-videos.py assets/video <captures-dir> <Outfit-600.ttf> <Outfit-500.ttf> [clip ...]
 Captures: the product build (reference/product/managem-app.html) at 1440x900 and 2x device scale, one PNG per screen
 (enquiries, quote, projects, stock, invoices, sage). Fonts: static instances of the Outfit variable font at weights 600
-and 500, made with fontTools instancer from assets/fonts/outfit-latin-wght.woff2. Output files are named walk-<clip>.mp4."""
-import subprocess, sys, os
+and 500, made with fontTools instancer from assets/fonts/outfit-latin-wght.woff2. Each clip is written twice at 1280x800:
+walk-<clip>.mp4 (H.264, for every browser) and walk-<clip>.webm (AV1, smaller, for browsers that support it). Needs an
+ffmpeg build with libx264 and libsvtav1."""
+import subprocess, sys, os, tempfile
 SRC=sys.argv[2].rstrip('/')+'/'
 FONT=sys.argv[3]
 FONT5=sys.argv[4]
@@ -40,10 +42,20 @@ def build(name, keys, caps, dur=12):
     chain=[zp,"format=yuv420p"]
     for c in caps: chain+=caption(*c)
     vf=",".join(chain)
+    master=os.path.join(tempfile.gettempdir(),"walk-"+name+"-master.mp4")
     cmd=["ffmpeg","-y","-hide_banner","-loglevel","error","-loop","1","-i",SRC+name+".png","-t",str(dur),"-vf",vf,
-         "-c:v","libx264","-preset","slow","-crf","25","-pix_fmt","yuv420p","-movflags","+faststart","-an",OUT+"/walk-"+name+".mp4"]
+         "-c:v","libx264","-preset","slow","-crf","18","-pix_fmt","yuv420p","-an",master]
     subprocess.run(cmd,check=True)
-    print("wrote",name, os.path.getsize(OUT+"/walk-"+name+".mp4")//1024,"KB")
+    # Delivery files, light on data: 720p (1280x800 for this 16:10 frame), silent, around 1 MB or less.
+    scale="scale=1280:800:flags=lanczos,fps=30"
+    mp4=OUT+"/walk-"+name+".mp4"; webm=OUT+"/walk-"+name+".webm"
+    subprocess.run(["ffmpeg","-y","-hide_banner","-loglevel","error","-i",master,"-vf",scale,"-an","-c:v","libx264","-profile:v","high",
+                    "-pix_fmt","yuv420p","-preset","veryslow","-tune","animation","-crf","27","-maxrate","750k","-bufsize","1500k",
+                    "-g","60","-movflags","+faststart",mp4],check=True)
+    subprocess.run(["ffmpeg","-y","-hide_banner","-loglevel","error","-i",master,"-vf",scale,"-an","-c:v","libsvtav1","-preset","5",
+                    "-crf","47","-g","60","-pix_fmt","yuv420p","-svtav1-params","tune=0",webm],check=True)
+    os.remove(master)
+    print("wrote",name, os.path.getsize(mp4)//1024,"KB mp4,", os.path.getsize(webm)//1024,"KB webm (AV1)")
 
 C=(1.0,1440,900)
 clips={

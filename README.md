@@ -17,10 +17,11 @@ No build step. Everything is local, including the fonts.
 | Path | What it is |
 | --- | --- |
 | `index.html` | The homepage, one page with anchored sections |
-| `support.html` | The support centre: nine ticket types, each opening a pre-addressed email, and the contact details |
+| `support.html` | The support centre: one ticket form and the contact details |
+| `contact.html` | Talk to sales: a short sales form and the contact details |
 | `blog.html`, `blog/` | The blog index and its three articles |
 | `industries/` | One page per industry |
-| `tools/build-chrome.py` | Writes the shared header, mega menus, phone menu and footer into every page |
+| `tools/build-chrome.py` | Writes the shared header, menus, phone drawer and footer into every page |
 | `pricing.html` | The pricing page: plans, what every plan includes, the full comparison, and what you can count on |
 | `assets/css/site.css` | Design tokens and all styles |
 | `assets/js/site.js` | Header state, mobile menu, scroll reveal, walkthrough clips and tabs, trade tabs, trust figure count-up and moving trust row, sticky bar |
@@ -68,11 +69,13 @@ Every figure in the trust panel is sourced. The founding year, the ERP work, the
 
 Every section uses the same spacing (the `.section` padding); there are no per-section overrides.
 
-The header menu is centred: Features, Product, Industries, Pricing, Blogs, Support, with Log in and the trial button on the right. Below 1180px it collapses into the phone menu.
+The header menu is centred: Product, Industries, Pricing, Support, with Log in and Start free trial on the right. Below 980px it collapses into the phone drawer.
 
-- **Features**, **Industries** and **Support** open mega menus on hover or keyboard focus; Escape closes them. Features and Industries list every page with a short description. Support lists nine ticket types (a fault, log-in and access, users, Sage sync, importing data, billing, how-to questions, feature requests, sales); each opens the visitor's email with the subject filled in and a short template, addressed to `info@gemis.co.za`. There is no ticketing system behind it; it is email.
-- **Pricing** goes to `pricing.html`, **Blogs** to `blog.html`, **Product** to the walkthrough on the homepage.
-- On phones the features and industries are listed under their menu items.
+- **Product** opens a menu with the walkthrough as the featured item ("See one job from enquiry to payment") and the six feature pages.
+- **Industries** opens a short list of the five industry pages.
+- **Pricing** goes to `pricing.html` and **Support** to `support.html`. Both are plain links.
+- The phone drawer has the same four items plus Log in. Product and Industries open in place, and Start free trial is pinned to the bottom.
+- Blog, Accountants and bookkeepers, and Talk to sales are in the footer.
 
 The header, menus and footer are generated. Edit `tools/build-chrome.py`, then run `python3 tools/build-chrome.py` from the repository root; it rewrites only the regions between the `chrome:header` and `chrome:footer` markers on every page. Contact goes to `info@gemis.co.za` by email; there is no form on the site.
 
@@ -84,7 +87,14 @@ The header, menus and footer are generated. Edit `tools/build-chrome.py`, then r
 
 `blog.html` lists three articles under `blog/`: moving off spreadsheets for the take-on, how one job record runs from enquiry to payment, and how ManaGEM and Sage split the work. They describe only what the product build and the V1 draft support, and carry no statistics. Add new articles by copying one and adding a card to `blog.html`.
 
-`support.html` repeats the nine ticket types from the Support menu as cards, with the phone number, email and FAQ link.
+`support.html` has one support ticket form (category, company, name, phone, description and a screenshot), with the phone number, email and FAQ beside it. `contact.html` is the sales form (name, company, phone, number of users, what you need); every "Talk to us", "Talk to the team" and "Email the team" link goes there.
+
+## Forms, copy buttons and WhatsApp
+
+- **Where forms send.** Both forms have a `data-endpoint` attribute, empty today. Put a form-handling URL there (for example a Formspree or Basin form, or your own endpoint) and the form posts its fields and the screenshot as multipart form data, then shows the result on the page. With no endpoint, sending opens the visitor's email app with every field filled in, addressed to `info@gemis.co.za`, and the page says so. Screenshots cannot be attached that way, so the visitor is asked to attach it in the email.
+- **Subject lines.** Sales enquiries use "ManaGEM sales enquiry". Support tickets use "ManaGEM support: <category>".
+- **Copy buttons.** The email address and phone number sit beside each form as plain text with a Copy button, so nobody is stuck if the form fails.
+- **WhatsApp.** Set the number once per page in `<body data-whatsapp="27…">` (international format, digits only). While it is empty, every WhatsApp link stays hidden. Only switch it on for a number someone monitors.
 
 ## Feature pages
 
@@ -92,7 +102,14 @@ The header, menus and footer are generated. Edit `tools/build-chrome.py`, then r
 
 ## Walkthrough clips
 
-`assets/video/walk-<step>.mp4` and `.webm` are 12-second silent loops made from 2x captures of the product build: an eased zoom and pan across the screen with captions in Outfit, starting and ending on the full screen so each loop is seamless. They are generated by `tools/make-walkthrough-videos.py` (see its header for the inputs). The page plays the clip of the selected step only, starts it when the section is on screen, pauses it off screen, and does not autoplay under reduced motion (the clips get controls instead).
+`assets/video/walk-<step>.mp4` (H.264) and `walk-<step>.webm` (AV1) are 12-second silent loops at 1280x800, 480 KB to 1 MB each, made from 2x captures of the product build: an eased zoom and pan across the screen with captions in Outfit, starting and ending on the full screen so each loop is seamless. They are generated by `tools/make-walkthrough-videos.py` (see its header for the inputs).
+
+The page is light on data:
+
+- Every clip has `preload="none"`, `muted playsinline loop` and a poster still, and carries no source in the HTML.
+- Nothing downloads until the tour is on screen. Then only step 1 loads. Picking a step loads that clip and unloads the previous one.
+- Browsers that play AV1 get the WebM; the rest get the MP4.
+- A visible Pause button sits in the browser bar of each clip (WCAG 2.2.2). Under reduced motion nothing loads or plays until Play is pressed.
 
 ## Trial sign-up and login addresses
 
@@ -116,6 +133,8 @@ The copy publishes only what the product build and the approved V1 draft support
 | Plan prices and user limits | R1,000 / R2,000 / R3,000 for 2 / 5 / 10 users, from V1. Commercial terms not frozen. |
 | Sign-up URL | `https://app.managem.co.za/signup` is a placeholder. |
 | Contact details | GEMIS corporate email and phone used; confirm routing for ManaGEM. |
+| Form endpoint | None set. Forms open the visitor's email app until `data-endpoint` is filled on both forms. |
+| WhatsApp number | None set, so WhatsApp links are hidden. Add a monitored number to `data-whatsapp`. |
 | Sage editions supported, direction of product sync | Phrased generally ("synced with Sage"); add specifics when known. |
 | Hosting location, retention after an account closes, notice period | Not stated; the FAQ says "ask us". |
 | Field-user pricing | Not stated; "ask us". |
