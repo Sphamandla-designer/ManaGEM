@@ -45,12 +45,12 @@ Taken from the brand files and the product itself, not invented for the site.
 ## Page order
 
 1. Hero, following `reference/design/reference-03-hero.jpeg`: left-aligned copy over a black-to-teal-to-white gradient with drifting light rays and blooms, a trade pill, a white call to action and an arrow link, and the dashboard standing on the white bloom with its lower part faded out
-2. Trust: a navy-to-teal panel ("Backed by more than a decade of building business systems") with four verified figures that count up once (GEMIS in business since 2014, six stages on one job record, five trades, three export formats), then a moving row of trust marks with a pause button; hover and keyboard focus also pause it, and with reduced motion it is a static, wrapped row
+2. Trust, on white with no card ("Backed by more than a decade of building business systems"): four verified figures in navy-to-teal gradient type that count up once (GEMIS in business since 2014, six stages on one job record, five trades, three export formats), then a moving row of trust marks with a pause button; hover and keyboard focus also pause it, and with reduced motion it is a static, wrapped row
 3. Features, "Run the work, not the paperwork.": three white linked cards in one row (sales pipeline, jobs and bookings, invoicing and Sage); each is a link to its page under `features/`, and the only control is the animated arrow. The "Also in every plan" line below links the quotes, stock and factory pages
-4. Inside ManaGEM, centred on a clean navy-to-teal-to-white band (`--grad-band`, no pattern): six steps, enquiry to payment, each with its copy above an auto-playing silent clip of the real screen (see below); the clips play through in order and a chosen step loops
+4. Inside ManaGEM, centred on a clean navy-to-teal-to-white band (`--grad-band`, no pattern): six steps, enquiry to payment, each with a heading and one short line above an auto-playing silent clip of the real screen (see below); the clips play through in order and a chosen step loops
 5. For your trade: five trade tabs with outcomes, modules and a product crop, plus the accountants card
 6. Pricing: four plan cards and a link to the pricing page
-7. Getting started, on the dark band: four steps and an example of what take-on files become
+7. Getting started, a full-width navy-to-teal band (no card): four steps and an example of what take-on files become
 8. Support and questions: the contact tile and a numbered FAQ
 9. Final call to action on the dark band with three paths, footer, sticky action bar on phones
 
@@ -62,7 +62,9 @@ Every figure in the trust panel is sourced. The founding year, the ERP work, the
 
 `pricing.html` holds the pricing detail that used to sit on the homepage: the four plans, "Everything, on every plan", the full plan comparison (always open, scrollable on phones), "Good to know", and the four commitments (your data stays yours, POPIA, monthly with no minimum term, support from the people who build it). The homepage pricing section and the feature pages link to it.
 
-The header menu is centred: Features, Product, For your trade, Pricing, Support, with Log in and the trial button on the right. Contact goes to `info@gemis.co.za` by email; there is no form on the page.
+Every section uses the same spacing (the `.section` padding); there are no per-section overrides.
+
+The header menu is centred: Features, Product, For your trade, Pricing, Support, with Log in and the trial button on the right. Hovering or tabbing onto Features opens a mega menu with all six features, each linking to its page, and a "See it working" card that links to the walkthrough. Escape closes it. On phones the six features are listed under Features in the menu sheet. The header is repeated on every page, so a change to the menu has to be made in `index.html`, `pricing.html` and each file in `features/`. Contact goes to `info@gemis.co.za` by email; there is no form on the page.
 
 ## Feature pages
 

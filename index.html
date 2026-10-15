@@ -50,7 +50,19 @@
     </a>
     <nav aria-label="Main">
       <ul class="nav-links">
-        <li><a href="#features">Features</a></li>
+        <li class="has-mega"><a href="#features" aria-expanded="false" aria-controls="megaFeatures">Features <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
+          <div class="mega" id="megaFeatures">
+            <div class="mega-in">
+              <div class="mega-main"><span class="mega-label">Features</span><div class="mega-grid"><a class="mega-item" href="features/sales-pipeline.html"><span class="mega-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg></span><span class="mega-t"><b>Sales pipeline</b><span>Every enquiry, from first call to signed job</span></span></a><a class="mega-item" href="features/quotes-and-pricing.html"><span class="mega-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg></span><span class="mega-t"><b>Quotes and pricing</b><span>Quote from your own product list</span></span></a><a class="mega-item" href="features/jobs-and-bookings.html"><span class="mega-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16v13H4zM8 3v4M16 3v4M4 11h16"/></svg></span><span class="mega-t"><b>Jobs and bookings</b><span>Every job with its foreman, dates and progress</span></span></a><a class="mega-item" href="features/stock-and-purchasing.html"><span class="mega-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/></svg></span><span class="mega-t"><b>Stock and purchasing</b><span>Stock across stores and vehicles</span></span></a><a class="mega-item" href="features/factory-production.html"><span class="mega-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V10l6 4V10l6 4V6h6v15z"/></svg></span><span class="mega-t"><b>Factory production</b><span>Builds from pending to invoiced</span></span></a><a class="mega-item" href="features/invoicing-and-debtors.html"><span class="mega-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg></span><span class="mega-t"><b>Invoicing, debtors and Sage</b><span>Invoice from the job, chase from one list</span></span></a></div></div>
+              <div class="mega-side">
+                <span class="mega-label">See it working</span>
+                <b>One job, from enquiry to payment</b>
+                <img src="assets/mockups/app-dashboard.webp" alt="" width="1800" height="1125" loading="lazy" decoding="async">
+                <a class="mega-go" href="#tour">Explore the product <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </li>
         <li><a href="#tour">Product</a></li>
         <li><a href="#trades">For your trade</a></li>
         <li><a href="#pricing">Pricing</a></li>
@@ -74,7 +86,9 @@
       <button class="close" type="button" id="menuClose" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <ul>
-      <li><a href="#features">Features</a></li>
+      <li><a href="#features">Features</a>
+        <ul class="m-sub" aria-label="Features"><li><a href="features/sales-pipeline.html">Sales pipeline</a></li><li><a href="features/quotes-and-pricing.html">Quotes and pricing</a></li><li><a href="features/jobs-and-bookings.html">Jobs and bookings</a></li><li><a href="features/stock-and-purchasing.html">Stock and purchasing</a></li><li><a href="features/factory-production.html">Factory production</a></li><li><a href="features/invoicing-and-debtors.html">Invoicing, debtors and Sage</a></li></ul>
+      </li>
       <li><a href="#tour">Product</a></li>
       <li><a href="#trades">For your trade</a></li>
       <li><a href="#pricing">Pricing</a></li>
@@ -118,9 +132,9 @@
 
 <!-- ================= TRUST ================= -->
 <!-- Every figure here is verified: GEMIS founded 2014 and its multi-country, ERP and Microsoft Cloud work (GEMIS company profile 2025); the six stages, five trades and three export formats (product build). No customer counts, logos or ratings are published until they are confirmed. -->
-<section class="trust" aria-labelledby="trustTitle">
+<section class="section trust" aria-labelledby="trustTitle">
   <div class="wrap">
-    <div class="trust-panel reveal">
+    <div class="trust-body reveal">
       <div class="trust-head">
         <div><span class="eyebrow">Built by GEMIS</span><h2 id="trustTitle">Backed by more than a decade of building business systems.</h2></div>
         <p class="lede">ManaGEM is built and supported by GEM Information Systems, a South African software company. Since 2014 the team has delivered ERP platforms and business systems that organisations rely on every day, in several countries.</p>
@@ -181,7 +195,7 @@
     <div class="section-head reveal">
       <span class="eyebrow">Inside ManaGEM</span>
       <h2 id="tourTitle">One job, from enquiry to payment</h2>
-      <p class="lede">The actual ManaGEM screens, shown with example data. Each step plays on its own, then hands to the next. Pick a step to watch it again.</p>
+      <p class="lede">The real screens, step by step. Pick any step to watch it again.</p>
     </div>
     <div class="walk reveal" id="walk">
       <div class="tabs" role="tablist" aria-label="Steps in the job">
@@ -195,8 +209,7 @@
       <div class="walk-panel" role="tabpanel" id="wp-1" aria-labelledby="wt-1">
         <div class="walk-copy">
           <h3>Log the enquiry once</h3>
-          <p>Capture the customer, the site and scope, and the schedule in four steps. The enquiry goes into a pipeline by stage, with the sales rep, the area and the enquiry type.</p>
-          <div class="tp-mods"><span>Modules</span><em>Enquiries</em><em>Customers</em><em>Sales targets</em></div>
+          <p>Customer, site and schedule in four steps, straight into your pipeline.</p>
         </div>
         <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/enquiries</span></div>
           <video class="walk-video" muted playsinline preload="auto" poster="assets/mockups/app-enquiries.webp" width="1440" height="900" aria-label="Open enquiries: pipeline totals by stage and the list of enquiries, shown with example data"><source src="assets/video/walk-enquiries.mp4" type="video/mp4"><source src="assets/video/walk-enquiries.webm" type="video/webm"></video>
@@ -205,8 +218,7 @@
       <div class="walk-panel" role="tabpanel" id="wp-2" aria-labelledby="wt-2" hidden>
         <div class="walk-copy">
           <h3>Quote from your own product list</h3>
-          <p>Line items come from your products, each with its unit price and cost behind it. VAT is added, the quote goes out as a PDF, and the timeline records when it was sent and when the deposit arrived.</p>
-          <div class="tp-mods"><span>Modules</span><em>Quotes</em><em>Products and pricing</em><em>Quote templates</em></div>
+          <p>Your products and prices, VAT added, out as a PDF.</p>
         </div>
         <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/enquiries/L04-26-124</span></div>
           <video class="walk-video" muted playsinline preload="none" poster="assets/mockups/app-quote.webp" width="1440" height="900" aria-label="An enquiry with its quote line items, totals and quick actions, shown with example data"><source src="assets/video/walk-quote.mp4" type="video/mp4"><source src="assets/video/walk-quote.webm" type="video/webm"></video>
@@ -215,8 +227,7 @@
       <div class="walk-panel" role="tabpanel" id="wp-3" aria-labelledby="wt-3" hidden>
         <div class="walk-copy">
           <h3>Turn it into a job</h3>
-          <p>The job carries the customer, the foreman, the start and end dates and the progress. Bookings put the crew on the calendar, and the office sees which jobs are on track and which are late.</p>
-          <div class="tp-mods"><span>Modules</span><em>Projects</em><em>Bookings and calendar</em><em>Staff records</em></div>
+          <p>Foreman, dates and progress on one job, with the crew on the calendar.</p>
         </div>
         <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/projects</span></div>
           <video class="walk-video" muted playsinline preload="none" poster="assets/mockups/app-projects.webp" width="1440" height="900" aria-label="Current jobs with customer, foreman, dates and progress, shown with example data"><source src="assets/video/walk-projects.mp4" type="video/mp4"><source src="assets/video/walk-projects.webm" type="video/webm"></video>
@@ -225,8 +236,7 @@
       <div class="walk-panel" role="tabpanel" id="wp-4" aria-labelledby="wt-4" hidden>
         <div class="walk-copy">
           <h3>Dispatch stock and track the build</h3>
-          <p>Receive, dispatch, transfer and return stock across stores and vehicles, with low-stock alerts and purchase orders. If you make what you install, each build moves from pending to in build, QC, ready and invoiced.</p>
-          <div class="tp-mods"><span>Modules</span><em>Stock control</em><em>Purchase orders</em><em>Factory</em></div>
+          <p>Stock across stores and vehicles, and every build from pending to ready.</p>
         </div>
         <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/stock</span></div>
           <video class="walk-video" muted playsinline preload="none" poster="assets/mockups/app-stock.webp" width="1440" height="900" aria-label="Stock control: totals, recent movements, warehouse capacity and low-stock alerts, shown with example data"><source src="assets/video/walk-stock.mp4" type="video/mp4"><source src="assets/video/walk-stock.webm" type="video/webm"></video>
@@ -235,8 +245,7 @@
       <div class="walk-panel" role="tabpanel" id="wp-5" aria-labelledby="wt-5" hidden>
         <div class="walk-copy">
           <h3>Invoice from the job</h3>
-          <p>Deposits, partial payments and the final invoice are tracked per customer and project, with paid, partial, unpaid and overdue in one list, and billed, paid, outstanding and overdue totals at the top.</p>
-          <div class="tp-mods"><span>Modules</span><em>Invoices</em><em>Customer receipts</em></div>
+          <p>Deposits, part payments and final invoices, with what is paid and what is overdue.</p>
         </div>
         <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/invoices</span></div>
           <video class="walk-video" muted playsinline preload="none" poster="assets/mockups/app-invoices.webp" width="1440" height="900" aria-label="Invoices with totals and status per invoice, shown with example data"><source src="assets/video/walk-invoices.mp4" type="video/mp4"><source src="assets/video/walk-invoices.webm" type="video/webm"></video>
@@ -245,18 +254,12 @@
       <div class="walk-panel" role="tabpanel" id="wp-6" aria-labelledby="wt-6" hidden>
         <div class="walk-copy">
           <h3>Chase payment, post to Sage</h3>
-          <p>Invoices post to Sage with their net, VAT and total, and each one shows whether it has synced. Debtors are aged by customer with the last interaction and statement date.</p>
-          <div class="tp-mods"><span>Modules</span><em>Sage invoices</em><em>Debtors</em><em>Customer statements</em></div>
+          <p>Every invoice posts to Sage, and debtors are aged by customer.</p>
         </div>
         <figure class="browser"><div class="bar-top" aria-hidden="true"><span class="dots"><i></i><i></i><i></i></span><span class="url">app.managem.co.za/sage-invoices</span></div>
           <video class="walk-video" muted playsinline preload="none" poster="assets/mockups/app-sage.webp" width="1440" height="900" aria-label="Sage invoices: connected, synced counts, and each invoice with net, VAT, total and sync status, shown with example data"><source src="assets/video/walk-sage.mp4" type="video/mp4"><source src="assets/video/walk-sage.webm" type="video/webm"></video>
         </figure>
       </div>
-    </div>
-    <div class="tour-notes reveal">
-      <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4zM4 9h16M9 20V9"/></svg><div><b>One sidebar, every module</b><span>Customers, sales, operations and admin in a fixed order your team learns once.</span></div></div>
-      <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><div><b>Search anything</b><span>Jump to a customer, a quote number or a job from any screen.</span></div></div>
-      <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M8 11l4 4 4-4M4 21h16"/></svg><div><b>Your data, exportable</b><span>Every list exports to CSV, Excel or PDF with the filters you have on screen.</span></div></div>
     </div>
   </div>
 </section>
@@ -384,9 +387,9 @@
 </section>
 
 <!-- ================= GETTING STARTED ================= -->
-<section class="section" id="start" aria-labelledby="howTitle">
-  <div class="how dark reveal">
-    <div class="sky" aria-hidden="true"><i class="rays"></i><i class="bloom bloom-l"></i><i class="bloom bloom-r"></i><i class="grain"></i></div>
+<section class="section how dark" id="start" aria-labelledby="howTitle">
+  <div class="sky" aria-hidden="true"><i class="bloom bloom-l"></i><i class="bloom bloom-r"></i></div>
+  <div class="wrap reveal">
     <div class="how-grid">
       <div>
         <span class="eyebrow">Getting started</span>
