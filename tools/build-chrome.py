@@ -151,7 +151,7 @@ def footer(page):
         <a class="btn btn-primary btn-sm" href="{SIGNUP}" data-signup style="margin-top:18px">Start free trial</a>
       </div>
       <div><h3>Product</h3><ul><li><a href="{home}#tour">Product walkthrough</a></li><li><a href="{home}#features">Features</a></li><li><a href="{p}pricing.html">Pricing</a></li><li><a href="{p}pricing.html#compare">Compare plans</a></li><li><a href="{home}#start">Getting started</a></li></ul></div>
-      <div><h3>Industries</h3><ul>{inds}<li><a href="{home}#industries">Accountants and bookkeepers</a></li></ul></div>
+      <div><h3>Industries</h3><ul>{inds}<li><a href="{p}accountants.html"{cur(page["kind"] == "accountants")}>Accountants and bookkeepers</a></li></ul></div>
       <div><h3>Support</h3><ul><li><a href="{p}support.html">Support centre</a></li><li><a href="{p}support.html#ticket">Open a ticket</a></li><li><a href="{home}#faq">Help and FAQ</a></li><li><a href="mailto:{EMAIL}">{EMAIL}</a></li><li><a href="{PHONE_HREF}">{PHONE}</a></li></ul></div>
       <div><h3>Company</h3><ul><li><a href="{p}contact.html"{cur(page["kind"] == "contact")}>Talk to sales</a></li><li><a href="{p}blog.html">Blog</a></li><li><a href="https://sphamandla-designer.github.io/gemis-site/about.html">About GEMIS</a></li></ul><p class="foot-note">The privacy notice and terms of service are being finalised. Ask the team for the current versions.</p></div>
     </div>
@@ -180,11 +180,11 @@ def page_for(rel):
     if rel.startswith('features/'): return {'kind': 'feature', 'feature': name, 'depth': depth}
     if rel.startswith('industries/'): return {'kind': 'industry', 'industry': name, 'depth': depth}
     if rel == 'blog.html' or rel.startswith('blog/'): return {'kind': 'blog', 'depth': depth}
-    if rel in ('pricing.html', 'support.html', 'contact.html'): return {'kind': name, 'depth': depth}
+    if rel in ('pricing.html', 'support.html', 'contact.html', 'accountants.html'): return {'kind': name, 'depth': depth}
     return None
 
 def main():
-    files = ['index.html', 'pricing.html', 'support.html', 'contact.html', 'blog.html'] + sorted(
+    files = ['index.html', 'pricing.html', 'support.html', 'contact.html', 'accountants.html', 'blog.html'] + sorted(
         os.path.relpath(f, ROOT) for pat in ('features/*.html', 'industries/*.html', 'blog/*.html') for f in glob.glob(os.path.join(ROOT, pat)))
     done = []
     for rel in files:

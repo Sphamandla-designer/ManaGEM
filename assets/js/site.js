@@ -281,6 +281,11 @@
   /* ---- sales and support forms. With data-endpoint set, the form posts there (FormData, so the
          screenshot is included) and reports the result on the page. With no endpoint, it opens the
          visitor's email app with every field filled in, and says so. ---- */
+  /* a link can pre-fill the sales form: contact.html?enquiry=accountant */
+  var PREFILL = { accountant: 'I am an accountant or bookkeeper, and I would like to set up a client on ManaGEM.' };
+  var need = $('#f-need'), enq = (location.search.match(/[?&]enquiry=([a-z-]+)/) || [])[1];
+  if (need && enq && PREFILL[enq] && !need.value) need.value = PREFILL[enq];
+
   $$('form[data-form]').forEach(function (form) {
     var endpoint = (form.getAttribute('data-endpoint') || '').trim();
     var status = $('.form-status', form), note = $('.form-note', form), btn = form.querySelector('button[type="submit"]');

@@ -19,6 +19,7 @@ No build step. Everything is local, including the fonts.
 | `index.html` | The homepage, one page with anchored sections |
 | `support.html` | The support centre: one ticket form and the contact details |
 | `contact.html` | Talk to sales: a short sales form and the contact details |
+| `accountants.html` | Accountants and bookkeepers: who keeps what between ManaGEM and Sage, what reaches Sage, setting up a client, and questions |
 | `blog.html`, `blog/` | The blog index and its three articles |
 | `industries/` | One page per industry |
 | `tools/build-chrome.py` | Writes the shared header, menus, phone drawer and footer into every page |
@@ -82,6 +83,10 @@ The header, menus and footer are generated. Edit `tools/build-chrome.py`, then r
 ## Industry pages
 
 `industries/<slug>.html`, one per industry: waterproofing, roofing, building and renovation, manufacturing and factory, maintenance and service. Each has a hero with a real product screen, what ManaGEM handles for that industry and the modules used most (the same verified points as the homepage tabs), links to the three features that matter most, and a next-industry link. Edit them directly.
+
+## Accountants and bookkeepers
+
+`accountants.html` is for accountants and bookkeepers whose clients run on ManaGEM. It explains who keeps what: the client's work in ManaGEM, invoices posting to Sage Accounting with their net, VAT, total and Sage reference, and the ledger staying with the accountant. It also covers what the accountant can rely on, four setup steps, and five questions answered with the same wording as the homepage FAQ. It makes no claim about accountant-only access, a multi-client view or partner pricing, because none is confirmed. "Set up a client" opens the sales form with the request filled in (`contact.html?enquiry=accountant`). The page is linked from the footer and from the accountants card on the homepage; it is not in the Industries menu.
 
 ## Blog and support
 
