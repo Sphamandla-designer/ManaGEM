@@ -17,11 +17,15 @@ No build step. Everything is local, including the fonts.
 | Path | What it is |
 | --- | --- |
 | `index.html` | The homepage, one page with anchored sections |
+| `support.html` | The support centre: nine ticket types, each opening a pre-addressed email, and the contact details |
+| `blog.html`, `blog/` | The blog index and its three articles |
+| `industries/` | One page per industry |
+| `tools/build-chrome.py` | Writes the shared header, mega menus, phone menu and footer into every page |
 | `pricing.html` | The pricing page: plans, what every plan includes, the full comparison, and what you can count on |
 | `assets/css/site.css` | Design tokens and all styles |
 | `assets/js/site.js` | Header state, mobile menu, scroll reveal, walkthrough clips and tabs, trade tabs, trust figure count-up and moving trust row, sticky bar |
 | `assets/video/` | The walkthrough clips, MP4 and WebM |
-| `features/` | One page per feature tile |
+| `features/` | One page per feature |
 | `tools/make-walkthrough-videos.py` | Builds the walkthrough clips with ffmpeg |
 | `assets/fonts/` | Self-hosted latin subsets of Outfit (variable) and IBM Plex Mono, SIL Open Font License |
 | `docs/homepage-audit-2026-10.md` | The October 2026 audit: what was verified against the product build, what was removed, and what still needs confirming |
@@ -44,12 +48,12 @@ Taken from the brand files and the product itself, not invented for the site.
 
 ## Page order
 
-1. Hero, following `reference/design/reference-03-hero.jpeg`: left-aligned copy over a black-to-teal-to-white gradient with drifting light rays and blooms, a trade pill, a white call to action and an arrow link, and the dashboard standing on the white bloom with its lower part faded out
-2. Trust, on white with no card ("Backed by more than a decade of building business systems"): four verified figures in navy-to-teal gradient type that count up once (GEMIS in business since 2014, six stages on one job record, five trades, three export formats), then a moving row of trust marks with a pause button; hover and keyboard focus also pause it, and with reduced motion it is a static, wrapped row
+1. Hero, following `reference/design/reference-03-hero.jpeg`: left-aligned copy over a black-to-teal-to-white gradient with drifting light rays and blooms, a "Synced with Sage" pill, a white call to action and an arrow link, and the dashboard standing on the white bloom with its lower part faded out
+2. Trust, centred on white ("Backed by more than a decade of building business systems"): four verified figures in navy-to-teal gradient type that count up once (GEMIS in business since 2014, six stages on one job record, five industries, three export formats), then a moving row of trust marks with a pause button; hover and keyboard focus also pause it, and with reduced motion it is a static, wrapped row
 3. Features, "Run the work, not the paperwork.": three white linked cards in one row (sales pipeline, jobs and bookings, invoicing and Sage); each is a link to its page under `features/`, and the only control is the animated arrow. The "Also in every plan" line below links the quotes, stock and factory pages
 4. Inside ManaGEM, centred on a clean navy-to-teal-to-white band (`--grad-band`, no pattern): six steps, enquiry to payment, each with a heading and one short line above an auto-playing silent clip of the real screen (see below); the clips play through in order and a chosen step loops
-5. For your trade: five trade tabs with outcomes, modules and a product crop, plus the accountants card
-6. Pricing: four plan cards and a link to the pricing page
+5. Pricing, centred: four plan cards and a link to the pricing page
+6. Industries: five industry tabs with outcomes, modules and a product crop, each with a link to its industry page, plus the accountants card
 7. Getting started, a full-width navy-to-teal band (no card): four steps and an example of what take-on files become
 8. Support and questions: the contact tile and a numbered FAQ
 9. Final call to action on the dark band with three paths, footer, sticky action bar on phones
@@ -64,7 +68,23 @@ Every figure in the trust panel is sourced. The founding year, the ERP work, the
 
 Every section uses the same spacing (the `.section` padding); there are no per-section overrides.
 
-The header menu is centred: Features, Product, For your trade, Pricing, Support, with Log in and the trial button on the right. Hovering or tabbing onto Features opens a mega menu with all six features, each linking to its page, and a "See it working" card that links to the walkthrough. Escape closes it. On phones the six features are listed under Features in the menu sheet. The header is repeated on every page, so a change to the menu has to be made in `index.html`, `pricing.html` and each file in `features/`. Contact goes to `info@gemis.co.za` by email; there is no form on the page.
+The header menu is centred: Features, Product, Industries, Pricing, Blogs, Support, with Log in and the trial button on the right. Below 1180px it collapses into the phone menu.
+
+- **Features**, **Industries** and **Support** open mega menus on hover or keyboard focus; Escape closes them. Features and Industries list every page with a short description. Support lists nine ticket types (a fault, log-in and access, users, Sage sync, importing data, billing, how-to questions, feature requests, sales); each opens the visitor's email with the subject filled in and a short template, addressed to `info@gemis.co.za`. There is no ticketing system behind it; it is email.
+- **Pricing** goes to `pricing.html`, **Blogs** to `blog.html`, **Product** to the walkthrough on the homepage.
+- On phones the features and industries are listed under their menu items.
+
+The header, menus and footer are generated. Edit `tools/build-chrome.py`, then run `python3 tools/build-chrome.py` from the repository root; it rewrites only the regions between the `chrome:header` and `chrome:footer` markers on every page. Contact goes to `info@gemis.co.za` by email; there is no form on the site.
+
+## Industry pages
+
+`industries/<slug>.html`, one per industry: waterproofing, roofing, building and renovation, manufacturing and factory, maintenance and service. Each has a hero with a real product screen, what ManaGEM handles for that industry and the modules used most (the same verified points as the homepage tabs), links to the three features that matter most, and a next-industry link. Edit them directly.
+
+## Blog and support
+
+`blog.html` lists three articles under `blog/`: moving off spreadsheets for the take-on, how one job record runs from enquiry to payment, and how ManaGEM and Sage split the work. They describe only what the product build and the V1 draft support, and carry no statistics. Add new articles by copying one and adding a card to `blog.html`.
+
+`support.html` repeats the nine ticket types from the Support menu as cards, with the phone number, email and FAQ link.
 
 ## Feature pages
 
