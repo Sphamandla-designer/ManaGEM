@@ -176,54 +176,142 @@
     new IntersectionObserver(function (en) { nearEnd = en[0].isIntersecting; syncSticky(); }, { threshold: 0.05 }).observe(footer);
   }
 
-  /* ---- product walkthrough: one clip per step. Each clip plays through once, then the next step
-         takes over, so the whole job plays on its own. Picking a step plays that clip and loops it.
-         Nothing plays until the section is on screen, and nothing autoplays under reduced motion. ---- */
+  /* ---- product walkthrough, light on data: no clip downloads until the tour is on screen, and only the
+         active step's clip is ever loaded. Picking a step swaps the source; the old one is unloaded.
+         Clips loop, and a visible Pause button stops them (WCAG 2.2.2). Under reduced motion nothing
+         plays until Play is pressed. ---- */
   var walk = $('#walk');
   if (walk) {
     var wtabs = $$('[role="tab"]', walk), wpanels = wtabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
     var videos = wpanels.map(function (p) { return p.querySelector('video'); });
-    var current = 0, picked = false, onScreen = false;
+    var pauseBtns = $$('.walk-pause', walk);
+    var current = 0, onScreen = false, userPaused = reduce;
+    var AV1 = 'video/webm; codecs="av01.0.08M.08"';
     function bar(i, frac) { var b = wtabs[i].querySelector('.tab-bar i'); if (b) b.style.width = (frac * 100).toFixed(1) + '%'; }
-    function playCurrent() {
-      var v = videos[current]; if (!v || reduce || !onScreen) return;
-      v.loop = picked;
+    function attach(v) {
+      if (!v || v.getAttribute('data-on')) return;
+      [[v.getAttribute('data-webm'), AV1], [v.getAttribute('data-mp4'), 'video/mp4']].forEach(function (s) {
+        if (!s[0]) return; var el = document.createElement('source'); el.src = s[0]; el.type = s[1]; v.appendChild(el);
+      });
+      v.setAttribute('data-on', '1'); v.preload = 'auto'; v.load();
+    }
+    function detach(v) {
+      if (!v || !v.getAttribute('data-on')) return;
+      v.pause(); $$('source', v).forEach(function (el) { el.remove(); });
+      v.removeAttribute('data-on'); v.preload = 'none'; v.load();
+    }
+    function syncButtons() {
+      pauseBtns.forEach(function (b) {
+        b.querySelector('span').textContent = userPaused ? 'Play' : 'Pause';
+        b.classList.toggle('is-paused', userPaused);
+      });
+    }
+    function play() {
+      var v = videos[current]; if (!v || !onScreen || userPaused || document.hidden) return;
+      attach(v);
       var pr = v.play(); if (pr && pr.catch) pr.catch(function () {});
     }
     function show(i, focus) {
-      current = i;
       wtabs.forEach(function (t, k) {
         var on = k === i; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; wpanels[k].hidden = !on;
-        if (!on) { bar(k, 0); if (videos[k]) { videos[k].pause(); } }
+        if (!on) { bar(k, 0); detach(videos[k]); }
       });
+      current = i;
       if (focus) wtabs[i].focus();
-      var v = videos[i]; if (v) { try { v.currentTime = 0; } catch (e) {} if (v.preload !== 'auto') v.preload = 'auto'; }
-      playCurrent();
+      play();
     }
+    function pick(i, focus) { if (!reduce) userPaused = false; syncButtons(); show(i, focus); }
     wtabs.forEach(function (t, i) {
-      t.addEventListener('click', function () { picked = true; show(i); });
+      t.addEventListener('click', function () { pick(i); });
       t.addEventListener('keydown', function (e) {
         var n = null;
         if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = (i + 1) % wtabs.length;
         else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = (i - 1 + wtabs.length) % wtabs.length;
         else if (e.key === 'Home') n = 0; else if (e.key === 'End') n = wtabs.length - 1;
-        if (n === null) return; e.preventDefault(); picked = true; show(n, true);
+        if (n === null) return; e.preventDefault(); pick(n, true);
+      });
+    });
+    pauseBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        userPaused = !userPaused; syncButtons();
+        if (userPaused) { var v = videos[current]; if (v) v.pause(); } else { onScreen = true; play(); }
       });
     });
     videos.forEach(function (v, i) {
       if (!v) return;
       v.addEventListener('timeupdate', function () { if (i === current && v.duration) bar(i, v.currentTime / v.duration); });
-      v.addEventListener('ended', function () { if (i !== current) return; if (picked) { v.currentTime = 0; playCurrent(); } else { show((i + 1) % wtabs.length); } });
-      if (reduce) v.controls = true;
     });
+    syncButtons();
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (en) {
         onScreen = en[0].isIntersecting;
-        if (onScreen) playCurrent(); else videos.forEach(function (v) { if (v) v.pause(); });
+        if (onScreen) play(); else videos.forEach(function (v) { if (v) v.pause(); });
       }, { threshold: 0.35 }).observe(walk);
-    } else { onScreen = true; playCurrent(); }
-    document.addEventListener('visibilitychange', function () { if (document.hidden) videos.forEach(function (v) { if (v) v.pause(); }); else playCurrent(); });
+    } else { onScreen = true; play(); }
+    document.addEventListener('visibilitychange', function () { if (document.hidden) videos.forEach(function (v) { if (v) v.pause(); }); else play(); });
   }
+
+  /* ---- phone menu: Product and Industries open and close in place ---- */
+  $$('.m-toggle').forEach(function (b) {
+    var sub = document.getElementById(b.getAttribute('aria-controls'));
+    b.addEventListener('click', function () { var open = b.getAttribute('aria-expanded') === 'true'; b.setAttribute('aria-expanded', String(!open)); sub.hidden = open; });
+  });
+
+  /* ---- WhatsApp: set the number once on <body data-whatsapp="27…">; empty keeps every WhatsApp link hidden ---- */
+  var wa = (document.body.getAttribute('data-whatsapp') || '').replace(/\D/g, '');
+  $$('[data-wa]').forEach(function (el) {
+    if (!wa) { el.hidden = true; return; }
+    var a = el.matches('a') ? el : el.querySelector('a');
+    if (a) a.href = 'https://wa.me/' + wa + '?text=' + encodeURIComponent(el.getAttribute('data-wa-text') || 'Hi, I have a question about ManaGEM.');
+    el.hidden = false;
+  });
+
+  /* ---- copy buttons for the email address and phone number ---- */
+  $$('.copy-btn').forEach(function (b) {
+    var label = b.querySelector('span');
+    b.addEventListener('click', function () {
+      var text = b.getAttribute('data-copy');
+      function done(ok) { label.textContent = ok ? 'Copied' : 'Select and copy'; setTimeout(function () { label.textContent = 'Copy'; }, 2200); }
+      if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); }); return; }
+      var t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} t.remove(); done(ok);
+    });
+  });
+
+  /* ---- sales and support forms. With data-endpoint set, the form posts there (FormData, so the
+         screenshot is included) and reports the result on the page. With no endpoint, it opens the
+         visitor's email app with every field filled in, and says so. ---- */
+  $$('form[data-form]').forEach(function (form) {
+    var endpoint = (form.getAttribute('data-endpoint') || '').trim();
+    var status = $('.form-status', form), note = $('.form-note', form), btn = form.querySelector('button[type="submit"]');
+    if (note) note.textContent = note.getAttribute(endpoint ? 'data-endpoint-note' : 'data-mailto-note');
+    function say(msg, cls) { status.textContent = msg; status.className = 'form-status ' + (cls || ''); }
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      if (endpoint) {
+        btn.disabled = true; say('Sending…');
+        fetch(endpoint, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
+          .then(function (r) { if (!r.ok) throw new Error(String(r.status)); form.reset(); say(form.getAttribute('data-ok'), 'ok'); })
+          .catch(function () { say(form.getAttribute('data-fail'), 'err'); })
+          .then(function () { btn.disabled = false; });
+        return;
+      }
+      var lines = [];
+      $$('[name]', form).forEach(function (el) {
+        var label = el.getAttribute('data-label') || el.name;
+        if (el.type === 'file') {
+          if (el.files && el.files.length) lines.push(label + ': ' + Array.prototype.map.call(el.files, function (f) { return f.name; }).join(', ') + ' (please attach it to this email)');
+          return;
+        }
+        lines.push(label + ': ' + (el.value.trim() || '-'));
+      });
+      var subject = form.getAttribute('data-subject');
+      var cat = form.querySelector('[name="category"]'); if (cat && cat.value) subject += ': ' + cat.value;
+      window.location.href = 'mailto:' + form.getAttribute('data-to') + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines.join('\n'));
+      say(form.getAttribute('data-mailto-ok'), 'ok');
+    });
+  });
 
   var yr = $('#year'); if (yr) yr.textContent = String(new Date().getFullYear());
 
