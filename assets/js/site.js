@@ -113,13 +113,39 @@
     sio.observe($('#steps'));
   }
 
-  /* ---- pricing: compare table disclosure ---- */
-  var cmpBtn = $('#compareBtn'), cmpBody = $('#compareTable');
-  if (cmpBtn) cmpBtn.addEventListener('click', function () {
-    var open = cmpBtn.getAttribute('aria-expanded') === 'true';
-    cmpBtn.setAttribute('aria-expanded', String(!open)); cmpBody.hidden = open;
-    cmpBtn.querySelector('span').textContent = open ? 'Compare plans in detail' : 'Hide plan comparison';
-  });
+  /* ---- trust figures: count up once when they come on screen (the final value is already in the markup) ---- */
+  var counters = $$('[data-count]');
+  var calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (counters.length && !calm && 'IntersectionObserver' in window) {
+    var cio = new IntersectionObserver(function (en) {
+      en.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        cio.unobserve(e.target);
+        var el = e.target, to = +el.getAttribute('data-count'), from = +(el.getAttribute('data-from') || 0), t0 = null, dur = 1500;
+        function step(t) {
+          if (t0 === null) t0 = t;
+          var p = Math.min(1, (t - t0) / dur), k = 1 - Math.pow(1 - p, 3);
+          el.textContent = String(Math.round(from + (to - from) * k));
+          if (p < 1) requestAnimationFrame(step);
+        }
+        el.textContent = String(from);
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(function (c) { cio.observe(c); });
+  }
+
+  /* ---- trust marks: moving row with a pause control (hover and focus also pause it) ---- */
+  var mq = $('#trustMarquee'), mqBtn = $('#marqueeBtn');
+  if (mq && mqBtn) {
+    var PAUSE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg>';
+    var PLAY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg>';
+    mqBtn.addEventListener('click', function () {
+      var paused = mq.classList.toggle('paused');
+      mqBtn.setAttribute('aria-pressed', String(paused));
+      mqBtn.innerHTML = paused ? PLAY : PAUSE;
+    });
+  }
 
   /* ---- sticky action bar on small screens: after the hero, hidden while the form or footer is on screen ---- */
   var sticky = $('#stickyCta'), footer = $('.site-footer');

@@ -16,9 +16,10 @@ No build step. Everything is local, including the fonts.
 
 | Path | What it is |
 | --- | --- |
-| `index.html` | The site, one page with anchored sections |
+| `index.html` | The homepage, one page with anchored sections |
+| `pricing.html` | The pricing page: plans, what every plan includes, the full comparison, and what you can count on |
 | `assets/css/site.css` | Design tokens and all styles |
-| `assets/js/site.js` | Header state, mobile menu, scroll reveal, walkthrough clips and tabs, trade tabs, plan comparison, sticky bar |
+| `assets/js/site.js` | Header state, mobile menu, scroll reveal, walkthrough clips and tabs, trade tabs, trust figure count-up and moving trust row, sticky bar |
 | `assets/video/` | The walkthrough clips, MP4 and WebM |
 | `features/` | One page per feature tile |
 | `tools/make-walkthrough-videos.py` | Builds the walkthrough clips with ffmpeg |
@@ -39,21 +40,27 @@ Taken from the brand files and the product itself, not invented for the site.
 - **Type.** Outfit for everything, IBM Plex Mono for figures and references, matching the product.
 - **Shape.** Pill buttons, 16 to 32 px radii, soft layered shadows on product cards, thin 1 px dividers in the feature bento.
 - **Motion.** Entrance rise on the hero, reveal on scroll, 160 to 600 ms easings. Everything respects `prefers-reduced-motion`.
-- **Restraint.** No background video, no floating cards, no counters. The product screens are the visuals.
+- **Restraint.** No background video and no floating cards. The trust figures count up once, and only verified figures are shown. The product screens are the visuals.
 
 ## Page order
 
 1. Hero, following `reference/design/reference-03-hero.jpeg`: left-aligned copy over a black-to-teal-to-white gradient with drifting light rays and blooms, a trade pill, a white call to action and an arrow link, and the dashboard standing on the white bloom with its lower part faded out
-2. Features: three white linked cards in one row (sales pipeline, jobs and bookings, invoicing and Sage); each is a link to its page under `features/`, and the only control is the animated arrow. The "Also in every plan" line below links the quotes, stock and factory pages
-3. Verified facts strip: one record per job, Sage sync, the 14-day trial, built by GEMIS
+2. Trust: a navy-to-teal panel ("Backed by more than a decade of building business systems") with four verified figures that count up once (GEMIS in business since 2014, six stages on one job record, five trades, three export formats), then a moving row of trust marks with a pause button; hover and keyboard focus also pause it, and with reduced motion it is a static, wrapped row
+3. Features, "Run the work, not the paperwork.": three white linked cards in one row (sales pipeline, jobs and bookings, invoicing and Sage); each is a link to its page under `features/`, and the only control is the animated arrow. The "Also in every plan" line below links the quotes, stock and factory pages
 4. Inside ManaGEM, centred on a clean navy-to-teal-to-white band (`--grad-band`, no pattern): six steps, enquiry to payment, each with its copy above an auto-playing silent clip of the real screen (see below); the clips play through in order and a chosen step loops
 5. For your trade: five trade tabs with outcomes, modules and a product crop, plus the accountants card
-6. Pricing: four plan cards, "everything on every plan", an expandable comparison
-7. What you can count on: data export, POPIA, monthly billing, support
-8. Getting started, on the dark band: four steps and an example of what take-on files become
-9. Sage integration, with what moves in which direction and what stays in Sage
-10. Support and questions: the contact tile and a numbered FAQ
-11. Final call to action on the dark band with three paths, footer, sticky action bar on phones
+6. Pricing: four plan cards and a link to the pricing page
+7. Getting started, on the dark band: four steps and an example of what take-on files become
+8. Support and questions: the contact tile and a numbered FAQ
+9. Final call to action on the dark band with three paths, footer, sticky action bar on phones
+
+### Trust figures
+
+Every figure in the trust panel is sourced. The founding year, the ERP work, the multi-country systems and the Microsoft Cloud team come from the GEMIS company profile (2025). The six stages, five trades and three export formats come from the product build. There is no customer count, client logo row or satisfaction score, because none is confirmed. Add them to the panel or the moving row once they are, with the customers' consent for any names or logos.
+
+## Pricing page
+
+`pricing.html` holds the pricing detail that used to sit on the homepage: the four plans, "Everything, on every plan", the full plan comparison (always open, scrollable on phones), "Good to know", and the four commitments (your data stays yours, POPIA, monthly with no minimum term, support from the people who build it). The homepage pricing section and the feature pages link to it.
 
 The header menu is centred: Features, Product, For your trade, Pricing, Support, with Log in and the trial button on the right. Contact goes to `info@gemis.co.za` by email; there is no form on the page.
 
