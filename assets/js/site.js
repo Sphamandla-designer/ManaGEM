@@ -113,6 +113,25 @@
     sio.observe($('#steps'));
   }
 
+  /* ---- features mega menu: CSS opens it on hover and focus; this keeps aria-expanded true to state and lets Escape close it ---- */
+  $$('.has-mega').forEach(function (item) {
+    var link = item.querySelector('a');
+    function set(open) { link.setAttribute('aria-expanded', String(open)); }
+    item.addEventListener('mouseenter', function () { item.classList.remove('closed'); set(true); });
+    item.addEventListener('mouseleave', function () { item.classList.remove('closed'); set(item.contains(document.activeElement)); });
+    item.addEventListener('focusin', function () { if (!item.classList.contains('closed')) set(true); });
+    item.addEventListener('focusout', function (e) { if (!item.contains(e.relatedTarget)) { item.classList.remove('closed'); set(false); } });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || link.getAttribute('aria-expanded') !== 'true') return;
+      var inside = item.contains(document.activeElement);
+      item.classList.add('closed'); set(false);
+      if (inside) link.focus();
+    });
+    $$('.mega a', item).forEach(function (a) {
+      a.addEventListener('click', function () { item.classList.add('closed'); set(false); });
+    });
+  });
+
   /* ---- trust figures: count up once when they come on screen (the final value is already in the markup) ---- */
   var counters = $$('[data-count]');
   var calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
