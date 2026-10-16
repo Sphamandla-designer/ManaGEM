@@ -132,7 +132,10 @@
     });
   });
 
-  /* ---- trust figures: count up once when they come on screen (the final value is already in the markup) ---- */
+  /* ---- trust figures: count up once when they come on screen. Only the number inside the aria-hidden span
+         animates; any suffix such as "+" sits outside it, and screen readers read the final value from the
+         .sr-only span, so intermediate values are never announced. data-group adds the thousands separator.
+         Under reduced motion the final values in the markup are left as they are. ---- */
   var counters = $$('[data-count]');
   var calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (counters.length && !calm && 'IntersectionObserver' in window) {
@@ -141,13 +144,15 @@
         if (!e.isIntersecting) return;
         cio.unobserve(e.target);
         var el = e.target, to = +el.getAttribute('data-count'), from = +(el.getAttribute('data-from') || 0), t0 = null, dur = 1500;
+        var group = el.hasAttribute('data-group');
+        function fmt(n) { var t = String(n); return group ? t.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : t; }
         function step(t) {
           if (t0 === null) t0 = t;
           var p = Math.min(1, (t - t0) / dur), k = 1 - Math.pow(1 - p, 3);
-          el.textContent = String(Math.round(from + (to - from) * k));
+          el.textContent = fmt(Math.round(from + (to - from) * k));
           if (p < 1) requestAnimationFrame(step);
         }
-        el.textContent = String(from);
+        el.textContent = fmt(from);
         requestAnimationFrame(step);
       });
     }, { threshold: 0.5 });
