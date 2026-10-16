@@ -19,7 +19,9 @@ No build step. Everything is local, including the fonts.
 | `index.html` | The homepage, one page with anchored sections |
 | `support.html` | The support centre: one ticket form and the contact details |
 | `contact.html` | Talk to sales: a short sales form and the contact details |
-| `accountants.html` | Accountants and bookkeepers: who keeps what between ManaGEM and Sage, what reaches Sage, setting up a client, and questions |
+| `accounting-and-bookkeeping.html` | Accounting & Bookkeeping landing page for accountants, bookkeepers and the businesses they support |
+| `accountants.html` | Redirect from the old accountants address to the accounting page (noindex) |
+| `about.html` | About ManaGEM: what it does, who builds it, how GEMIS works with customers, who it is for |
 | `blog.html`, `blog/` | The blog index and its three articles |
 | `industries/` | One page per industry |
 | `tools/build-chrome.py` | Writes the shared header, menus, phone drawer and footer into every page |
@@ -89,9 +91,19 @@ The header, menus and footer are generated. Edit `tools/build-chrome.py`, then r
 
 `industries/<slug>.html`, one per industry: waterproofing, roofing, building and renovation, manufacturing and factory, maintenance and service. Each has a hero with a real product screen, what ManaGEM handles for that industry and the modules used most (the same verified points as the homepage tabs), links to the three features that matter most, and a next-industry link. Edit them directly.
 
-## Accountants and bookkeepers
+## Accounting & Bookkeeping
 
-`accountants.html` is for accountants and bookkeepers whose clients run on ManaGEM. It explains who keeps what: the client's work in ManaGEM, invoices posting to Sage Accounting with their net, VAT, total and Sage reference, and the ledger staying with the accountant. It also covers what the accountant can rely on, four setup steps, and five questions answered with the same wording as the homepage FAQ. It makes no claim about accountant-only access, a multi-client view or partner pricing, because none is confirmed. "Set up a client" opens the sales form with the request filled in (`contact.html?enquiry=accountant`). The page is linked from the footer and from the accountants card on the homepage; it is not in the Industries menu.
+`accounting-and-bookkeeping.html` explains ManaGEM to accountants, bookkeepers and the businesses they support, without presenting it as accounting software. Sections: hero with four real screens (enquiry, quote, job, invoice); the operational information problem; ManaGEM's role; how ManaGEM works alongside accounting software (three stages, with the real Sage invoices screen); benefits; who it suits; an illustrative example with sample data from the screenshots; FAQ; final call to action. "Book a ManaGEM Demo" opens the sales form pre-filled (`contact.html?enquiry=accountant-demo`); "Contact GEMIS" goes to the contact details on `contact.html#reach`. The page is in the Industries menu, the footer and the homepage accountants card. The old `accountants.html` address redirects here.
+
+Integration copy is limited to what the product build and docs show:
+
+- **Sage Accounting, shown in the build:** invoices post with net, VAT, total and a Sage reference; each invoice shows synced, pending or error and its last sync time; a Sync now action; products can be synced with Sage (direction not stated).
+- **Not confirmed:** which Sage editions are supported, how often sync runs on its own, and which way product sync runs. The page asks visitors to check editions with the team.
+- **Xero:** not available (docs Q6). The page says so.
+
+## About ManaGEM
+
+`about.html` replaces the footer's external "About GEMIS" link. It covers what ManaGEM does (links to the six feature pages), who builds it (GEMIS, from the 2025 company profile), how the team works with customers (from the homepage FAQ), and who it is for. It links to the GEMIS website.
 
 ## Blog and support
 
@@ -153,4 +165,5 @@ The copy publishes only what the product build and the approved V1 draft support
 | Job costing, labour hours, margin per job | Not in the product build. Not claimed anywhere on the page. If the live application has them, the hero can return to a profitability promise. |
 | Customer stories | None published. The page says so and offers a reference call. |
 | Legal pages | Privacy notice and terms of service do not exist yet; the footer says they are being finalised. |
-| Xero | Planned, not available. |
+| Xero | Planned, not available. The accounting page says it is not available. |
+| Sage sync frequency | Not stated. The build shows a Sync now action and a last-sync time per invoice. |

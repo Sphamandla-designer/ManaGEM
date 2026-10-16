@@ -24,6 +24,7 @@ def ico(d, w='2'):
     return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{d}</svg>'
 ARROW = ico('<path d="M5 12h14M13 6l6 6-6 6"/>')
 CHEV = ico('<path d="M6 9l6 6 6-6"/>')
+LEDGER = ico('<path d="M4 4h16v16H4zM8 9h8M8 13h8M8 17h5"/>')
 GRID = ico('<path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/>')
 
 # slug, name, one-line description, icon path
@@ -77,7 +78,9 @@ def mega_industries(page):
     items = ''.join(
         f'<a class="mega-item" href="{p}industries/{s}.html"{cur(page.get("industry") == s)}><span class="mega-ico">{ico(d)}</span>'
         f'<span class="mega-t"><b>{n}</b><span>{t}</span></span></a>' for s, n, t, d in INDUSTRIES)
-    on = ' is-current' if page['kind'] == 'industry' else ''
+    items += (f'<a class="mega-item mega-acct" href="{p}accounting-and-bookkeeping.html"{cur(page["kind"] == "accounting")}><span class="mega-ico">{ico(LEDGER)}</span>'
+              f'<span class="mega-t"><b>Accounting and bookkeeping</b><span>For accountants and the businesses they support</span></span></a>')
+    on = ' is-current' if page['kind'] in ('industry', 'accounting') else ''
     return (f'<li class="has-mega{on}"><a href="{home}#industries" aria-expanded="false" aria-controls="megaIndustries">Industries {CHEV}</a>\n'
             f'          <div class="mega mega-narrow" id="megaIndustries"><div class="mega-in">\n'
             f'            <div class="mega-main"><span class="mega-label">Industries</span><div class="mega-grid cols-1">{items}</div></div>\n'
@@ -89,7 +92,8 @@ def header(page):
     brand = '#top' if k == 'home' else home
     sub_p = (f'<li><a class="m-featured" href="{home}#tour">See one job from enquiry to payment</a></li>'
              + ''.join(f'<li><a href="{p}features/{s}.html"{cur(page.get("feature") == s)}>{n}</a></li>' for s, n, _, _ in FEATURES))
-    sub_i = ''.join(f'<li><a href="{p}industries/{s}.html"{cur(page.get("industry") == s)}>{n}</a></li>' for s, n, _, _ in INDUSTRIES)
+    sub_i = (''.join(f'<li><a href="{p}industries/{s}.html"{cur(page.get("industry") == s)}>{n}</a></li>' for s, n, _, _ in INDUSTRIES)
+             + f'<li><a href="{p}accounting-and-bookkeeping.html"{cur(k == "accounting")}>Accounting and bookkeeping</a></li>')
     return f'''<header class="site-header on-dark" id="siteHeader">
   <div class="wrap">
     <a class="brand" href="{brand}" aria-label="ManaGEM home">
@@ -151,9 +155,9 @@ def footer(page):
         <a class="btn btn-primary btn-sm" href="{SIGNUP}" data-signup style="margin-top:18px">Start free trial</a>
       </div>
       <div><h3>Product</h3><ul><li><a href="{home}#tour">Product walkthrough</a></li><li><a href="{home}#features">Features</a></li><li><a href="{p}pricing.html">Pricing</a></li><li><a href="{p}pricing.html#compare">Compare plans</a></li><li><a href="{home}#start">Getting started</a></li></ul></div>
-      <div><h3>Industries</h3><ul>{inds}<li><a href="{p}accountants.html"{cur(page["kind"] == "accountants")}>Accountants and bookkeepers</a></li></ul></div>
+      <div><h3>Industries</h3><ul>{inds}<li><a href="{p}accounting-and-bookkeeping.html"{cur(page["kind"] == "accounting")}>Accounting and bookkeeping</a></li></ul></div>
       <div><h3>Support</h3><ul><li><a href="{p}support.html">Support centre</a></li><li><a href="{p}support.html#ticket">Open a ticket</a></li><li><a href="{home}#faq">Help and FAQ</a></li><li><a href="mailto:{EMAIL}">{EMAIL}</a></li><li><a href="{PHONE_HREF}">{PHONE}</a></li></ul></div>
-      <div><h3>Company</h3><ul><li><a href="{p}contact.html"{cur(page["kind"] == "contact")}>Talk to sales</a></li><li><a href="{p}blog.html">Blog</a></li><li><a href="https://sphamandla-designer.github.io/gemis-site/about.html">About GEMIS</a></li></ul><p class="foot-note">The privacy notice and terms of service are being finalised. Ask the team for the current versions.</p></div>
+      <div><h3>Company</h3><ul><li><a href="{p}contact.html"{cur(page["kind"] == "contact")}>Talk to sales</a></li><li><a href="{p}blog.html">Blog</a></li><li><a href="{p}about.html"{cur(page["kind"] == "about")}>About ManaGEM</a></li></ul><p class="foot-note">The privacy notice and terms of service are being finalised. Ask the team for the current versions.</p></div>
     </div>
     <div class="foot-bottom">
       <span>© <span id="year">2026</span> <b>GEM Information Systems</b>. South Africa.</span>
@@ -180,11 +184,12 @@ def page_for(rel):
     if rel.startswith('features/'): return {'kind': 'feature', 'feature': name, 'depth': depth}
     if rel.startswith('industries/'): return {'kind': 'industry', 'industry': name, 'depth': depth}
     if rel == 'blog.html' or rel.startswith('blog/'): return {'kind': 'blog', 'depth': depth}
-    if rel in ('pricing.html', 'support.html', 'contact.html', 'accountants.html'): return {'kind': name, 'depth': depth}
+    if rel in ('pricing.html', 'support.html', 'contact.html', 'about.html'): return {'kind': name, 'depth': depth}
+    if rel == 'accounting-and-bookkeeping.html': return {'kind': 'accounting', 'depth': depth}
     return None
 
 def main():
-    files = ['index.html', 'pricing.html', 'support.html', 'contact.html', 'accountants.html', 'blog.html'] + sorted(
+    files = ['index.html', 'pricing.html', 'support.html', 'contact.html', 'about.html', 'accounting-and-bookkeeping.html', 'blog.html'] + sorted(
         os.path.relpath(f, ROOT) for pat in ('features/*.html', 'industries/*.html', 'blog/*.html') for f in glob.glob(os.path.join(ROOT, pat)))
     done = []
     for rel in files:
