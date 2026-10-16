@@ -51,7 +51,7 @@ Taken from the brand files and the product itself, not invented for the site.
 ## Page order
 
 1. Hero, following `reference/design/reference-03-hero.jpeg`: left-aligned copy over a black-to-teal-to-white gradient with drifting light rays and blooms, a "Synced with Sage" pill, a white call to action and an arrow link, and the dashboard standing on the white bloom with its lower part faded out
-2. Trust, centred on white ("Backed by more than a decade of building business systems"): four company figures as a description list (in business since 2014; South Africa, built for local businesses; 50+ business systems delivered; 1,000+ jobs managed in ManaGEM), a customer quote card, then a moving row of trust marks with a pause button; hover and keyboard focus also pause it, and with reduced motion it is a static, wrapped row
+2. Product value, centred on white, under the small "Built by GEMIS" eyebrow ("Every job. Every quote. Every invoice. One place."): four static statements as a description list (1 connected workflow; live job visibility; centralised business records; South Africa, built for local businesses), a customer quote card, then a moving row of trust marks with a pause button; hover and keyboard focus also pause it, and with reduced motion it is a static, wrapped row
 3. Features, "Run the work, not the paperwork.": three white linked cards in one row (sales pipeline, jobs and bookings, invoicing and Sage); each is a link to its page under `features/`, and the only control is the animated arrow. The "Also in every plan" line below links the quotes, stock and factory pages
 4. Inside ManaGEM, centred on a clean navy-to-teal-to-white band (`--grad-band`, no pattern): six steps, enquiry to payment, each with a heading and one short line above an auto-playing silent clip of the real screen (see below); the clips play through in order and a chosen step loops
 5. Pricing, centred: four plan cards and a link to the pricing page
@@ -60,11 +60,14 @@ Taken from the brand files and the product itself, not invented for the site.
 8. Support and questions: the contact tile and a numbered FAQ
 9. Final call to action on the dark band with three paths, footer, sticky action bar on phones
 
-### Trust figures
+### Product-value statements
 
-The four figures and the customer quote were supplied by GEMIS in October 2026. The founding year matches the GEMIS company profile (2025). Update `index.html` if any figure changes.
+The four blocks under "Built by GEMIS" are product-value statements, not measured figures, and are static text. Each is a `dt` (label) followed by `dd` elements (value, then detail), so a screen reader reads label, value and detail once each.
 
-Each figure is a `dt` (label) followed by `dd` elements (value, then detail), so a screen reader reads label, value and detail once each. Numbers count up once when they come on screen. The animated digits sit in an `aria-hidden` span, the final value (including the comma and `+`) is in an `.sr-only` span, and under reduced motion the final values show immediately.
+Two items were supplied by GEMIS and still need confirming before they are relied on:
+
+- "Live" job visibility. The product shows job progress in one place, but nothing in the build confirms real-time updates. If updates are not real time, change the value, for example to "Clear".
+- The customer quote (operations manager, waterproofing contractor, Gauteng, 6 users). Confirm its source and the customer's consent to be quoted.
 
 ## Pricing page
 
