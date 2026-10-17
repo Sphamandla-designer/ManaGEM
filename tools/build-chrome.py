@@ -34,7 +34,7 @@ FEATURES = [
     ('jobs-and-bookings', 'Jobs and bookings', 'Every job with its foreman, dates and progress', '<path d="M4 7h16v13H4zM8 3v4M16 3v4M4 11h16"/>'),
     ('stock-and-purchasing', 'Stock and purchasing', 'Stock across stores and vehicles', '<path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/>'),
     ('factory-production', 'Factory production', 'Builds from pending to invoiced', '<path d="M3 21V10l6 4V10l6 4V6h6v15z"/>'),
-    ('invoicing-and-debtors', 'Invoicing, debtors and Sage', 'Invoice from the job, chase from one list', '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'),
+    ('invoicing-and-debtors', 'Invoicing, debtors and accounting sync', 'Invoice from the job, chase from one list', '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'),
 ]
 
 # slug, name, one-line description, icon path
@@ -47,7 +47,7 @@ INDUSTRIES = [
 ]
 
 # Support ticket categories, used by the ticket form on support.html
-SUPPORT_CATEGORIES = ['Something is not working', 'Log in and access', 'Users and permissions', 'Sage sync',
+SUPPORT_CATEGORIES = ['Something is not working', 'Log in and access', 'Users and permissions', 'Sage or Xero sync',
                       'Importing your data', 'Billing and plans', 'How do I\u2026?', 'Request a feature']
 
 def links(page):
@@ -151,7 +151,7 @@ def footer(page):
     <div class="foot-grid wide">
       <div>
         <a class="brand" href="{brand}" aria-label="ManaGEM home"><img src="{p}assets/brand/logo-reversed.png" alt="ManaGEM" width="160" height="28"></a>
-        <p>Job management for contractors and service businesses. Enquiries, quotes, jobs, stock, production and invoices in one system, synced with Sage. Built and supported by GEMIS in South Africa.</p>
+        <p>Job management for contractors and service businesses. Enquiries, quotes, jobs, stock, production and invoices in one system, synced with Sage or Xero. Built and supported by GEMIS in South Africa.</p>
         <a class="btn btn-primary btn-sm" href="{SIGNUP}" data-signup style="margin-top:18px">Start free trial</a>
       </div>
       <div><h3>Product</h3><ul><li><a href="{home}#tour">Product walkthrough</a></li><li><a href="{home}#features">Features</a></li><li><a href="{p}pricing.html">Pricing</a></li><li><a href="{p}pricing.html#compare">Compare plans</a></li><li><a href="{home}#start">Getting started</a></li></ul></div>
@@ -161,7 +161,7 @@ def footer(page):
     </div>
     <div class="foot-bottom">
       <span>© <span id="year">2026</span> <b>GEM Information Systems</b>. South Africa.</span>
-      <span class="foot-region"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>South Africa · English · Prices in ZAR excl. VAT</span>
+      <span class="foot-region"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>For South African companies · Prices in ZAR excl. VAT</span>
     </div>
   </div>
 </footer>
