@@ -70,7 +70,7 @@ clips={
  'invoices': ([(0,*C),(1.6,1.08,1480,900),(2.4,1.3,1620,520),(5.2,1.3,1620,520),(6.2,2.0,2250,1200),(9.2,2.0,2250,1200),(10.6,*C),(12,*C)],
    [("Billed, paid, outstanding and overdue at the top","INVOICES",2.2,5.4),("Paid, partial, unpaid or overdue on every invoice","STATUS",6.0,9.4)]),
  'sage': ([(0,*C),(1.6,1.08,1480,900),(2.4,2.4,2400,220),(4.8,2.4,2400,220),(5.6,1.3,1620,560),(8.0,1.3,1620,560),(8.8,2.0,2250,1250),(10.6,2.0,2250,1250),(11.3,*C),(12,*C)],
-   [("Connected to Sage Accounting","SAGE",2.2,5.0),("Synced, pending and errors in one view","SYNC STATUS",5.5,8.2),("Each invoice posts with its net, VAT and total","POSTED",8.7,10.8)]),
+   [("Connected to Sage Accounting or Xero","SAGE OR XERO",2.2,5.0),("Synced, pending and errors in one view","SYNC STATUS",5.5,8.2),("Each invoice posts with its net, VAT and total","POSTED",8.7,10.8)]),
 }
 only=sys.argv[5:] or list(clips)
 for n in only: build(n,*clips[n])

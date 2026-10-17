@@ -24,6 +24,7 @@ No build step. Everything is local, including the fonts.
 | `about.html` | About ManaGEM: what it does, who builds it, how GEMIS works with customers, who it is for |
 | `blog.html`, `blog/` | The blog index and its three articles |
 | `industries/` | One page per industry |
+| `tools/prototype-bundle.py` | Unpacks and repacks the single-file product prototype for editing |
 | `tools/build-chrome.py` | Writes the shared header, menus, phone drawer and footer into every page |
 | `pricing.html` | The pricing page: plans, what every plan includes, the full comparison, and what you can count on |
 | `assets/css/site.css` | Design tokens and all styles |
@@ -52,9 +53,9 @@ Taken from the brand files and the product itself, not invented for the site.
 
 ## Page order
 
-1. Hero, following `reference/design/reference-03-hero.jpeg`: left-aligned copy over a black-to-teal-to-white gradient with drifting light rays and blooms, a "Synced with Sage" pill, a white call to action and an arrow link, and the dashboard standing on the white bloom with its lower part faded out
+1. Hero, following `reference/design/reference-03-hero.jpeg`: left-aligned copy over a black-to-teal-to-white gradient with drifting light rays and blooms, a "Synced with Sage and Xero" pill, a white call to action and an arrow link, and the dashboard standing on the white bloom with its lower part faded out
 2. Product value, centred on white, under the small "Built by GEMIS" eyebrow ("Every job. Every quote. Every invoice. One place."): four static statements as a description list (1 connected workflow; live job visibility; centralised business records; South Africa, built for local businesses), a customer quote card, then a moving row of trust marks with a pause button; hover and keyboard focus also pause it, and with reduced motion it is a static, wrapped row
-3. Features, "Run the work, not the paperwork.": three white linked cards in one row (sales pipeline, jobs and bookings, invoicing and Sage); each is a link to its page under `features/`, and the only control is the animated arrow. The "Also in every plan" line below links the quotes, stock and factory pages
+3. Features, "Run the work, not the paperwork.": three white linked cards in one row (sales pipeline, jobs and bookings, invoicing and Sage or Xero); each is a link to its page under `features/`, and the only control is the animated arrow. The "Also in every plan" line below links the quotes, stock and factory pages
 4. Inside ManaGEM, centred on a clean navy-to-teal-to-white band (`--grad-band`, no pattern): six steps, enquiry to payment, each with a heading and one short line above an auto-playing silent clip of the real screen (see below); the clips play through in order and a chosen step loops
 5. Pricing, centred: four plan cards and a link to the pricing page
 6. Industries: five industry tabs with outcomes, modules and a product crop, each with a link to its industry page, plus the accountants card
@@ -93,13 +94,13 @@ The header, menus and footer are generated. Edit `tools/build-chrome.py`, then r
 
 ## Accounting & Bookkeeping
 
-`accounting-and-bookkeeping.html` explains ManaGEM to accountants, bookkeepers and the businesses they support, without presenting it as accounting software. Sections: hero with four real screens (enquiry, quote, job, invoice); the operational information problem; ManaGEM's role; how ManaGEM works alongside accounting software (three stages, with the real Sage invoices screen); benefits; who it suits; an illustrative example with sample data from the screenshots; FAQ; final call to action. "Book a ManaGEM Demo" opens the sales form pre-filled (`contact.html?enquiry=accountant-demo`); "Contact GEMIS" goes to the contact details on `contact.html#reach`. The page is in the Industries menu, the footer and the homepage accountants card. The old `accountants.html` address redirects here.
+`accounting-and-bookkeeping.html` explains ManaGEM to accountants, bookkeepers and the businesses they support, without presenting it as accounting software. Sections: hero with four real screens (enquiry, quote, job, invoice); the operational information problem; ManaGEM's role; how ManaGEM works alongside accounting software (three stages, with the real Accounting Sync screen for Sage Accounting or Xero); benefits; who it suits; a practical example that follows one job through the screens; FAQ; final call to action. "Book a ManaGEM Demo" opens the sales form pre-filled (`contact.html?enquiry=accountant-demo`); "Contact GEMIS" goes to the contact details on `contact.html#reach`. The page is in the Industries menu, the footer and the homepage accountants card. The old `accountants.html` address redirects here.
 
-Integration copy is limited to what the product build and docs show:
+Integration copy:
 
-- **Sage Accounting, shown in the build:** invoices post with net, VAT, total and a Sage reference; each invoice shows synced, pending or error and its last sync time; a Sync now action; products can be synced with Sage (direction not stated).
-- **Not confirmed:** which Sage editions are supported, how often sync runs on its own, and which way product sync runs. The page asks visitors to check editions with the team.
-- **Xero:** not available (docs Q6). The page says so.
+- **Sage Accounting:** invoices post with net, VAT, total and a Sage reference; each invoice shows synced, pending or error and its last sync time; a Sync now action; products can be synced.
+- **Xero:** supported (confirmed by GEMIS, October 2026). The page describes it with the same invoice sync as Sage.
+- **Not stated:** which Sage editions or Xero plans are supported, and how often sync runs on its own. The page asks visitors to check their setup with the team.
 
 ## About ManaGEM
 
@@ -107,7 +108,7 @@ Integration copy is limited to what the product build and docs show:
 
 ## Blog and support
 
-`blog.html` lists three articles under `blog/`: moving off spreadsheets for the take-on, how one job record runs from enquiry to payment, and how ManaGEM and Sage split the work. They describe only what the product build and the V1 draft support, and carry no statistics. Add new articles by copying one and adding a card to `blog.html`.
+`blog.html` lists three articles under `blog/`: moving off spreadsheets for the take-on, how one job record runs from enquiry to payment, and how ManaGEM and Sage or Xero split the work. They describe only what the product build and the V1 draft support, and carry no statistics. Add new articles by copying one and adding a card to `blog.html`.
 
 `support.html` has one support ticket form (category, company, name, phone, description and a screenshot), with the phone number, email and FAQ beside it. `contact.html` is the sales form (name, company, phone, number of users, what you need); every "Talk to us", "Talk to the team" and "Email the team" link goes there.
 
@@ -121,6 +122,19 @@ Integration copy is limited to what the product build and docs show:
 ## Feature pages
 
 `features/<slug>.html`, six pages: three reached from the feature cards and three from the "Also in every plan" line. Each has the same header and footer as the homepage, a hero on the dark band with the real screen, a "what you get" list drawn only from what the product build shows, and a next-feature link. They are static pages generated from the content table in the October 2026 rebuild; edit them directly.
+
+## Product prototype
+
+`reference/product/managem-app.html` is the product prototype the mockups and clips are captured from. It opens in a browser on its own; screens are addressed by hash (for example `#dashboard`, `#enquiries`, `#enquiry-detail`, `#projects`, `#stock`, `#invoices`, `#sage`, `#factory`, `#debtors`, `#customers`). The company shown is ManaGEM, and the accounting screen (`#sage`, "Accounting Sync") switches between Sage Accounting and Xero.
+
+To edit it, unpack it, change the JavaScript modules under `res/`, and repack:
+
+```
+python3 tools/prototype-bundle.py unpack /tmp/proto
+python3 tools/prototype-bundle.py repack /tmp/proto
+```
+
+Then recapture the mockups in `assets/mockups/` (full screens at 1440x900 and 1.25x; cards and tables as element captures at 2x) and rebuild the walkthrough clips from 2x captures with `tools/make-walkthrough-videos.py`.
 
 ## Walkthrough clips
 
@@ -157,7 +171,8 @@ The copy publishes only what the product build and the approved V1 draft support
 | Contact details | GEMIS corporate email and phone used; confirm routing for ManaGEM. |
 | Form endpoint | None set. Forms open the visitor's email app until `data-endpoint` is filled on both forms. |
 | WhatsApp number | None set, so WhatsApp links are hidden. Add a monitored number to `data-whatsapp`. |
-| Sage editions supported, direction of product sync | Phrased generally ("synced with Sage"); add specifics when known. |
+| Sage editions and Xero plans supported, direction of product sync | Phrased generally ("synced with Sage or Xero"); add specifics when known. |
+| Availability | South African companies only, for now. Stated on the homepage FAQ, the pricing and About pages, the footer and in the structured data. |
 | Hosting location, retention after an account closes, notice period | Not stated; the FAQ says "ask us". |
 | Field-user pricing | Not stated; "ask us". |
 | Several companies per account | Not stated as a feature; routed to the larger-teams path. |
@@ -165,5 +180,5 @@ The copy publishes only what the product build and the approved V1 draft support
 | Job costing, labour hours, margin per job | Not in the product build. Not claimed anywhere on the page. If the live application has them, the hero can return to a profitability promise. |
 | Customer stories | None published. The page says so and offers a reference call. |
 | Legal pages | Privacy notice and terms of service do not exist yet; the footer says they are being finalised. |
-| Xero | Planned, not available. The accounting page says it is not available. |
-| Sage sync frequency | Not stated. The build shows a Sync now action and a last-sync time per invoice. |
+| Xero | Supported, confirmed by GEMIS in October 2026. The site names Sage Accounting and Xero together. |
+| Sage and Xero sync frequency | Not stated. The build shows a Sync now action and a last-sync time per invoice. |

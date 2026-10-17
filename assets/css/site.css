@@ -877,7 +877,7 @@ a:hover > .mega-ico,a:focus-visible > .mega-ico{background:var(--navy-900);color
 .tag-ok,.tag-no{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600}
 .tag-ok{background:#E6FBF7;color:#0F766E}
 .tag-no{background:rgba(255,255,255,.14);color:#fff}
-.conn-note{margin:8px 0 0;font-size:14px;color:#E3F1F2;line-height:1.5}
+.conn-stage > .conn-note{margin:8px 0 0;font-size:14px;color:#E3F1F2;line-height:1.5}
 .conn-shot{margin:32px auto 0;max-width:1100px}
 .conn-shot .browser img{width:100%;height:auto;display:block}
 .conn-shot figcaption{margin-top:12px;text-align:center;font-size:13.5px;color:var(--muted)}
