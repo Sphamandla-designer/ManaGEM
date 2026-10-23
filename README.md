@@ -25,6 +25,7 @@ No build step. Everything is local, including the fonts.
 | `blog.html`, `blog/` | The blog index and its three articles |
 | `industries/` | One page per industry |
 | `tools/prototype-bundle.py` | Unpacks and repacks the single-file product prototype for editing |
+| `tools/build-standalone.py` | Builds the whole site as one self-contained HTML file (`dist/`, not committed) |
 | `tools/build-chrome.py` | Writes the shared header, menus, phone drawer and footer into every page |
 | `pricing.html` | The pricing page: plans, what every plan includes, the full comparison, and what you can count on |
 | `assets/css/site.css` | Design tokens and all styles |
@@ -135,6 +136,10 @@ python3 tools/prototype-bundle.py repack /tmp/proto
 ```
 
 Then recapture the mockups in `assets/mockups/` (full screens at 1440x900 and 1.25x; cards and tables as element captures at 2x) and rebuild the walkthrough clips from 2x captures with `tools/make-walkthrough-videos.py`.
+
+## Single-file version
+
+`python3 tools/build-standalone.py` writes `dist/ManaGEM-website.html` (about 11 MB): every page, the stylesheet, fonts, logos, product screens and the H.264 walkthrough clips in one file that opens from disk on a phone, tablet or computer with no internet connection. The homepage is plain HTML and reads fully even where scripts are off (some file previewers); the other pages open through a small built-in router at addresses like `#/pricing.html`, so Back, Forward and reload work. `site.js` runs unchanged for each page. Rebuild it after changing the site; `dist/` is ignored by git.
 
 ## Walkthrough clips
 
