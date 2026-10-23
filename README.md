@@ -111,13 +111,13 @@ Integration copy:
 
 `blog.html` lists three articles under `blog/`: moving off spreadsheets for the take-on, how one job record runs from enquiry to payment, and how ManaGEM and Sage or Xero split the work. They describe only what the product build and the V1 draft support, and carry no statistics. Add new articles by copying one and adding a card to `blog.html`.
 
-`support.html` has one support ticket form (category, company, name, phone, description and a screenshot), with the phone number, email and FAQ beside it. `contact.html` is the sales form (name, company, phone, number of users, what you need); every "Talk to us", "Talk to the team" and "Email the team" link goes there.
+`support.html` has one support ticket form (category, company, name, phone, description and a screenshot), with the email address and FAQ beside it. `contact.html` is the sales form (name, company, phone, number of users, what you need); every "Talk to us", "Talk to the team" and "Email the team" link goes there.
 
 ## Forms, copy buttons and WhatsApp
 
 - **Where forms send.** Both forms have a `data-endpoint` attribute, empty today. Put a form-handling URL there (for example a Formspree or Basin form, or your own endpoint) and the form posts its fields and the screenshot as multipart form data, then shows the result on the page. With no endpoint, sending opens the visitor's email app with every field filled in, addressed to `info@gemis.co.za`, and the page says so. Screenshots cannot be attached that way, so the visitor is asked to attach it in the email.
 - **Subject lines.** Sales enquiries use "ManaGEM sales enquiry". Support tickets use "ManaGEM support: <category>".
-- **Copy buttons.** The email address and phone number sit beside each form as plain text with a Copy button, so nobody is stuck if the form fails.
+- **Copy buttons.** The email address sits beside each form as plain text with a Copy button, so nobody is stuck if the form fails.
 - **WhatsApp.** Set the number once per page in `<body data-whatsapp="27…">` (international format, digits only). While it is empty, every WhatsApp link stays hidden. Only switch it on for a number someone monitors.
 
 ## Feature pages
@@ -158,7 +158,7 @@ The login link carries `data-login` and reads `<body data-login="…">`, current
 
 ## Contact details
 
-The form, the FAQ and the footer use the GEMIS contact published on the GEMIS corporate site: `info@gemis.co.za` and `+27 11 219 5008`. The form's address is the `data-to` attribute on `#teamForm`. Change these in `index.html` if ManaGEM enquiries should go elsewhere.
+The form, the FAQ and the footer use the GEMIS contact published on the GEMIS corporate site: `info@gemis.co.za`. The site shows no phone number. The form's address is the `data-to` attribute on `#teamForm`. Change these in `index.html` if ManaGEM enquiries should go elsewhere.
 
 ## Regenerating mockups
 
@@ -173,7 +173,7 @@ The copy publishes only what the product build and the approved V1 draft support
 | Trial length and card requirement | 14 days, no card, from V1. Commercial terms not frozen. |
 | Plan prices and user limits | R1,000 / R2,000 / R3,000 for 2 / 5 / 10 users, from V1. Commercial terms not frozen. |
 | Sign-up URL | `https://app.managem.co.za/signup` is a placeholder. |
-| Contact details | GEMIS corporate email and phone used; confirm routing for ManaGEM. |
+| Contact details | GEMIS corporate email used (no phone number on the site); confirm routing for ManaGEM. |
 | Form endpoint | None set. Forms open the visitor's email app until `data-endpoint` is filled on both forms. |
 | WhatsApp number | None set, so WhatsApp links are hidden. Add a monitored number to `data-whatsapp`. |
 | Sage editions and Xero plans supported, direction of product sync | Phrased generally ("synced with Sage or Xero"); add specifics when known. |

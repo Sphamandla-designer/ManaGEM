@@ -17,8 +17,6 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SIGNUP = 'https://app.managem.co.za/signup'
 LOGIN = 'https://app.managem.co.za/'
 EMAIL = 'info@gemis.co.za'
-PHONE_HREF = 'tel:+27112195008'
-PHONE = '+27 11 219 5008'
 
 def ico(d, w='2'):
     return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{d}</svg>'
@@ -156,7 +154,7 @@ def footer(page):
       </div>
       <div><h3>Product</h3><ul><li><a href="{home}#tour">Product walkthrough</a></li><li><a href="{home}#features">Features</a></li><li><a href="{p}pricing.html">Pricing</a></li><li><a href="{p}pricing.html#compare">Compare plans</a></li><li><a href="{home}#start">Getting started</a></li></ul></div>
       <div><h3>Industries</h3><ul>{inds}<li><a href="{p}accounting-and-bookkeeping.html"{cur(page["kind"] == "accounting")}>Accounting and bookkeeping</a></li></ul></div>
-      <div><h3>Support</h3><ul><li><a href="{p}support.html">Support centre</a></li><li><a href="{p}support.html#ticket">Open a ticket</a></li><li><a href="{home}#faq">Help and FAQ</a></li><li><a href="mailto:{EMAIL}">{EMAIL}</a></li><li><a href="{PHONE_HREF}">{PHONE}</a></li></ul></div>
+      <div><h3>Support</h3><ul><li><a href="{p}support.html">Support centre</a></li><li><a href="{p}support.html#ticket">Open a ticket</a></li><li><a href="{home}#faq">Help and FAQ</a></li><li><a href="mailto:{EMAIL}">{EMAIL}</a></li></ul></div>
       <div><h3>Company</h3><ul><li><a href="{p}contact.html"{cur(page["kind"] == "contact")}>Talk to sales</a></li><li><a href="{p}blog.html">Blog</a></li><li><a href="{p}about.html"{cur(page["kind"] == "about")}>About ManaGEM</a></li></ul><p class="foot-note">The privacy notice and terms of service are being finalised. Ask the team for the current versions.</p></div>
     </div>
     <div class="foot-bottom">
