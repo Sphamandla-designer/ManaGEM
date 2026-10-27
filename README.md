@@ -210,7 +210,7 @@ The copy publishes only what the product build and the approved V1 draft support
 | Item | Status |
 | --- | --- |
 | Trial length and card requirement | 14 days, no card, from V1. Commercial terms not frozen. |
-| Plan prices and user limits | R1,000 / R2,000 / R3,000 for 2 / 5 / 10 users, from V1. Commercial terms not frozen. |
+| Plan prices and user limits | R999 / R1,999 / R2,999 for 2 / 5 / 10 users (set by GEMIS, October 2026; V1 had R1,000 / R2,000 / R3,000). Commercial terms not frozen. |
 | Sign-up URL | `https://app.managem.co.za/signup` is a placeholder. |
 | Contact details | GEMIS corporate email used (no phone number on the site); confirm routing for ManaGEM. |
 | Form endpoint | None set. Forms open the visitor's email app until `data-endpoint` is filled on both forms. |
