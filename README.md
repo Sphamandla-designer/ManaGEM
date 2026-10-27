@@ -26,7 +26,7 @@ No build step. Everything is local, including the fonts.
 | `industries/` | One page per industry |
 | `tools/prototype-bundle.py` | Unpacks and repacks the single-file product prototype for editing |
 | `tools/build-standalone.py` | Builds the whole site as one self-contained HTML file (`dist/`, not committed) |
-| `tools/build-chrome.py` | Writes the shared header, menus, phone drawer and footer into every page |
+| `tools/build-chrome.py` | Writes the shared header, menus, phone drawer and footer into every page (not `login.html`, which has its own layout) |
 | `pricing.html` | The pricing page: plans, what every plan includes, the full comparison, and what you can count on |
 | `assets/css/site.css` | Design tokens and all styles |
 | `assets/js/site.js` | Header state, mobile menu, scroll reveal, walkthrough clips and tabs, trade tabs, trust figure count-up and moving trust row, sticky bar |
@@ -152,9 +152,17 @@ The page is light on data:
 - Browsers that play AV1 get the WebM; the rest get the MP4.
 - A visible Pause button sits in the browser bar of each clip (WCAG 2.2.2). Under reduced motion nothing loads or plays until Play is pressed.
 
-## Trial sign-up and login addresses
+## Log in page and sign-up address
 
-The login link carries `data-login` and reads `<body data-login="…">`, currently `https://app.managem.co.za/`, a placeholder like the sign-up address. Every trial button carries `data-signup`. The address is set once, on `<body data-signup="…">` in `index.html`, and the script copies it into each button; the markup carries the same address as a fallback. It is `https://app.managem.co.za/signup`, a placeholder until the real sign-up URL is supplied. Confirm it before launch.
+`login.html` is the log-in page, and every "Log in" link (header and phone menu, built by `tools/build-chrome.py`) opens it. It has no site header: a brand panel on the left (the customer quote over flowing teal lines, drawn in CSS so it costs nothing to animate and stands still under reduced motion) and the form on the right, which becomes a single column below 1024px.
+
+- **Username and password** only. The form posts `username`, `password` and `remember` to its `action`, currently `https://app.managem.co.za/`. Confirm the app's real sign-in address and that it accepts these field names before launch.
+- **Remember me** is sent with the form and also keeps the username in this browser (localStorage) for next time; unticking it forgets the username.
+- **Forgot password?** opens the support ticket with "Log in and access" chosen and the description started (`support.html?topic=password`).
+- **Try the demo** opens the product demo, `reference/product/managem-app.html`.
+- **Terms of use** and **Privacy** open an email to the team asking for the current versions, until those documents are published; then point the two links at them.
+
+Every trial button carries `data-signup`. The address is set once, on `<body data-signup="…">`, and the script copies it into each button; the markup carries the same address as a fallback. It is `https://app.managem.co.za/signup`, a placeholder until the real sign-up URL is supplied. Confirm it before launch.
 
 ## Contact details
 

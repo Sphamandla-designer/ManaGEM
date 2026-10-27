@@ -22,6 +22,7 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'dist' / 'ManaGEM-website.html'
 SKIP = {'accountants.html'}                     # a redirect page; its address routes to the page it points at
 ALIAS = {'accountants.html': 'accounting-and-bookkeeping.html'}
+LIVE = 'https://sphamandla-designer.github.io/ManaGEM/'
 mimetypes.add_type('image/webp', '.webp'); mimetypes.add_type('font/woff2', '.woff2')
 
 pages = sorted(str(p.relative_to(ROOT)) for p in list(ROOT.glob('*.html')) + list(ROOT.glob('*/*.html'))
@@ -51,6 +52,8 @@ def resolve(page, url):
         return 'page', '#/' + target + ('?' + query if query else '') + ('~' + frag if frag else '')
     if target.startswith('assets/') and (ROOT / target).is_file():
         return 'asset', target
+    if (ROOT / target).is_file():                # e.g. the product demo: too large to embed, so open it on the live site
+        return None, LIVE + target + ('?' + query if query else '') + ('#' + frag if frag else '')
     raise SystemExit(f'{page}: cannot resolve {url!r}')
 
 
@@ -58,7 +61,7 @@ def rewrite(page, html, used):
     def sub(m):
         attr, url = m.group(1), m.group(2)
         kind, val = resolve(page, url)
-        if kind is None: return m.group(0)
+        if kind is None: return m.group(0) if val == url else f' {attr}="{val}"'
         if kind == 'page': return f' {attr}="{val}"'
         if attr == 'data-webm': return ''
         used.add(val)
