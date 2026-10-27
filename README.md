@@ -26,7 +26,8 @@ No build step. Everything is local, including the fonts.
 | `industries/` | One page per industry |
 | `tools/prototype-bundle.py` | Unpacks and repacks the single-file product prototype for editing |
 | `tools/build-standalone.py` | Builds the whole site as one self-contained HTML file (`dist/`, not committed) |
-| `tools/build-chrome.py` | Writes the shared header, menus, phone drawer and footer into every page (not `login.html`, which has its own layout) |
+| `tools/build-chrome.py` | Writes the shared header, menus, phone drawer and footer into every page (not the account pages, which have their own layout) |
+| `tools/build-auth.py` | Writes the account pages: `login.html`, `forgot-password.html` and `reset-password.html` |
 | `pricing.html` | The pricing page: plans, what every plan includes, the full comparison, and what you can count on |
 | `assets/css/site.css` | Design tokens and all styles |
 | `assets/js/site.js` | Header state, mobile menu, scroll reveal, walkthrough clips and tabs, trade tabs, trust figure count-up and moving trust row, sticky bar |
@@ -152,15 +153,45 @@ The page is light on data:
 - Browsers that play AV1 get the WebM; the rest get the MP4.
 - A visible Pause button sits in the browser bar of each clip (WCAG 2.2.2). Under reduced motion nothing loads or plays until Play is pressed.
 
-## Log in page and sign-up address
+## Log in, forgot password and reset password
 
-`login.html` is the log-in page, and every "Log in" link (header and phone menu, built by `tools/build-chrome.py`) opens it. It has no site header: a brand panel on the left (the customer quote over flowing teal lines, drawn in CSS so it costs nothing to animate and stands still under reduced motion) and the form on the right, which becomes a single column below 1024px.
+`tools/build-auth.py` writes the three account pages from one layout: a brand panel on the left (the customer quote over flowing teal lines, drawn in CSS and still under reduced motion) and the form on the right, one column below 1024px. Every "Log in" link on the site opens `login.html`. Their behaviour is in `site.js`; edit the pages through the script, then run it.
 
-- **Username and password** only. The form posts `username`, `password` and `remember` to its `action`, currently `https://app.managem.co.za/`. Confirm the app's real sign-in address and that it accepts these field names before launch.
-- **Remember me** is sent with the form and also keeps the username in this browser (localStorage) for next time; unticking it forgets the username.
-- **Forgot password?** opens the support ticket with "Log in and access" chosen and the description started (`support.html?topic=password`).
-- **Try the demo** opens the product demo, `reference/product/managem-app.html`.
-- **Terms of use** and **Privacy** open an email to the team asking for the current versions, until those documents are published; then point the two links at them.
+- **Log in** (`login.html`): username and password, show/hide password, Remember me (sent to the app and also keeps the username in this browser), Forgot password?, Try the demo (opens the prototype on its dashboard, `reference/product/managem-app.html#dashboard`), and Start free trial.
+- **Forgot password** (`forgot-password.html`): the customer enters their username or email and gets a reset link by email, with no help from the team. The answer is the same whether or not an account exists, so nobody can use it to find out which usernames are real. They can resend after 30 seconds or change what they typed.
+- **Reset password** (`reset-password.html?token=…`): the page the email links to. New password with live rules (at least 8 characters, a letter and a number), confirmation, then "Password changed" and back to log in, which says so. A missing, used or expired link shows "This link doesn't work any more" with a button for a new one.
+- **Terms of use** and **Privacy** open an email to the team asking for the current versions until those documents are published.
+
+What the customer sees when something goes wrong:
+
+| Situation | Where it shows |
+|---|---|
+| Field left empty | Under that field |
+| Username with spaces or symbols (checked before sending) | Under the username |
+| User not found | Under the username, with Start free trial |
+| Incorrect password | Under the password, with a reset link that carries the username |
+| Username or password incorrect (when the app does not say which) | Box at the top |
+| Account switched off | Box at the top |
+| Too many attempts | Box at the top, with the wait time when the app gives one |
+| Offline | A notice as soon as the connection drops; trying to log in says nothing was sent; "You're back online" when it returns |
+| App unreachable | Box with a support link (forgot and reset pages) |
+| App too slow (no answer in 15 s) | Box at the top |
+| Server error | Box with a support link |
+| Session ended (sent back by the app) | Information box |
+
+Every state can be opened for review by adding `?state=` to the address, for example `login.html?state=wrong_password`. Log in: `invalid_username`, `user_not_found`, `wrong_password`, `invalid_credentials`, `account_disabled`, `too_many_attempts`, `offline`, `unreachable`, `timeout`, `server_error`, `session_expired`, `password_reset`. Forgot password: `sent`, `invalid_identifier`, `too_many_attempts`, `offline`, `unreachable`, `timeout`, `server_error`. Reset password: `done`, `expired`, `mismatch`, `weak_password`, `offline`, `unreachable`, `timeout`, `server_error`.
+
+### What the app needs to provide
+
+The pages send JSON to the address on `<body data-auth-api>`, currently `https://app.managem.co.za/api/auth`, with cookies included, so the app must allow this site's origin (CORS with credentials). None of this exists in the app yet; until `/login` answers, the log-in form falls back to posting `username`, `password` and `remember` to the app itself, as before. Forgot and reset password need the app's endpoints to work.
+
+| Request | Body | Answers |
+|---|---|---|
+| `POST /login` | `{ username, password, remember }` | `200 { redirect }` (where to go next; defaults to `data-app`) · `404 { error: "user_not_found" }` · `401 { error: "wrong_password" }` or `401 {}` for "username or password incorrect" · `400 { error: "invalid_username" }` · `403 { error: "account_disabled" }` · `429 { error: "too_many_attempts", retry_after: seconds }` · `5xx` |
+| `POST /forgot-password` | `{ identifier, reset_url }` | `202` whether or not the account exists; the app emails a link to `reset_url?token=…` · `429 { retry_after }` · `5xx` |
+| `POST /reset-password` | `{ token, password }` | `200` · `410 { error: "token_expired" }` · `400 { error: "token_invalid" }` · `422 { error: "weak_password", message }` · `429` · `5xx` |
+
+Separate "user not found" and "incorrect password" messages tell a visitor which usernames exist. If the app prefers not to reveal that, it can answer `401 {}` for both and the page shows the combined message instead. The app can also send people back with `login.html?state=session_expired`.
 
 Every trial button carries `data-signup`. The address is set once, on `<body data-signup="…">`, and the script copies it into each button; the markup carries the same address as a fallback. It is `https://app.managem.co.za/signup`, a placeholder until the real sign-up URL is supplied. Confirm it before launch.
 
