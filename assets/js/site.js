@@ -8,46 +8,45 @@
   /* ---- trial sign-up address: set once on <body data-signup>, applied to every trial button ---- */
   var signup = document.body.getAttribute('data-signup');
   if (signup) $$('a[data-signup]').forEach(function (a) { a.href = signup; });
-  var login = document.body.getAttribute('data-login');
-  if (login) $$('a[data-login]').forEach(function (a) { a.href = login; });
 
   /* ---- header: switch to light surface once the dark hero scrolls away ---- */
   var header = $('#siteHeader');
   var hero = $('.hero') || $('.page-hero');
   function onScroll() { header.classList.toggle('scrolled', window.scrollY > 24); }
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
+  if (header) { onScroll(); window.addEventListener('scroll', onScroll, { passive: true }); }
 
   /* ---- mobile nav: dialog with focus kept inside while open ---- */
   var menuBtn = $('#menuBtn'), nav = $('#mobileNav'), closeBtn = $('#menuClose'), lastFocus;
-  function focusables() {
-    return $$('a[href], button:not([disabled])', nav).filter(function (el) { return el.offsetParent !== null; });
+  if (menuBtn && nav) {
+    function focusables() {
+      return $$('a[href], button:not([disabled])', nav).filter(function (el) { return el.offsetParent !== null; });
+    }
+    function openNav() {
+      lastFocus = document.activeElement;
+      nav.hidden = false; nav.setAttribute('open', '');
+      menuBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+    function closeNav() {
+      nav.removeAttribute('open'); nav.hidden = true;
+      menuBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    menuBtn.addEventListener('click', openNav);
+    closeBtn.addEventListener('click', closeNav);
+    nav.addEventListener('click', function (e) { if (e.target === nav || e.target.closest('a')) closeNav(); });
+    document.addEventListener('keydown', function (e) {
+      if (nav.hidden) return;
+      if (e.key === 'Escape') { closeNav(); return; }
+      if (e.key !== 'Tab') return;
+      var f = focusables(); if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
   }
-  function openNav() {
-    lastFocus = document.activeElement;
-    nav.hidden = false; nav.setAttribute('open', '');
-    menuBtn.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
-    closeBtn.focus();
-  }
-  function closeNav() {
-    nav.removeAttribute('open'); nav.hidden = true;
-    menuBtn.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-    if (lastFocus && lastFocus.focus) lastFocus.focus();
-  }
-  menuBtn.addEventListener('click', openNav);
-  closeBtn.addEventListener('click', closeNav);
-  nav.addEventListener('click', function (e) { if (e.target === nav || e.target.closest('a')) closeNav(); });
-  document.addEventListener('keydown', function (e) {
-    if (nav.hidden) return;
-    if (e.key === 'Escape') { closeNav(); return; }
-    if (e.key !== 'Tab') return;
-    var f = focusables(); if (!f.length) return;
-    var first = f[0], last = f[f.length - 1];
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-  });
 
   /* ---- reveal on scroll ---- */
   var revealEls = $$('.reveal');
@@ -264,8 +263,13 @@
     accountant: 'I am an accountant or bookkeeper, and I would like to set up a client on ManaGEM.',
     'accountant-demo': 'I am an accountant or bookkeeper, and I would like a ManaGEM demo for one of my clients.'
   };
-  var need = $('#f-need'), enq = (location.search.match(/[?&]enquiry=([a-z-]+)/) || [])[1];
+  var query = location.search;
+  var need = $('#f-need'), enq = (query.match(/[?&]enquiry=([a-z-]+)/) || [])[1];
   if (need && enq && PREFILL[enq] && !need.value) need.value = PREFILL[enq];
+  /* ...and the support form: support.html?topic=password (the log-in page's Forgot password? link) */
+  var TOPIC = { password: ['Log in and access', 'I have forgotten my password and need to reset it. My username is: '] };
+  var topic = TOPIC[(query.match(/[?&]topic=([a-z-]+)/) || [])[1]], cat = $('#f-category'), desc = $('#f-description');
+  if (topic && cat && desc) { cat.value = topic[0]; if (!desc.value) desc.value = topic[1]; }
 
   $$('form[data-form]').forEach(function (form) {
     var endpoint = (form.getAttribute('data-endpoint') || '').trim();
@@ -298,6 +302,37 @@
       say(form.getAttribute('data-mailto-ok'), 'ok');
     });
   });
+
+  /* ---- log in: show or hide the password, say what is missing beside the field, and remember the
+         username on this device when Remember me is ticked. The form then posts to its action. ---- */
+  var login = $('#loginForm');
+  if (login) {
+    var user = $('#l-user', login), pass = $('#l-pass', login), remember = $('input[name="remember"]', login);
+    var reveal = $('.auth-reveal', login), loginBtn = login.querySelector('button[type="submit"]'), loginStatus = $('.auth-status', login);
+    var KEY = 'managem-username';
+    try { var saved = localStorage.getItem(KEY); if (saved) { user.value = saved; remember.checked = true; } } catch (e) {}
+    reveal.addEventListener('click', function () {
+      var show = pass.type === 'password';
+      pass.type = show ? 'text' : 'password';
+      reveal.setAttribute('aria-pressed', String(show));
+      reveal.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+    });
+    function mark(input, bad) {
+      input.setAttribute('aria-invalid', String(bad));
+      document.getElementById(input.getAttribute('aria-describedby')).hidden = !bad;
+    }
+    [user, pass].forEach(function (input) {
+      input.addEventListener('input', function () { if (input.value.trim()) mark(input, false); });
+    });
+    login.addEventListener('submit', function (e) {
+      var missing = [user, pass].filter(function (input) { var bad = !input.value.trim(); mark(input, bad); return bad; });
+      if (missing.length) { e.preventDefault(); missing[0].focus(); return; }
+      try { if (remember.checked) localStorage.setItem(KEY, user.value.trim()); else localStorage.removeItem(KEY); } catch (err) {}
+      loginBtn.disabled = true; loginStatus.className = 'auth-status'; loginStatus.textContent = 'Logging you in…';
+    });
+    /* coming back to this page with Back: let the button be used again */
+    window.addEventListener('pageshow', function () { loginBtn.disabled = false; loginStatus.textContent = ''; });
+  }
 
   var yr = $('#year'); if (yr) yr.textContent = String(new Date().getFullYear());
 

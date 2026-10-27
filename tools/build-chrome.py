@@ -15,7 +15,6 @@ import glob, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SIGNUP = 'https://app.managem.co.za/signup'
-LOGIN = 'https://app.managem.co.za/'
 EMAIL = 'info@gemis.co.za'
 
 def ico(d, w='2'):
@@ -107,7 +106,7 @@ def header(page):
       </ul>
     </nav>
     <div class="nav-cta">
-      <a class="nav-login" href="{LOGIN}" data-login>Log in</a>
+      <a class="nav-login" href="{p}login.html">Log in</a>
       <a class="btn btn-primary btn-sm" href="{SIGNUP}" data-signup>Start free trial</a>
       <button class="menu-btn" type="button" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -131,7 +130,7 @@ def header(page):
       </li>
       <li><a href="{p}pricing.html"{cur(k == "pricing")}>Pricing</a></li>
       <li><a href="{p}support.html"{cur(k == "support")}>Support</a></li>
-      <li><a href="{LOGIN}" data-login>Log in</a></li>
+      <li><a href="{p}login.html">Log in</a></li>
     </ul>
     <div class="actions">
       <a class="btn btn-primary btn-lg" href="{SIGNUP}" data-signup>Start free trial</a>
