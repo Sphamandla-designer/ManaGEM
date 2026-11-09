@@ -1,8 +1,0 @@
-{
-  "name": "managem-app",
-  "private": true,
-  "type": "module",
-  "description": "Builds app/app.js from the JSX sources in app/src.",
-  "scripts": { "build": "node build.mjs" },
-  "devDependencies": { "esbuild": "0.24.0" }
-}
