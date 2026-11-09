@@ -942,6 +942,10 @@ a:hover > .mega-ico,a:focus-visible > .mega-ico{background:var(--navy-900);color
 .auth-head p{color:var(--muted);font-size:16px;line-height:1.5}
 .auth-form{display:grid;gap:16px}
 .auth-field{display:grid;gap:6px}
+.auth-pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:inherit}
+@media (max-width:480px){.auth-pair{grid-template-columns:1fr}}
+.auth-select select{width:100%;min-height:50px;padding:10px 40px 10px 14px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-size:16px;appearance:none;cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,var(--muted-2) 50%),linear-gradient(135deg,var(--muted-2) 50%,transparent 50%);background-position:calc(100% - 20px) 22px,calc(100% - 14px) 22px;background-size:6px 6px;background-repeat:no-repeat}
+.auth-select select:focus{outline:none;border-color:var(--sky-500);box-shadow:0 0 0 4px rgba(14,165,233,.15)}
 .auth-field label{font-size:14px;font-weight:600;color:var(--ink-2)}
 .auth-input{position:relative;display:flex;align-items:center}
 .auth-input>svg{position:absolute;left:14px;width:18px;height:18px;color:var(--muted-2);pointer-events:none}

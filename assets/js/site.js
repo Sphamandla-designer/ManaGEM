@@ -503,6 +503,64 @@
     else if (preview) forgotError(forgotForm, preview);
   }
 
+  /* -- sign up: create the account, then open ManaGEM as the new user -- */
+  var signupForm = $('#signupForm');
+  if (signupForm) {
+    var sName = $('#s-name'), sCo = $('#s-company'), sEmail = $('#s-email'), sUser = $('#s-user'), sPass = $('#s-pass');
+    var S_RULES = { length: function (v) { return v.length >= 8; }, mix: function (v) { return /[A-Za-z]/.test(v) && /\d/.test(v); } };
+    var sRules = function () {
+      var ok = true;
+      $$('#s-reqs li').forEach(function (li) { var pass = S_RULES[li.getAttribute('data-req')](sPass.value); li.classList.toggle('met', pass); ok = ok && pass; });
+      return ok;
+    };
+    sPass.addEventListener('input', sRules);
+    /* a username suggestion from the email, until the visitor types their own */
+    var userTouched = false;
+    sUser.addEventListener('input', function () { userTouched = true; });
+    sEmail.addEventListener('input', function () {
+      if (userTouched) return;
+      sUser.value = sEmail.value.split('@')[0].replace(/[^A-Za-z0-9._-]/g, '').toLowerCase();
+      $('#s-user-err').hidden = true; sUser.removeAttribute('aria-invalid');
+    });
+    var FIELD = {
+      name: [sName, 'Enter your name.'], company: [sCo, 'Enter your company name.'],
+      email: [sEmail, 'Enter a work email address, like name@company.co.za.'],
+      username: [sUser, 'Use 2 to 64 letters, numbers or . _ - @, with no spaces.'],
+      password: [sPass, 'Use at least 8 characters, with a letter and a number.']
+    };
+    function signupError(code, data) {
+      if (code === 'username_taken') { fieldError(sUser, 'That username is taken. Try another, or', { text: 'log in', href: 'login.html?u=' + encodeURIComponent(sUser.value.trim()) }); sUser.focus(); return; }
+      if (code === 'email_taken') { fieldError(sEmail, 'There is already an account with this email.', { text: 'Log in instead', href: 'login.html' }); sEmail.focus(); return; }
+      if (code === 'invalid_fields') {
+        var first = null;
+        Object.keys((data && data.fields) || {}).forEach(function (k) { if (FIELD[k]) { fieldError(FIELD[k][0], FIELD[k][1]); first = first || FIELD[k][0]; } });
+        if (first) { first.focus(); return; }
+      }
+      if (code === 'too_many_attempts') { showAlert(signupForm, 'err', 'Too many attempts', 'Wait a few minutes, then try again.'); return; }
+      showCommon(signupForm, COMMON[code] ? code : 'server_error');
+    }
+    signupForm.addEventListener('submit', function (e) {
+      e.preventDefault(); clearForm(signupForm);
+      var bad = [];
+      if (!sName.value.trim()) bad.push('name');
+      if (!sCo.value.trim()) bad.push('company');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(sEmail.value.trim())) bad.push('email');
+      if (!/^[A-Za-z0-9._@-]{2,64}$/.test(sUser.value.trim())) bad.push('username');
+      if (!sRules()) bad.push('password');
+      if (bad.length) { bad.forEach(function (k) { fieldError(FIELD[k][0], FIELD[k][1]); }); FIELD[bad[0]][0].focus(); return; }
+      if (navigator.onLine === false) { showCommon(signupForm, 'offline'); return; }
+      busy(signupForm, true, 'Setting up your workspace…');
+      send('/signup', {
+        name: sName.value.trim(), company: sCo.value.trim(), email: sEmail.value.trim(), username: sUser.value.trim(),
+        password: sPass.value, trade: $('#s-trade').value, team: $('#s-team').value
+      }).then(function (r) {
+        if (r.status >= 200 && r.status < 300) { busy(signupForm, true, 'Opening ManaGEM…'); window.location.assign(r.data.redirect || appUrl); return; }
+        busy(signupForm, false);
+        signupError(r.data.error || (r.status === 409 ? 'username_taken' : r.status === 422 ? 'invalid_fields' : r.status === 429 ? 'too_many_attempts' : 'server_error'), r.data);
+      }, function (err) { busy(signupForm, false); signupError(err.code); });
+    });
+  }
+
   /* -- reset password: the link in the email opens reset-password.html?token=… -- */
   var resetForm = $('#resetForm');
   if (resetForm) {

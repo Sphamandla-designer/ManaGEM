@@ -13,7 +13,7 @@
 <link rel="preload" href="assets/fonts/outfit-latin-wght.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/site.css">
 </head>
-<body class="auth-body" data-signup="https://app.managem.co.za/signup" data-app="https://app.managem.co.za/" data-auth-api="https://app.managem.co.za/api/auth">
+<body class="auth-body" data-signup="signup.html" data-app="reference/product/managem-app.html#dashboard" data-auth-api="prototype-api">
 <a class="skip" href="#main">Skip to the form</a>
 <div class="auth">
   <aside class="auth-art">
@@ -114,7 +114,7 @@
         </div>
         <p class="auth-offline" id="authOffline" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 2l20 20M8.5 16.5a5 5 0 0 1 7 0M5 13a10 10 0 0 1 5.2-2.8M19 13a10 10 0 0 0-2-1.5M2 8.8a15 15 0 0 1 4.2-2.7M10.7 5.1A15 15 0 0 1 22 8.8"/><circle cx="12" cy="20" r=".8" fill="currentColor"/></svg><span><b>You’re offline.</b> Check your internet connection. This page will be ready when you’re back.</span></p>
 
-        <form id="loginForm" class="auth-form" method="post" action="https://app.managem.co.za/" novalidate>
+        <form id="loginForm" class="auth-form" method="post" action="reference/product/managem-app.html#dashboard" novalidate>
           <div class="auth-alert" role="alert" tabindex="-1" hidden></div>
           <div class="auth-field">
             <label for="l-user">Username</label>
@@ -148,7 +148,7 @@
 
         <a class="btn btn-outline btn-lg btn-block" href="reference/product/managem-app.html#dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4M10 8.5l4 2.5-4 2.5z"/></svg>Try the demo</a>
 
-        <p class="auth-signup">Don’t have an account? <a class="auth-link" id="signupLink" href="https://app.managem.co.za/signup" data-signup>Start free trial</a></p>
+        <p class="auth-signup">Don’t have an account? <a class="auth-link" id="signupLink" href="signup.html" data-signup>Start free trial</a></p>
       </div>
     </div>
 
@@ -160,6 +160,7 @@
     </nav>
   </main>
 </div>
+<script src="assets/js/prototype-api.js"></script>
 <script src="assets/js/site.js" defer></script>
 </body>
 </html>
