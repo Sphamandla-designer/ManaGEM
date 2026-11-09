@@ -97,6 +97,10 @@ def select_field(fid, name, label, options):
           </div>'''
 
 
+# While the pages run on the prototype API, say how to get in without an account.
+DEMO_HINT = ('        <p class="auth-hint">Exploring the prototype? Log in with username <b>demo</b> and password <b>demo1234</b>, '
+             'or start a free trial to create your own account.</p>') if PROTOTYPE else ''
+
 ALERT = '<div class="auth-alert" role="alert" tabindex="-1" hidden></div>'
 OFFLINE = (f'<p class="auth-offline" id="authOffline" hidden>{svg("wifi-off")}'
            '<span><b>You’re offline.</b> Check your internet connection. This page will be ready when you’re back.</span></p>')
@@ -131,7 +135,8 @@ LOGIN = f'''        <a class="auth-logo" href="index.html"><img src="assets/bran
 
         <a class="btn btn-outline btn-lg btn-block" href="{DEMO}">{svg('demo')}Try the demo</a>
 
-        <p class="auth-signup">Don’t have an account? <a class="auth-link" id="signupLink" href="{SIGNUP}" data-signup>Start free trial</a></p>'''
+        <p class="auth-signup">Don’t have an account? <a class="auth-link" id="signupLink" href="{SIGNUP}" data-signup>Start free trial</a></p>
+{DEMO_HINT}'''
 
 FORGOT = f'''        <a class="auth-logo" href="index.html"><img src="assets/brand/logo.png" alt="ManaGEM home" width="137" height="24"></a>
         <div class="auth-step" id="forgotStep">
