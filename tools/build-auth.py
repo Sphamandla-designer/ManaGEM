@@ -15,9 +15,13 @@ for example login.html?state=wrong_password.
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-AUTH_API = 'https://app.managem.co.za/api/auth'
-APP = 'https://app.managem.co.za/'
-SIGNUP = 'https://app.managem.co.za/signup'
+# Until the app answers at https://app.managem.co.za/api/auth, the pages use the
+# prototype API in assets/js/prototype-api.js, which answers in the browser and opens
+# the product prototype as the signed-in person. To go live, set PROTOTYPE = False.
+PROTOTYPE = True
+AUTH_API = 'prototype-api' if PROTOTYPE else 'https://app.managem.co.za/api/auth'
+APP = 'reference/product/managem-app.html#dashboard' if PROTOTYPE else 'https://app.managem.co.za/'
+SIGNUP = 'signup.html'
 DEMO = 'reference/product/managem-app.html#dashboard'
 SITE = 'https://sphamandla-designer.github.io/ManaGEM/'
 
@@ -33,6 +37,7 @@ ICON = {
     'wifi-off': '<path d="M2 2l20 20M8.5 16.5a5 5 0 0 1 7 0M5 13a10 10 0 0 1 5.2-2.8M19 13a10 10 0 0 0-2-1.5M2 8.8a15 15 0 0 1 4.2-2.7M10.7 5.1A15 15 0 0 1 22 8.8"/><circle cx="12" cy="20" r=".8" fill="currentColor"/>',
     'mail-sent': '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/><path d="M16 17l2 2 4-4"/>',
     'link-off': '<path d="M9 17H7a5 5 0 0 1 0-10h2M15 7h2a5 5 0 0 1 4 8M8 12h3M3 3l18 18"/>',
+    'building': '<path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M16 9h2a2 2 0 0 1 2 2v10M8 7h4M8 11h4M8 15h4M2 21h20"/>',
     'shield': '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/>',
 }
 
@@ -70,6 +75,25 @@ def password_field(fid, name, label, autocomplete, extra=''):
               </button>
             </div>
             <p class="auth-err" id="{fid}-err" hidden></p>
+          </div>'''
+
+
+def text_field(fid, name, label, icon, autocomplete, kind='text', extra=''):
+    return f'''          <div class="auth-field">
+            <label for="{fid}">{label}</label>
+            <div class="auth-input">
+              {svg(icon)}
+              <input id="{fid}" name="{name}" type="{kind}" autocomplete="{autocomplete}" required aria-describedby="{fid}-err"{extra}>
+            </div>
+            <p class="auth-err" id="{fid}-err" hidden></p>
+          </div>'''
+
+
+def select_field(fid, name, label, options):
+    opts = ''.join(f'<option>{o}</option>' for o in options)
+    return f'''          <div class="auth-field">
+            <label for="{fid}">{label}</label>
+            <div class="auth-input auth-select"><select id="{fid}" name="{name}">{opts}</select></div>
           </div>'''
 
 
@@ -191,7 +215,42 @@ RESET = f'''        <a class="auth-logo" href="index.html"><img src="assets/bran
           <a class="auth-back" href="login.html">{svg('back')}Back to log in</a>
         </div>'''
 
+SIGNUP_PAGE = f'''        <a class="auth-logo" href="index.html"><img src="assets/brand/logo.png" alt="ManaGEM home" width="137" height="24"></a>
+        <div class="auth-head">
+          <h1>Start your free trial</h1>
+          <p>14 days free, no card needed. Your workspace opens with sample data so you can try every module straight away.</p>
+        </div>
+        {OFFLINE}
+
+        <form id="signupForm" class="auth-form" novalidate>
+          {ALERT}
+          <div class="auth-pair">
+{text_field('s-name', 'name', 'Your name', 'user', 'name')}
+{text_field('s-company', 'company', 'Company', 'building', 'organization')}
+          </div>
+{text_field('s-email', 'email', 'Work email', 'mail', 'email', 'email', ' autocapitalize="none" spellcheck="false"')}
+{text_field('s-user', 'username', 'Choose a username', 'user', 'username', 'text', ' autocapitalize="none" spellcheck="false"')}
+{password_field('s-pass', 'password', 'Choose a password', 'new-password', ' s-reqs')}
+          <ul class="auth-reqs" id="s-reqs" aria-label="Your password needs">
+            <li data-req="length">{svg('check', width=3)}At least 8 characters</li>
+            <li data-req="mix">{svg('check', width=3)}A letter and a number</li>
+          </ul>
+          <div class="auth-pair">
+{select_field('s-trade', 'trade', 'Your trade', ['Waterproofing', 'Roofing', 'Building and renovation', 'Manufacturing and factory', 'Maintenance and service', 'Something else'])}
+{select_field('s-team', 'team', 'People who will log in', ['1 or 2', '3 to 5', '6 to 10', 'More than 10'])}
+          </div>
+          <button class="btn btn-primary btn-lg btn-block" type="submit">Start my free trial</button>
+          <p class="auth-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="auth-divider" role="presentation"><span>or</span></div>
+
+        <a class="btn btn-outline btn-lg btn-block" href="{DEMO}">{svg('demo')}Try the demo first</a>
+
+        <p class="auth-signup">Already have an account? <a class="auth-link" href="login.html">Log in</a></p>'''
+
 PAGES = [
+    ('signup.html', 'Start your free trial · ManaGEM', 'Start a 14-day ManaGEM trial. No card needed.', SIGNUP_PAGE),
     ('login.html', 'Log in · ManaGEM', 'Log in to ManaGEM with your username and password, or try the demo.', LOGIN),
     ('forgot-password.html', 'Reset your password · ManaGEM', 'Reset your ManaGEM password. We’ll email you a link to choose a new one.', FORGOT),
     ('reset-password.html', 'Choose a new password · ManaGEM', 'Choose a new password for your ManaGEM account.', RESET),
@@ -246,6 +305,7 @@ def page(name, title, description, card):
     </nav>
   </main>
 </div>
+{'<script src="assets/js/prototype-api.js"></script>' if PROTOTYPE else ''}
 <script src="assets/js/site.js" defer></script>
 </body>
 </html>

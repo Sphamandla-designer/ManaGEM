@@ -14,7 +14,7 @@ regions between the chrome markers are rewritten.
 import glob, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SIGNUP = 'https://app.managem.co.za/signup'
+SIGNUP = 'signup.html'  # relative to the site root; each page prefixes its depth
 EMAIL = 'info@gemis.co.za'
 
 def ico(d, w='2'):
@@ -107,7 +107,7 @@ def header(page):
     </nav>
     <div class="nav-cta">
       <a class="nav-login" href="{p}login.html">Log in</a>
-      <a class="btn btn-primary btn-sm" href="{SIGNUP}" data-signup>Start free trial</a>
+      <a class="btn btn-primary btn-sm" href="{p}{SIGNUP}" data-signup>Start free trial</a>
       <button class="menu-btn" type="button" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
@@ -133,7 +133,7 @@ def header(page):
       <li><a href="{p}login.html">Log in</a></li>
     </ul>
     <div class="actions">
-      <a class="btn btn-primary btn-lg" href="{SIGNUP}" data-signup>Start free trial</a>
+      <a class="btn btn-primary btn-lg" href="{p}{SIGNUP}" data-signup>Start free trial</a>
     </div>
   </div>
 </div>
@@ -149,7 +149,7 @@ def footer(page):
       <div>
         <a class="brand" href="{brand}" aria-label="ManaGEM home"><img src="{p}assets/brand/logo-reversed.png" alt="ManaGEM" width="160" height="28"></a>
         <p>Job management for contractors and service businesses. Enquiries, quotes, jobs, stock, production and invoices in one system, synced with Sage or Xero. Built and supported by GEMIS in South Africa.</p>
-        <a class="btn btn-primary btn-sm" href="{SIGNUP}" data-signup style="margin-top:18px">Start free trial</a>
+        <a class="btn btn-primary btn-sm" href="{p}{SIGNUP}" data-signup style="margin-top:18px">Start free trial</a>
       </div>
       <div><h3>Product</h3><ul><li><a href="{home}#tour">Product walkthrough</a></li><li><a href="{home}#features">Features</a></li><li><a href="{p}pricing.html">Pricing</a></li><li><a href="{p}pricing.html#compare">Compare plans</a></li><li><a href="{home}#start">Getting started</a></li></ul></div>
       <div><h3>Industries</h3><ul>{inds}<li><a href="{p}accounting-and-bookkeeping.html"{cur(page["kind"] == "accounting")}>Accounting and bookkeeping</a></li></ul></div>

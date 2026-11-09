@@ -27,7 +27,8 @@ No build step. Everything is local, including the fonts.
 | `tools/prototype-bundle.py` | Unpacks and repacks the single-file product prototype for editing |
 | `tools/build-standalone.py` | Builds the whole site as one self-contained HTML file (`dist/`, not committed) |
 | `tools/build-chrome.py` | Writes the shared header, menus, phone drawer and footer into every page (not the account pages, which have their own layout) |
-| `tools/build-auth.py` | Writes the account pages: `login.html`, `forgot-password.html` and `reset-password.html` |
+| `tools/build-auth.py` | Writes the account pages: `signup.html`, `login.html`, `forgot-password.html` and `reset-password.html` |
+| `assets/js/prototype-api.js` | Answers the account pages' requests in the browser until the app's API exists, and opens the prototype as the signed-in person |
 | `pricing.html` | The pricing page: plans, what every plan includes, the full comparison, and what you can count on |
 | `assets/css/site.css` | Design tokens and all styles |
 | `assets/js/site.js` | Header state, mobile menu, scroll reveal, walkthrough clips and tabs, trade tabs, trust figure count-up and moving trust row, sticky bar |
@@ -127,7 +128,7 @@ Integration copy:
 
 ## Product prototype
 
-`reference/product/managem-app.html` is the product prototype the mockups and clips are captured from. It opens in a browser on its own; screens are addressed by hash (for example `#dashboard`, `#enquiries`, `#enquiry-detail`, `#projects`, `#stock`, `#invoices`, `#sage`, `#factory`, `#debtors`, `#customers`). The company shown is ManaGEM, and the accounting screen (`#sage`, "Accounting Sync") switches between Sage Accounting and Xero.
+`reference/product/managem-app.html` is the product prototype the mockups and clips are captured from. It opens in a browser on its own; screens are addressed by hash (for example `#dashboard`, `#enquiries`, `#enquiry-detail`, `#projects`, `#stock`, `#invoices`, `#sage`, `#factory`, `#debtors`, `#customers`). The company shown is ManaGEM, and the accounting screen (`#sage`, "Accounting Sync") switches between Sage Accounting and Xero. When someone has signed in on the site, the sidebar, top bar and dashboard greeting show their name and company instead, and the sign-out button returns to `login.html`. The projects module and stock control each use their own bookings and dispatch lists (they previously shared a global name with the bookings and dispatch modules and showed the wrong rows).
 
 To edit it, unpack it, change the JavaScript modules under `res/`, and repack:
 
@@ -155,8 +156,9 @@ The page is light on data:
 
 ## Log in, forgot password and reset password
 
-`tools/build-auth.py` writes the three account pages from one layout: a brand panel on the left (the customer quote over flowing teal lines, drawn in CSS and still under reduced motion) and the form on the right, one column below 1024px. Every "Log in" link on the site opens `login.html`. Their behaviour is in `site.js`; edit the pages through the script, then run it.
+`tools/build-auth.py` writes the four account pages from one layout: a brand panel on the left (the customer quote over flowing teal lines, drawn in CSS and still under reduced motion) and the form on the right, one column below 1024px. Every "Log in" link on the site opens `login.html`. Their behaviour is in `site.js`; edit the pages through the script, then run it.
 
+- **Start free trial** (`signup.html`): name, company, work email, username (suggested from the email), password with live rules, trade and team size. Every "Start free trial" button on the site opens it. A new account opens the product prototype as that person and company, with a banner showing the trial days left.
 - **Log in** (`login.html`): username and password, show/hide password, Remember me (sent to the app and also keeps the username in this browser), Forgot password?, Try the demo (opens the prototype on its dashboard, `reference/product/managem-app.html#dashboard`), and Start free trial.
 - **Forgot password** (`forgot-password.html`): the customer enters their username or email and gets a reset link by email, with no help from the team. The answer is the same whether or not an account exists, so nobody can use it to find out which usernames are real. They can resend after 30 seconds or change what they typed.
 - **Reset password** (`reset-password.html?token=…`): the page the email links to. New password with live rules (at least 8 characters, a letter and a number), confirmation, then "Password changed" and back to log in, which says so. A missing, used or expired link shows "This link doesn't work any more" with a button for a new one.
@@ -181,6 +183,15 @@ What the customer sees when something goes wrong:
 
 Every state can be opened for review by adding `?state=` to the address, for example `login.html?state=wrong_password`. Log in: `invalid_username`, `user_not_found`, `wrong_password`, `invalid_credentials`, `account_disabled`, `too_many_attempts`, `offline`, `unreachable`, `timeout`, `server_error`, `session_expired`, `password_reset`. Forgot password: `sent`, `invalid_identifier`, `too_many_attempts`, `offline`, `unreachable`, `timeout`, `server_error`. Reset password: `done`, `expired`, `mismatch`, `weak_password`, `offline`, `unreachable`, `timeout`, `server_error`.
 
+### From the website into the product
+
+Until the app answers at `https://app.managem.co.za/api/auth`, the account pages set `<body data-auth-api="prototype-api">` and load `assets/js/prototype-api.js`. That script answers the requests below in the browser, with the same statuses and bodies, so every message on the pages behaves as it will live. Accounts are kept in the browser (`managem.accounts`) and the signed-in person in `managem.session`.
+
+- Sign up or log in, and the prototype opens on its dashboard showing the person's name, role and company, greets them by first name, and shows the trial banner.
+- Sign out (bottom of the sidebar) clears the session and returns to `login.html`.
+- A demo account is built in: username `demo`, password `demo1234`. "Try the demo" opens the prototype without signing in, as its default user, with no banner, so mockup and clip captures are unchanged.
+- To go live, set `PROTOTYPE = False` in `tools/build-auth.py` and run it. The pages then talk to the app and no longer load the script.
+
 ### What the app needs to provide
 
 The pages send JSON to the address on `<body data-auth-api>`, currently `https://app.managem.co.za/api/auth`, with cookies included, so the app must allow this site's origin (CORS with credentials). None of this exists in the app yet; until `/login` answers, the log-in form falls back to posting `username`, `password` and `remember` to the app itself, as before. Forgot and reset password need the app's endpoints to work.
@@ -188,12 +199,13 @@ The pages send JSON to the address on `<body data-auth-api>`, currently `https:/
 | Request | Body | Answers |
 |---|---|---|
 | `POST /login` | `{ username, password, remember }` | `200 { redirect }` (where to go next; defaults to `data-app`) · `404 { error: "user_not_found" }` · `401 { error: "wrong_password" }` or `401 {}` for "username or password incorrect" · `400 { error: "invalid_username" }` · `403 { error: "account_disabled" }` · `429 { error: "too_many_attempts", retry_after: seconds }` · `5xx` |
+| `POST /signup` | `{ name, company, email, username, password, trade, team }` | `201 { redirect }` · `409 { error: "username_taken" }` or `409 { error: "email_taken" }` · `422 { error: "invalid_fields", fields: { name, company, email, username, password } }` · `429` · `5xx` |
 | `POST /forgot-password` | `{ identifier, reset_url }` | `202` whether or not the account exists; the app emails a link to `reset_url?token=…` · `429 { retry_after }` · `5xx` |
 | `POST /reset-password` | `{ token, password }` | `200` · `410 { error: "token_expired" }` · `400 { error: "token_invalid" }` · `422 { error: "weak_password", message }` · `429` · `5xx` |
 
 Separate "user not found" and "incorrect password" messages tell a visitor which usernames exist. If the app prefers not to reveal that, it can answer `401 {}` for both and the page shows the combined message instead. The app can also send people back with `login.html?state=session_expired`.
 
-Every trial button carries `data-signup`. The address is set once, on `<body data-signup="…">`, and the script copies it into each button; the markup carries the same address as a fallback. It is `https://app.managem.co.za/signup`, a placeholder until the real sign-up URL is supplied. Confirm it before launch.
+Every trial button carries `data-signup`. The address is set once, on `<body data-signup="…">`, and the script copies it into each button; the markup carries the same address as a fallback. It is `signup.html` (with `../` on pages in subfolders), set in `tools/build-chrome.py` and `tools/build-auth.py`.
 
 ## Contact details
 
@@ -211,7 +223,8 @@ The copy publishes only what the product build and the approved V1 draft support
 | --- | --- |
 | Trial length and card requirement | 14 days, no card, from V1. Commercial terms not frozen. |
 | Plan prices and user limits | R999 / R1,999 / R2,999 for 2 / 5 / 10 users (set by GEMIS, October 2026; V1 had R1,000 / R2,000 / R3,000). Commercial terms not frozen. |
-| Sign-up URL | `https://app.managem.co.za/signup` is a placeholder. |
+| Sign-up URL | `signup.html`, answered by the prototype API until the app's `/signup` exists. |
+| Accounts | Prototype only: kept in the visitor's browser. Forgot and reset password need the app to send email. |
 | Contact details | GEMIS corporate email used (no phone number on the site); confirm routing for ManaGEM. |
 | Form endpoint | None set. Forms open the visitor's email app until `data-endpoint` is filled on both forms. |
 | WhatsApp number | None set, so WhatsApp links are hidden. Add a monitored number to `data-whatsapp`. |
