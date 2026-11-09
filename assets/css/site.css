@@ -981,6 +981,8 @@ a:hover > .mega-ico,a:focus-visible > .mega-ico{background:var(--navy-900);color
 .auth-divider::before,.auth-divider::after{content:"";flex:1;border-top:1px solid var(--line)}
 .auth-signup{margin-top:-6px;text-align:center;color:var(--muted);font-size:15px}
 .auth-signup .auth-link{min-height:0}
+.auth-hint{margin:0;padding:12px 14px;border-radius:12px;background:var(--sunk);color:var(--muted);font-size:14px;line-height:1.5;text-align:center}
+.auth-hint b{color:var(--ink);font-family:var(--f-mono);font-weight:600}
 .auth-foot{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 22px;margin-top:40px;padding-bottom:env(safe-area-inset-bottom);font-size:14px;color:var(--muted)}
 .auth-foot a{display:inline-flex;align-items:center;min-height:40px;color:var(--ink-2);text-decoration:none;border-radius:6px}
 .auth-foot a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
