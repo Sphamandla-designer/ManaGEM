@@ -98,6 +98,9 @@ p{margin:0}
 .nav-links a{display:inline-block;padding:10px 14px;border-radius:999px;text-decoration:none;font-size:15px;font-weight:500;color:inherit;opacity:.78;transition:opacity var(--t-fast),background var(--t-fast)}
 .nav-links a:hover{opacity:1;background:rgba(127,140,160,.14)}
 .nav-cta{display:flex;align-items:center;gap:8px;margin-left:auto}
+.nav-signin{display:inline-block;padding:10px 14px;border-radius:999px;text-decoration:none;font-size:15px;font-weight:500;color:inherit;opacity:.85;transition:opacity var(--t-fast),background var(--t-fast)}
+.nav-signin:hover{opacity:1;background:rgba(127,140,160,.14)}
+@media (max-width:420px){.nav-signin{padding:10px 8px}}
 .site-header.on-dark:not(.scrolled) .btn-outline{--fg:#fff;--bd:rgba(255,255,255,.35)}
 .site-header.on-dark:not(.scrolled) .btn-outline:hover{--bd:#fff}
 .menu-btn{display:none;width:44px;height:44px;border-radius:12px;border:1.5px solid rgba(127,140,160,.35);background:transparent;cursor:pointer;place-items:center}
@@ -321,6 +324,9 @@ p{margin:0}
 .browser .url{margin-inline:auto;font-size:12.5px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:8px;padding:5px 12px;min-width:min(320px,50%);text-align:center;font-family:var(--f-mono)}
 .tour-notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
 @media (max-width:860px){.tour-notes{grid-template-columns:1fr}}
+.tour-demo{display:flex;align-items:center;justify-content:space-between;gap:16px 24px;flex-wrap:wrap;margin-top:18px;padding:18px 22px;border-radius:20px;border:1px solid var(--line,rgba(15,23,42,.1));background:linear-gradient(90deg,rgba(0,191,166,.08),rgba(14,165,233,.06))}
+.tour-demo p{margin:0;max-width:62ch}
+.tour-demo .btn svg{width:18px;height:18px}
 .note{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:16px 18px;border-radius:14px;background:#fff;border:1px solid var(--line)}
 .note svg{width:20px;height:20px;color:var(--teal-600);margin-top:3px}
 .note b{display:block;font-weight:600}

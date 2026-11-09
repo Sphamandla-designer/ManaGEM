@@ -36,10 +36,10 @@
 </head>
 <!--
   The trial sign-up address is set once, here. Every trial button carries
-  data-signup and the script copies this value into its href. The README
-  records that the address is a placeholder until the real one is supplied.
+  data-signup and the script copies this value into its href. It points at
+  the ManaGEM app in app/, which opens on the start-your-trial screen.
 -->
-<body data-signup="https://app.managem.co.za/signup">
+<body data-signup="app/#signup">
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="site-header on-dark" id="siteHeader">
@@ -58,8 +58,9 @@
       </ul>
     </nav>
     <div class="nav-cta">
+      <a class="nav-signin" href="app/#login">Sign in</a>
       <a class="btn btn-outline btn-sm" href="#tour">Explore the product</a>
-      <a class="btn btn-primary btn-sm" href="https://app.managem.co.za/signup" data-signup>Start your free trial</a>
+      <a class="btn btn-primary btn-sm" href="app/#signup" data-signup>Start your free trial</a>
       <button class="menu-btn" type="button" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
@@ -83,8 +84,9 @@
       <li><a href="#support">Support and FAQ</a></li>
     </ul>
     <div class="actions">
-      <a class="btn btn-primary btn-lg" href="https://app.managem.co.za/signup" data-signup>Start your free trial</a>
+      <a class="btn btn-primary btn-lg" href="app/#signup" data-signup>Start your free trial</a>
       <a class="btn btn-outline-light" href="#tour">Explore the product</a>
+      <a class="btn btn-outline-light" href="app/#login">Sign in</a>
     </div>
   </div>
 </div>
@@ -97,7 +99,7 @@
     <h1 id="heroTitle">Know where every job stands, <span class="accent">from enquiry to invoice.</span></h1>
     <p class="lede">ManaGEM runs your enquiries, quotes, jobs, stock, production and invoices in one connected system, synced with Sage. See what is quoted, booked, invoiced and still owed while there is time to act.</p>
     <div class="ctas">
-      <a class="btn btn-primary btn-lg" href="https://app.managem.co.za/signup" data-signup>Start your free trial</a>
+      <a class="btn btn-primary btn-lg" href="app/#signup" data-signup>Start your free trial</a>
       <a class="btn btn-outline-light btn-lg" href="#tour">Explore the product
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
@@ -244,6 +246,11 @@
       <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><div><b>Search anything</b><span>Jump to a customer, a quote number or a job from any screen.</span></div></div>
       <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M8 11l4 4 4-4M4 21h16"/></svg><div><b>Your data, exportable</b><span>Every list exports to CSV, Excel or PDF with the filters you have on screen.</span></div></div>
     </div>
+    <div class="tour-demo reveal">
+      <p><b>Click through it yourself.</b> The demo workspace is the full product, loaded with sample data from a fictional company. No sign-up needed.</p>
+      <a class="btn btn-dark" href="app/#demo">Open the live demo
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
   </div>
 </section>
 
@@ -266,7 +273,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>Sales targets per rep and reports by enquiry, quote, sale and product</div></li>
           </ul>
         </div>
-        <div class="frame"><img src="assets/mockups/table-open-enquiries.webp" alt="Open enquiries list with quote numbers, customers, status tags and assigned sales reps" width="2300" height="1276" loading="lazy" decoding="async"></div>
+        <div class="frame"><img src="assets/mockups/table-open-enquiries.webp" alt="Open enquiries list with quote numbers, customers, status tags and assigned sales reps" width="2300" height="1384" loading="lazy" decoding="async"></div>
       </article>
       <article class="cell span-2">
         <div class="copy">
@@ -280,7 +287,7 @@
           </ul>
         </div>
         <div class="frame stack">
-          <img src="assets/mockups/table-products.webp" alt="Product list with code, description, Sage account, sales price, cost, unit, tax and stock on hand" width="2304" height="1004" loading="lazy" decoding="async">
+          <img src="assets/mockups/table-products.webp" alt="Product list with code, description, Sage account, sales price, cost, unit, tax and stock on hand" width="2304" height="1662" loading="lazy" decoding="async">
         </div>
       </article>
       <article class="cell span-2">
@@ -296,7 +303,7 @@
         </div>
         <div class="frame stack">
           <img src="assets/mockups/kpi-debtors.webp" alt="Debtors summary: R 960,000 outstanding, R 535,000 overdue, R 113,000 unallocated receipts" width="1152" height="98" loading="lazy" decoding="async">
-          <img src="assets/mockups/table-debtors.webp" alt="Debtors list showing invoices by customer with ageing bands from current to over 90 days" width="2300" height="1048" loading="lazy" decoding="async">
+          <img src="assets/mockups/table-debtors.webp" alt="Debtors list showing invoices by customer with ageing bands from current to over 90 days" width="2300" height="1050" loading="lazy" decoding="async">
         </div>
       </article>
     </div>
@@ -324,7 +331,7 @@
             <h3>Every roof priced from today's costs, not last year's</h3>
             <ul class="checks tp-pts"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>Quote from your product list with the current cost next to the selling price, so a membrane that went up R30 shows before the quote goes out.</div></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>Warranty claims and inspection reports sit on the original job and customer.</div></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>Stock dispatched to site is recorded the day it leaves the store, with low-stock alerts before the next job.</div></li></ul>
             <div class="tp-mods"><span>Modules you will use most</span><em>Enquiries</em><em>Quotes</em><em>Projects</em><em>Warranties</em><em>Stock control</em></div>
-            <a class="btn btn-dark" href="https://app.managem.co.za/signup" data-signup>Start your free trial</a>
+            <a class="btn btn-dark" href="app/#signup" data-signup>Start your free trial</a>
           </div>
           <div class="tp-shot"><img src="assets/mockups/card-current-projects.webp" alt="Current projects with progress, status, foreman and due date" width="2304" height="828" loading="lazy" decoding="async"></div>
         </div>
@@ -333,34 +340,34 @@
             <h3>Deposits, progress claims and the final invoice on one job</h3>
             <ul class="checks tp-pts"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>Enquiries typed as repeat customer, home owner, warranty claim or new customer, so you see where the work comes from.</div></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>Deposit, partial and final invoices tracked per job and posted to Sage with their VAT.</div></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>Debtors aged by customer, with the last contact date next to the balance.</div></li></ul>
             <div class="tp-mods"><span>Modules you will use most</span><em>Projects</em><em>Invoices</em><em>Debtors</em><em>Sage sync</em></div>
-            <a class="btn btn-dark" href="https://app.managem.co.za/signup" data-signup>Start your free trial</a>
+            <a class="btn btn-dark" href="app/#signup" data-signup>Start your free trial</a>
           </div>
-          <div class="tp-shot"><img src="assets/mockups/table-debtors.webp" alt="Aged debtors list by customer" width="2300" height="1048" loading="lazy" decoding="async"></div>
+          <div class="tp-shot"><img src="assets/mockups/table-debtors.webp" alt="Aged debtors list by customer" width="2300" height="1050" loading="lazy" decoding="async"></div>
         </div>
         <div class="trade-panel" role="tabpanel" id="tpanel-build" aria-labelledby="ttab-build" hidden>
           <div class="tp-copy">
             <h3>Long jobs, many trades, one record you can trust</h3>
             <ul class="checks tp-pts"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>Enquiry, site and scope, schedule and quote captured once, without re-typing a customer detail.</div></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>Jobs with a foreman, start and end dates and progress, and bookings on the calendar.</div></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>Sales targets per rep, and reports by enquiry, quote, sale and product.</div></li></ul>
             <div class="tp-mods"><span>Modules you will use most</span><em>Enquiries</em><em>Projects</em><em>Bookings</em><em>Reports</em></div>
-            <a class="btn btn-dark" href="https://app.managem.co.za/signup" data-signup>Start your free trial</a>
+            <a class="btn btn-dark" href="app/#signup" data-signup>Start your free trial</a>
           </div>
-          <div class="tp-shot"><img src="assets/mockups/table-open-enquiries.webp" alt="Open enquiries pipeline" width="2300" height="1276" loading="lazy" decoding="async"></div>
+          <div class="tp-shot"><img src="assets/mockups/table-open-enquiries.webp" alt="Open enquiries pipeline" width="2300" height="1384" loading="lazy" decoding="async"></div>
         </div>
         <div class="trade-panel" role="tabpanel" id="tpanel-fact" aria-labelledby="ttab-fact" hidden>
           <div class="tp-copy">
             <h3>From pending to invoiced, with QC in between</h3>
             <ul class="checks tp-pts"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>Each build moves through pending, in build, QC check and ready, and feeds back into the customer's job.</div></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>Low-stock alerts on raw material and purchase orders before the line stops for it.</div></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>Products, variations, components and kits kept in one price list, synced with Sage.</div></li></ul>
             <div class="tp-mods"><span>Modules you will use most</span><em>Factory</em><em>Stock control</em><em>Products and pricing</em><em>Sage sync</em></div>
-            <a class="btn btn-dark" href="https://app.managem.co.za/signup" data-signup>Start your free trial</a>
+            <a class="btn btn-dark" href="app/#signup" data-signup>Start your free trial</a>
           </div>
-          <div class="tp-shot"><img src="assets/mockups/card-factory-pipeline.webp" alt="Factory production pipeline from pending to invoiced" width="1152" height="221" loading="lazy" decoding="async"></div>
+          <div class="tp-shot"><img src="assets/mockups/card-factory-pipeline.webp" alt="Factory production pipeline from pending to invoiced" width="1152" height="166" loading="lazy" decoding="async"></div>
         </div>
         <div class="trade-panel" role="tabpanel" id="tpanel-maint" aria-labelledby="ttab-maint" hidden>
           <div class="tp-copy">
             <h3>Small jobs, high volume, nothing dropped</h3>
             <ul class="checks tp-pts"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>Bookings for the week by crew and site, with the enquiry and quote attached.</div></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>Inspection reports and warranty claims logged against the site they belong to.</div></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div>A debtors view built for many small invoices, with statements sent from the same screen.</div></li></ul>
             <div class="tp-mods"><span>Modules you will use most</span><em>Bookings</em><em>Inspection reports</em><em>Warranties</em><em>Debtors</em></div>
-            <a class="btn btn-dark" href="https://app.managem.co.za/signup" data-signup>Start your free trial</a>
+            <a class="btn btn-dark" href="app/#signup" data-signup>Start your free trial</a>
           </div>
           <div class="tp-shot"><img src="assets/mockups/card-bookings.webp" alt="Open bookings this week" width="568" height="399" loading="lazy" decoding="async"></div>
         </div>
@@ -387,7 +394,7 @@
         <div class="pprice"><span class="cur">R</span><span class="amt num">1,000</span></div><p class="pper">per month, excl. VAT</p>
         <p class="pfit">An owner and an office manager running sales and jobs.</p>
         <ul class="pfacts"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Every module included</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Sage sync and exports</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Phone and email support</li></ul>
-        <a class="btn btn-outline btn-block" href="https://app.managem.co.za/signup" data-signup>Start your free trial</a>
+        <a class="btn btn-outline btn-block" href="app/#signup" data-signup>Start your free trial</a>
         <span class="pcancel">14 days free, no card needed</span>
       </article>
       <article class="pcard featured">
@@ -396,7 +403,7 @@
         <div class="pprice"><span class="cur">R</span><span class="amt num">2,000</span></div><p class="pper">per month, excl. VAT</p>
         <p class="pfit">Sales, office and site leads working from the same jobs.</p>
         <ul class="pfacts"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Every module included</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Sage sync and exports</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Phone and email support</li></ul>
-        <a class="btn btn-primary btn-block" href="https://app.managem.co.za/signup" data-signup>Start your free trial</a>
+        <a class="btn btn-primary btn-block" href="app/#signup" data-signup>Start your free trial</a>
         <span class="pcancel">14 days free, no card needed</span>
       </article>
       <article class="pcard">
@@ -405,7 +412,7 @@
         <div class="pprice"><span class="cur">R</span><span class="amt num">3,000</span></div><p class="pper">per month, excl. VAT</p>
         <p class="pfit">Several teams and foremen working at the same time.</p>
         <ul class="pfacts"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Every module included</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Sage sync and exports</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Phone and email support</li></ul>
-        <a class="btn btn-outline btn-block" href="https://app.managem.co.za/signup" data-signup>Start your free trial</a>
+        <a class="btn btn-outline btn-block" href="app/#signup" data-signup>Start your free trial</a>
         <span class="pcancel">14 days free, no card needed</span>
       </article>
       <article class="pcard">
@@ -504,7 +511,7 @@
           </li>
         </ol>
         <div class="how-ctas">
-          <a class="btn btn-primary btn-lg" href="https://app.managem.co.za/signup" data-signup>Start your free trial</a>
+          <a class="btn btn-primary btn-lg" href="app/#signup" data-signup>Start your free trial</a>
           <a class="btn btn-outline-light" href="#teams">Larger team? Talk to us</a>
         </div>
       </div>
@@ -570,7 +577,7 @@
           <div class="field"><label for="fNeed">What you need</label><select id="fNeed" name="need"><option>Rollout across branches</option><option>Moving from another system</option><option>Workflows for our trade</option><option>Not sure yet</option></select></div>
         </div>
         <button class="btn btn-dark btn-lg btn-block" type="submit" id="fSubmit">Email the team</button>
-        <p class="fine">Fewer than ten users? <a href="https://app.managem.co.za/signup" data-signup>Start your free trial</a> and onboard yourself. Or email <a href="mailto:info@gemis.co.za">info@gemis.co.za</a> or call <a href="tel:+27112195008">+27 11 219 5008</a>.</p>
+        <p class="fine">Fewer than ten users? <a href="app/#signup" data-signup>Start your free trial</a> and onboard yourself. Or email <a href="mailto:info@gemis.co.za">info@gemis.co.za</a> or call <a href="tel:+27112195008">+27 11 219 5008</a>.</p>
       </div>
       <div class="done" id="formDone" hidden tabindex="-1">
         <span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
@@ -672,7 +679,7 @@
     <h2 id="finalTitle">See every job in one place.</h2>
     <p class="lede">Start the trial, bring one job with its quote and invoice, and follow it from enquiry to payment. Every module is open for fourteen days, and nothing is charged.</p>
     <div class="paths">
-      <a class="path" href="https://app.managem.co.za/signup" data-signup><span class="path-k">Most people start here</span><b>Start your free trial</b><span>Create the account, bring your lists, and the team checks the take-on with you.</span><span class="path-go" aria-hidden="true">→</span></a>
+      <a class="path" href="app/#signup" data-signup><span class="path-k">Most people start here</span><b>Start your free trial</b><span>Create the account, bring your lists, and the team checks the take-on with you.</span><span class="path-go" aria-hidden="true">→</span></a>
       <a class="path" href="#teams"><span class="path-k">Larger or several branches</span><b>Talk to the team</b><span>Tell us about the rollout and we will plan it with you.</span><span class="path-go" aria-hidden="true">→</span></a>
       <a class="path" href="#tour"><span class="path-k">Still deciding</span><b>Explore the product</b><span>Six steps from enquiry to payment, on the real screens.</span><span class="path-go" aria-hidden="true">→</span></a>
     </div>
@@ -687,7 +694,7 @@
       <div>
         <a class="brand" href="#top" aria-label="ManaGEM home"><img src="assets/brand/logo-reversed.png" alt="ManaGEM" width="160" height="28"></a>
         <p>Job management for contractors and service businesses. Enquiries, quotes, jobs, stock, production and invoices in one system, synced with Sage. Built and supported by GEMIS in South Africa.</p>
-        <a class="btn btn-primary btn-sm" href="https://app.managem.co.za/signup" data-signup style="margin-top:18px">Start your free trial</a>
+        <a class="btn btn-primary btn-sm" href="app/#signup" data-signup style="margin-top:18px">Start your free trial</a>
       </div>
       <div><h3>Product</h3><ul><li><a href="#tour">Product walkthrough</a></li><li><a href="#features">What it does</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#integrations">Sage sync</a></li><li><a href="#start">Getting started</a></li></ul></div>
       <div><h3>For your trade</h3><ul><li><a href="#trades" data-trade="ttab-wp">Waterproofing</a></li><li><a href="#trades" data-trade="ttab-roof">Roofing</a></li><li><a href="#trades" data-trade="ttab-build">Building and renovation</a></li><li><a href="#trades" data-trade="ttab-fact">Manufacturing and factory</a></li><li><a href="#trades" data-trade="ttab-maint">Maintenance and service</a></li></ul></div>
@@ -703,7 +710,7 @@
 
 <!-- sticky action bar on small screens -->
 <div class="sticky-cta" id="stickyCta" hidden>
-  <a class="btn btn-primary" href="https://app.managem.co.za/signup" data-signup>Start your free trial</a>
+  <a class="btn btn-primary" href="app/#signup" data-signup>Start your free trial</a>
   <a class="btn btn-outline" href="#pricing">Pricing</a>
 </div>
 
