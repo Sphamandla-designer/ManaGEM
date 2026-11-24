@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<title>ManaGEM social banners</title>
+<style>
+/* ManaGEM LinkedIn and Facebook artwork. Every canvas below is rendered to a PNG at its own size by
+   brand/social/build.mjs. Type, colours and the flowing lines are the website's (assets/css/site.css,
+   the log-in page's brand panel). Copy is the site's own; the product screen is the dashboard mockup. */
+@font-face{font-family:"Outfit";src:url("../../../assets/fonts/outfit-latin-wght.woff2") format("woff2");font-weight:100 900}
+@font-face{font-family:"IBM Plex Mono";src:url("../../../assets/fonts/ibm-plex-mono-latin-500.woff2") format("woff2");font-weight:500}
+:root{
+  --navy-950:#070B15;--navy-900:#0B1222;--teal-300:#5EEAD4;--teal-500:#14B8A6;--gem:#00BFA6;
+  --ink:#0F172A;--ink-2:#334155;--muted:#5B6B82;--on-dark:#F1F5F9;--on-dark-muted:#A7B3C6;
+  --grad:linear-gradient(115deg,#0B1222 0%,#0E3350 40%,#0F5F70 74%,#13907F 100%);
+}
+*{box-sizing:border-box;margin:0}
+body{background:#cfd6de;font-family:"Outfit",system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:40px;display:grid;gap:40px;justify-items:start}
+.canvas{position:relative;overflow:hidden;background:var(--grad);color:#fff}
+.canvas.light{background:radial-gradient(70% 90% at 100% 0%,rgba(20,184,166,.14),transparent 70%),linear-gradient(180deg,#F6F8FB,#FFFFFF);color:var(--ink)}
+
+/* the flowing lines, drawn by the script below */
+.paths{position:absolute;inset:0;pointer-events:none}
+.paths svg{position:absolute;inset:0;width:100%;height:100%;color:var(--teal-300)}
+.light .paths svg{color:var(--teal-500)}
+.canvas::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(7,11,21,.55) 0%,rgba(7,11,21,.25) 45%,rgba(7,11,21,0) 70%)}
+.light::after{background:linear-gradient(90deg,rgba(255,255,255,.92) 0%,rgba(255,255,255,.7) 45%,rgba(255,255,255,0) 72%)}
+
+.copy{position:absolute;z-index:2;display:flex;flex-direction:column}
+.logo{display:block;height:auto}
+.h{font-weight:600;letter-spacing:-.03em;line-height:1.04;text-wrap:balance}
+.h em{font-style:normal;color:var(--teal-300)}
+.light .h em{color:#0F766E}
+.sub{color:var(--on-dark);opacity:.86;line-height:1.45;letter-spacing:-.005em}
+.light .sub{color:var(--ink-2);opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{display:inline-flex;align-items:center;gap:9px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);font-family:"IBM Plex Mono",monospace;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--on-dark);white-space:nowrap}
+.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gem);flex:none}
+.light .chip{border-color:#CBD5E1;background:#fff;color:var(--ink-2)}
+.by{font-family:"IBM Plex Mono",monospace;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-muted)}
+.light .by{color:var(--muted)}
+
+/* the product: the dashboard in a browser frame, resting off the right edge */
+.app{position:absolute;z-index:1;border-radius:14px;background:#EEF2F7;box-shadow:0 40px 80px -30px rgba(7,11,21,.75),0 0 0 1px rgba(255,255,255,.12);overflow:hidden}
+.light .app{box-shadow:0 30px 70px -30px rgba(15,23,42,.45),0 0 0 1px #E2E8F0}
+.app .bar{display:flex;align-items:center;gap:7px;padding:0 14px;background:#E9EEF4;border-bottom:1px solid #DCE3EA}
+.app .bar i{width:10px;height:10px;border-radius:50%;background:#C5CED9}
+.app .bar span{margin-left:14px;padding:3px 12px;border-radius:6px;background:#fff;font-family:"IBM Plex Mono",monospace;color:#5B6B82}
+.app img{display:block;width:100%;height:auto}
+
+/* profile pictures: the official mark on white (assets/brand/ManaGEM-mark-square-white-1024.png), which reads at any size */
+.avatar{background:#fff}
+.avatar::after{display:none}
+.avatar img{display:block;width:100%;height:100%}
+
+/* safe-area guides: shown only in the guide renders (body.guides) */
+.guide{display:none;position:absolute;z-index:9;pointer-events:none}
+body.guides .guide{display:block}
+.guide--photo{border:3px dashed #FF4D8D;background:rgba(255,77,141,.12)}
+.guide--round{border-radius:50%}
+.guide--crop{top:0;bottom:0;border-left:3px dashed #FFB020;border-right:3px dashed #FFB020}
+.guide--note{font:600 14px/1 "IBM Plex Mono",monospace;color:#FFB020;padding:6px 8px;background:rgba(7,11,21,.7);top:8px}
+
+/* ---- LinkedIn personal profile banner, 1584x396. Photo covers the lower left; narrow screens crop to 352-1232. ---- */
+#li-banner,#li-banner-light{width:1584px;height:396px}
+#li-banner .copy,#li-banner-light .copy{left:400px;top:62px;width:620px;gap:18px}
+#li-banner .logo,#li-banner-light .logo{width:200px}
+#li-banner .h,#li-banner-light .h{font-size:46px}
+#li-banner .chip,#li-banner-light .chip{height:32px;font-size:12.5px}
+#li-banner .app,#li-banner-light .app{left:1080px;top:58px;width:620px}
+#li-banner .bar,#li-banner-light .bar{height:30px}
+#li-banner .bar span,#li-banner-light .bar span{font-size:11px}
+
+/* ---- LinkedIn company page cover, 1128x191. The logo badge covers the lower left; narrow screens crop to 200-928. ---- */
+#li-cover{width:1128px;height:191px}
+#li-cover .copy{left:250px;top:0;bottom:0;justify-content:center;gap:12px;width:560px}
+#li-cover .logo{width:124px}
+#li-cover .h{font-size:28px}
+#li-cover .chip{height:24px;font-size:10px;padding:0 10px;gap:7px}
+#li-cover .chip::before{width:6px;height:6px}
+#li-cover .app{left:850px;top:26px;width:330px;border-radius:10px}
+#li-cover .bar{height:18px;padding:0 9px;gap:5px}
+#li-cover .bar i{width:6px;height:6px}
+#li-cover .bar span{display:none}
+
+/* ---- Facebook page cover, 1640x624 (820x312 shown at 2x). Phones crop to the middle 1110px; the photo sits at the lower left. ---- */
+#fb-cover{width:1640px;height:624px}
+#fb-cover .copy{left:300px;top:64px;width:680px;gap:22px}
+#fb-cover .logo{width:240px}
+#fb-cover .h{font-size:62px}
+#fb-cover .sub{font-size:21px}
+#fb-cover .chip{height:40px;font-size:15px;padding:0 18px}
+#fb-cover .app{left:990px;top:110px;width:760px}
+#fb-cover .bar{height:36px}
+#fb-cover .bar span{font-size:13px}
+
+/* ---- Facebook group cover, 1640x856. Phones crop the sides; keep to the middle. ---- */
+#fb-group{width:1640px;height:856px}
+#fb-group .copy{left:270px;top:150px;width:700px;gap:26px}
+#fb-group .logo{width:250px}
+#fb-group .h{font-size:66px}
+#fb-group .sub{font-size:22px}
+#fb-group .chip{height:42px;font-size:15px;padding:0 18px}
+#fb-group .app{left:980px;top:170px;width:820px}
+#fb-group .bar{height:38px}
+#fb-group .bar span{font-size:14px}
+
+/* ---- Facebook event cover, 1920x1005 ---- */
+#fb-event{width:1920px;height:1005px}
+#fb-event .copy{left:150px;top:200px;width:760px;gap:30px}
+#fb-event .logo{width:290px}
+#fb-event .h{font-size:76px}
+#fb-event .sub{font-size:26px}
+#fb-event .chip{height:46px;font-size:17px;padding:0 20px}
+#fb-event .app{left:1000px;top:190px;width:1040px}
+#fb-event .bar{height:44px}
+#fb-event .bar span{font-size:15px}
+#fb-event .by{position:absolute;z-index:2;left:150px;bottom:70px;font-size:16px}
+
+/* ---- profile pictures ---- */
+#li-logo{width:400px;height:400px}
+#fb-profile{width:720px;height:720px}
+</style>
+</head>
+<body>
+
+<!-- LinkedIn personal profile background -->
+<div class="canvas" id="li-banner">
+  <div class="paths" data-scale="1" data-opacity=".6"></div>
+  <div class="copy">
+    <img class="logo" src="../../../assets/brand/logo-reversed.png" alt="ManaGEM">
+    <h1 class="h">Know where every job stands, <em>from enquiry to invoice.</em></h1>
+    <div class="chips"><span class="chip">Synced with Sage and Xero</span><span class="chip">For South African businesses</span></div>
+  </div>
+  <div class="app"><div class="bar"><i></i><i></i><i></i><span>app.managem.co.za/dashboard</span></div><img src="../../../assets/mockups/app-dashboard.webp" alt=""></div>
+  <span class="guide guide--photo guide--round" style="left:64px;top:210px;width:268px;height:268px"></span>
+  <span class="guide guide--crop" style="left:352px;width:880px"></span>
+</div>
+
+<!-- the same, light -->
+<div class="canvas light" id="li-banner-light">
+  <div class="paths" data-scale="1" data-opacity=".7"></div>
+  <div class="copy">
+    <img class="logo" src="../../../assets/brand/logo.png" alt="ManaGEM">
+    <h1 class="h">Know where every job stands, <em>from enquiry to invoice.</em></h1>
+    <div class="chips"><span class="chip">Synced with Sage and Xero</span><span class="chip">For South African businesses</span></div>
+  </div>
+  <div class="app"><div class="bar"><i></i><i></i><i></i><span>app.managem.co.za/dashboard</span></div><img src="../../../assets/mockups/app-dashboard.webp" alt=""></div>
+  <span class="guide guide--photo guide--round" style="left:64px;top:210px;width:268px;height:268px"></span>
+  <span class="guide guide--crop" style="left:352px;width:880px"></span>
+</div>
+
+<!-- LinkedIn company page cover -->
+<div class="canvas" id="li-cover">
+  <div class="paths" data-scale=".5" data-opacity=".6"></div>
+  <div class="copy">
+    <img class="logo" src="../../../assets/brand/logo-reversed.png" alt="ManaGEM">
+    <h1 class="h">Know where every job stands, <em>from enquiry to invoice.</em></h1>
+    <div class="chips"><span class="chip">Synced with Sage and Xero</span><span class="chip">For South African businesses</span></div>
+  </div>
+  <div class="app"><div class="bar"><i></i><i></i><i></i><span></span></div><img src="../../../assets/mockups/app-dashboard.webp" alt=""></div>
+  <span class="guide guide--photo" style="left:28px;top:104px;width:160px;height:160px;border-radius:8px"></span>
+  <span class="guide guide--crop" style="left:200px;width:728px"></span>
+</div>
+
+<!-- Facebook page cover -->
+<div class="canvas" id="fb-cover">
+  <div class="paths" data-scale="1.5" data-opacity=".6"></div>
+  <div class="copy">
+    <img class="logo" src="../../../assets/brand/logo-reversed.png" alt="ManaGEM">
+    <h1 class="h">Know where every job stands, <em>from enquiry to invoice.</em></h1>
+    <p class="sub">Enquiries, quotes, jobs, stock and invoices in one connected system.</p>
+    <div class="chips"><span class="chip">Synced with Sage and Xero</span><span class="chip">14-day free trial</span></div>
+  </div>
+  <div class="app"><div class="bar"><i></i><i></i><i></i><span>app.managem.co.za/dashboard</span></div><img src="../../../assets/mockups/app-dashboard.webp" alt=""></div>
+  <span class="guide guide--photo guide--round" style="left:40px;top:470px;width:340px;height:340px"></span>
+  <span class="guide guide--crop" style="left:265px;width:1110px"></span>
+</div>
+
+<!-- Facebook group cover -->
+<div class="canvas" id="fb-group">
+  <div class="paths" data-scale="1.6" data-opacity=".6"></div>
+  <div class="copy">
+    <img class="logo" src="../../../assets/brand/logo-reversed.png" alt="ManaGEM">
+    <h1 class="h">Know where every job stands, <em>from enquiry to invoice.</em></h1>
+    <p class="sub">Enquiries, quotes, jobs, stock and invoices in one connected system.</p>
+    <div class="chips"><span class="chip">Synced with Sage and Xero</span><span class="chip">14-day free trial</span></div>
+  </div>
+  <div class="app"><div class="bar"><i></i><i></i><i></i><span>app.managem.co.za/dashboard</span></div><img src="../../../assets/mockups/app-dashboard.webp" alt=""></div>
+  <span class="guide guide--crop" style="left:240px;width:1160px"></span>
+</div>
+
+<!-- Facebook event cover -->
+<div class="canvas" id="fb-event">
+  <div class="paths" data-scale="1.9" data-opacity=".6"></div>
+  <div class="copy">
+    <img class="logo" src="../../../assets/brand/logo-reversed.png" alt="ManaGEM">
+    <h1 class="h">Know where every job stands, <em>from enquiry to invoice.</em></h1>
+    <p class="sub">Enquiries, quotes, jobs, stock and invoices in one connected system, synced with Sage or Xero.</p>
+    <div class="chips"><span class="chip">For South African businesses</span><span class="chip">14-day free trial</span></div>
+  </div>
+  <div class="app"><div class="bar"><i></i><i></i><i></i><span>app.managem.co.za/dashboard</span></div><img src="../../../assets/mockups/app-dashboard.webp" alt=""></div>
+  <p class="by">A GEM Information Systems product</p>
+</div>
+
+<!-- profile pictures -->
+<div class="canvas avatar" id="li-logo">
+  <img src="../../../assets/brand/ManaGEM-mark-square-white-1024.png" alt="ManaGEM">
+</div>
+<div class="canvas avatar" id="fb-profile">
+  <img src="../../../assets/brand/ManaGEM-mark-square-white-1024.png" alt="ManaGEM">
+  <span class="guide guide--photo guide--round" style="left:0;top:0;width:720px;height:720px;background:none"></span>
+</div>
+
+<script>
+/* the flowing lines from the log-in page (tools/build-auth.py): 2 x 36 curves, drawn still */
+document.querySelectorAll('.paths').forEach(function (box) {
+  var fade = Number(box.dataset.opacity || 1), html = '';
+  [1, -1].forEach(function (pos) {
+    html += '<svg viewBox="0 0 696 316" fill="none" preserveAspectRatio="xMidYMid slice">';
+    for (var i = 0; i < 36; i++) {
+      var a = 380 - i * 5 * pos, b = 189 + i * 6, c = 312 - i * 5 * pos, d = 216 - i * 6, e = 152 - i * 5 * pos, f = 343 - i * 6;
+      var g = 616 - i * 5 * pos, h = 470 - i * 6, k = 684 - i * 5 * pos, m = 875 - i * 6;
+      html += '<path d="M-' + a + ' -' + b + 'C-' + a + ' -' + b + ' -' + c + ' ' + d + ' ' + e + ' ' + f + 'C' + g + ' ' + h + ' ' + k + ' ' + m + ' ' + k + ' ' + m +
+        '" stroke="currentColor" stroke-width="' + (0.5 + i * 0.03).toFixed(2) + '" stroke-opacity="' + ((0.06 + i * 0.018) * fade).toFixed(3) + '"/>';
+    }
+    html += '</svg>';
+  });
+  box.innerHTML = html;
+});
+</script>
+</body>
+</html>
