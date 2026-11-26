@@ -50,6 +50,8 @@ def resolve(page, url):
     target = ALIAS.get(target, target)
     if target in PAGES:
         return 'page', '#/' + target + ('?' + query if query else '') + ('~' + frag if frag else '')
+    if target.startswith('assets/video/ads/'):     # the adverts: tens of megabytes, so they play from the live site
+        return None, LIVE + target
     if target.startswith('assets/') and (ROOT / target).is_file():
         return 'asset', target
     if (ROOT / target).is_file():                # e.g. the product demo: too large to embed, so open it on the live site
@@ -66,6 +68,7 @@ def rewrite(page, html, used):
         if attr == 'data-webm': return ''
         used.add(val)
         return f' data-mg-{attr.replace("data-", "")}="{val}"'
+    html = re.sub(r'\sdata-(16x9|9x16|1x1)="(assets/video/ads/[^"]*)"', lambda m: f' data-{m.group(1)}="{LIVE}{m.group(2)}"', html)
     return re.sub(r'\s(href|src|poster|data-mp4|data-webm)="([^"]*)"', sub, html)
 
 

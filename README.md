@@ -27,6 +27,7 @@ No build step. Everything is local, including the fonts.
 | `tools/prototype-bundle.py` | Unpacks and repacks the single-file product prototype for editing |
 | `tools/build-standalone.py` | Builds the whole site as one self-contained HTML file (`dist/`, not committed) |
 | `tools/build-chrome.py` | Writes the shared header, menus, phone drawer and footer into every page (not the account pages, which have their own layout) |
+| `tools/build-adverts.py` | Writes the Adverts tab of `blog.html` from its list of adverts |
 | `tools/build-auth.py` | Writes the account pages: `signup.html`, `login.html`, `forgot-password.html` and `reset-password.html` |
 | `assets/js/prototype-api.js` | Answers the account pages' requests in the browser until the app's API exists, and opens the prototype as the signed-in person |
 | `pricing.html` | The pricing page: plans, what every plan includes, the full comparison, and what you can count on |
@@ -112,6 +113,10 @@ Integration copy:
 ## Blog and support
 
 `blog.html` lists three articles under `blog/`: moving off spreadsheets for the take-on, how one job record runs from enquiry to payment, and how ManaGEM and Sage or Xero split the work. They describe only what the product build and the V1 draft support, and carry no statistics. Add new articles by copying one and adding a card to `blog.html`.
+
+The blog page has two tabs: **Articles** (the default) and **Adverts**. `blog.html#adverts` opens the adverts, and the footer links there. The Adverts tab is written by `tools/build-adverts.py` from its list of adverts; each card links to its first video (so it plays without JavaScript), and `site.js` opens it in a player that loads the clip only then and offers the other formats (landscape, vertical, square). The videos are in `assets/video/ads/` (720p H.264 and AAC, about 1–2 MB per ten seconds) with a still for each card in `assets/img/ads/`.
+
+The adverts come from the marketing repository (`Sphamandla-designer/marketing`). The originals there show the old prototype's real customer records in their product scenes, so the versions on this site were re-rendered from the same animations with every product screen recaptured from the demo prototype (`reference/product/managem-app.html`) and the typed names in "Now Serving" changed to match; the soundtracks and voice-overs are the originals. Use these versions, not the originals, anywhere public.
 
 `support.html` has one support ticket form (category, company, name, phone, description and a screenshot), with the email address and FAQ beside it. `contact.html` is the sales form (name, company, phone, number of users, what you need); every "Talk to us", "Talk to the team" and "Email the team" link goes there.
 

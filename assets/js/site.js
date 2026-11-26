@@ -89,6 +89,61 @@
     return { select: select, tabs: tabs };
   }
   var trades = tablist($('.trade-tabs'), 'on');
+
+  /* ---- blog: Articles (the default) and Adverts. blog.html#adverts opens the adverts, and the
+         address follows the tab so it can be shared. ---- */
+  var blogTabs = tablist($('.blog-tabs'));
+  if (blogTabs) {
+    var advertsTab = document.getElementById('tab-adverts');
+    var fromHash = function () { blogTabs.select(/[#~]adverts$/.test(location.hash) ? advertsTab : blogTabs.tabs[0]); };
+    fromHash();
+    window.addEventListener('hashchange', fromHash);
+    blogTabs.tabs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        if (/^#\//.test(location.hash)) return; /* the single-file version keeps its own addresses */
+        try { history.replaceState(null, '', t === advertsTab ? '#adverts' : location.href.split('#')[0]); } catch (e) {}
+      });
+    });
+  }
+
+  /* ---- advert player: each card links to its video (so it plays even without this script); here it
+         opens in a dialog instead, the clip loads only then, and it is unloaded again on close. ---- */
+  var adDialog = $('#adDialog');
+  if (adDialog && adDialog.showModal) {
+    var adVideo = $('video', adDialog), adTitle = $('h2', adDialog), adShapes = $('.ad-shapes', adDialog), adFrom = null;
+    var SHAPES = [['16x9', 'Landscape'], ['9x16', 'Vertical'], ['1x1', 'Square']];
+    var adPick = function (link, shape) {
+      adDialog.setAttribute('data-shape', shape);
+      adVideo.src = link.getAttribute('data-' + shape);
+      $$('button', adShapes).forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-shape') === shape)); });
+      var pr = adVideo.play(); if (pr && pr.catch) pr.catch(function () {});
+    };
+    $$('.ad-play').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault(); adFrom = link;
+        var shapes = SHAPES.filter(function (s) { return link.getAttribute('data-' + s[0]); });
+        adTitle.textContent = link.getAttribute('data-title');
+        while (adShapes.firstChild) adShapes.removeChild(adShapes.firstChild);
+        adShapes.hidden = shapes.length < 2;
+        if (shapes.length > 1) {
+          var lab = document.createElement('span'); lab.textContent = 'Format:'; adShapes.appendChild(lab);
+          shapes.forEach(function (s) {
+            var b = document.createElement('button'); b.type = 'button'; b.textContent = s[1]; b.setAttribute('data-shape', s[0]);
+            b.addEventListener('click', function () { adPick(link, s[0]); });
+            adShapes.appendChild(b);
+          });
+        }
+        adDialog.showModal();
+        adPick(link, shapes[0][0]);
+      });
+    });
+    $('.ad-close', adDialog).addEventListener('click', function () { adDialog.close(); });
+    adDialog.addEventListener('click', function (e) { if (e.target === adDialog) adDialog.close(); });
+    adDialog.addEventListener('close', function () {
+      adVideo.pause(); adVideo.removeAttribute('src'); adVideo.load();
+      if (adFrom) adFrom.focus();
+    });
+  }
   /* footer trade links open the matching trade before scrolling */
   if (trades) $$('a[data-trade]').forEach(function (a) {
     a.addEventListener('click', function () {
