@@ -154,7 +154,7 @@ def footer(page):
       <div><h3>Product</h3><ul><li><a href="{home}#tour">Product walkthrough</a></li><li><a href="{home}#features">Features</a></li><li><a href="{p}pricing.html">Pricing</a></li><li><a href="{p}pricing.html#compare">Compare plans</a></li><li><a href="{home}#start">Getting started</a></li></ul></div>
       <div><h3>Industries</h3><ul>{inds}<li><a href="{p}accounting-and-bookkeeping.html"{cur(page["kind"] == "accounting")}>Accounting and bookkeeping</a></li></ul></div>
       <div><h3>Support</h3><ul><li><a href="{p}support.html">Support centre</a></li><li><a href="{p}support.html#ticket">Open a ticket</a></li><li><a href="{home}#faq">Help and FAQ</a></li><li><a href="mailto:{EMAIL}">{EMAIL}</a></li></ul></div>
-      <div><h3>Company</h3><ul><li><a href="{p}contact.html"{cur(page["kind"] == "contact")}>Talk to sales</a></li><li><a href="{p}blog.html">Blog</a></li><li><a href="{p}about.html"{cur(page["kind"] == "about")}>About ManaGEM</a></li></ul><p class="foot-note">The privacy notice and terms of service are being finalised. Ask the team for the current versions.</p></div>
+      <div><h3>Company</h3><ul><li><a href="{p}contact.html"{cur(page["kind"] == "contact")}>Talk to sales</a></li><li><a href="{p}blog.html">Blog</a></li><li><a href="{p}blog.html#adverts">Adverts</a></li><li><a href="{p}about.html"{cur(page["kind"] == "about")}>About ManaGEM</a></li></ul><p class="foot-note">The privacy notice and terms of service are being finalised. Ask the team for the current versions.</p></div>
     </div>
     <div class="foot-bottom">
       <span>© <span id="year">2026</span> <b>GEM Information Systems</b>. South Africa.</span>
