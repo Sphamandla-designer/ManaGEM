@@ -72,6 +72,16 @@ def rewrite(page, html, used):
     return re.sub(r'\s(href|src|poster|data-mp4|data-webm)="([^"]*)"', sub, html)
 
 
+def page_attrs(page, attrs):
+    """Body attributes that name a page (data-signup: site.js copies it onto every trial button) take the router's address."""
+    out = dict(attrs)
+    for k in ('data-signup', 'data-login'):
+        if out.get(k):
+            kind, val = resolve(page, out[k])
+            if kind == 'page': out[k] = val
+    return out
+
+
 def parse(page):
     s = (ROOT / page).read_text()
     title = re.search(r'<title>(.*?)</title>', s, re.S).group(1)
@@ -84,10 +94,11 @@ def parse(page):
 used, tpl = set(), {}
 for p in pages:
     title, attrs, body, _ = parse(p)
-    tpl[p] = {'t': title, 'a': attrs, 'h': rewrite(p, body, used)}
+    tpl[p] = {'t': title, 'a': page_attrs(p, attrs), 'h': rewrite(p, body, used)}
 
 # ---- homepage as plain HTML: its images carry their data, so it reads without scripts ----
 title, attrs, home_body, home_src = parse('index.html')
+attrs = page_attrs('index.html', attrs)
 static_used = set()
 static = rewrite('index.html', home_body, static_used)
 def inline(m):
